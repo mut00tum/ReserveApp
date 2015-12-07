@@ -1,0 +1,180 @@
+// setting
+$baseColor:#0cae62;
+$bgColor:#eeebe6;
+$gray:#6b6b6b;
+$brown:#9e8b64;
+$baseSubColor:#94bf23;
+
+$baseFontSize:16px;
+$baseTitleSize:30px;
+$baseSubSize:24px;
+
+$mobileFontSize:22px;
+$mobileTitleSize:36px;
+$mobileSubSize:30px;
+
+// Dir
+$commonImgDir  : "../../img/common/";
+$bubbleImgDir  : "../img/mv/bubble/";
+$contentsImgDir: "../img/contents/";
+
+//breakPoint
+$pc    : 980px;
+$tablet: 768px;
+$mobile: 640px;
+$mv: 900px;
+
+// mixin
+@mixin max( $breakPoint ) {
+  @media screen and (max-width: $breakPoint) {
+    @content;
+  }
+}
+
+@mixin min( $breakPoint ) {
+  @media screen and (min-width: $breakPoint + 1 ) {
+    @content;
+  }
+}
+
+@mixin into($min, $max) {
+  @media screen and (min-width: $min) and (max-width: $max) {
+    @content;
+  }
+}
+
+
+@mixin bubblePositionR( $top:0 , $right:0  ){
+  top:$top;
+  right:$right;
+}
+
+@mixin bgRound( $round:10px , $color:#fff ){
+  border-radius: $round;
+  background-color: $color;
+}
+
+@mixin fitImg {
+  width:100%;
+  height: auto;
+}
+
+@mixin caption {
+  display: block;
+  margin-top: 15px;
+  padding-left: 1em;
+  font-size: 12px;
+  text-indent: -1em;
+}
+
+@mixin callout(
+    $position:left,
+    $triSize:30px,
+    $bgColor:#fff,
+    $radius:20px
+  ){
+  @if $position == "left" {
+    $RePosition: "right";
+    $SubPosition: "top";
+  }
+  @if $position == "right" {
+    $RePosition: "left";
+    $SubPosition: "top";
+  }
+  @if $position == "top" {
+    $RePosition: "bottom";
+    $SubPosition: "left";
+  }
+   @if $position == "bottom" {
+    $RePosition: "top";
+    $SubPosition: "left";
+  }
+  position:relative;
+  margin-#{$position}:$triSize + 10;
+  background-color:$bgColor;
+  border: 1px solid $bgColor;
+  border-radius:$radius;
+  &:after {
+    position: absolute;
+    #{$RePosition}:100%;
+    #{$SubPosition}:50%;
+    content:"";
+    height:0;
+    width:0;
+    margin-#{$SubPosition}:-$triSize;
+    border:solid rgba( $bgColor , 0 );
+    border-#{$RePosition}-color:$bgColor;
+    border-width:$triSize;
+    visibility:visible;
+  }
+}
+
+@mixin grid (
+  $num: 3,
+  $margin: 30px
+  ){
+  $prefixNum: 92%;
+  float: left;
+  width: $prefixNum/$num ;
+  width: calc( 99.5% / #{$num} - #{$margin * ( $num - 1 )} / #{$num} );
+  margin-right: $margin;
+  margin-bottom: $margin;
+  box-sizing: border-box;
+  &:nth-child(#{$num}n){
+    margin-right: 0;
+  }
+  &:nth-last-child(-n+#{$num} ){
+    margin-bottom: 0;
+  }
+}
+
+@mixin floatListCenter {
+  position: relative;
+  overflow: hidden;
+  ul {
+    position: relative;
+    left: 50%;
+    float: left;
+  }
+  li {
+    position: relative;
+    left: -50%;
+    float: left;
+  }
+}
+
+// beforeセレクタ用
+@mixin arrow (
+  $color  : #000,
+  $rotate : 45deg,
+  $size   : 10px,
+  $border : 2px  
+  ){
+  $top   : $size / 2;
+  $right : $size;
+  border-top: $border solid $color;
+  border-right: $border solid $color;
+  content: "";
+  display: inline-block;
+  width: $size;
+  height: $size;
+  -webkit-transform: rotate( $rotate );
+     -moz-transform: rotate( $rotate );
+      -ms-transform: rotate( $rotate );
+       -o-transform: rotate( $rotate );
+          transform: rotate( $rotate );
+  margin: -$top $right 0 0;
+  vertical-align: middle;
+}
+
+/*extend*/
+
+%clearfix {
+  zoom:1;
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+    visibility: hidden;
+  }
+}

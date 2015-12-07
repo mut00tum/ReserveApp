@@ -1,0 +1,143 @@
+@charset "UTF-8";
+@import "base.css";
+// @import "../setting";
+/* 設定 */
+
+/* test
+/*-----------------------------------------------------------------------*/
+#test {
+  position: relative;
+  left: 50px;
+  width: 50px;
+  left: 100px;
+}
+
+/* All
+/*-----------------------------------------------------------------------*/
+#all {
+  width: 100%;
+  margin: 0 auto;
+  font-family:'Open Sans';
+  h1 {
+    padding-top: 30px;
+    padding-left: 5%;
+    margin-bottom: 30px;
+    font-size: 14px;
+    letter-spacing: .3em;
+  }
+  .inner {
+    margin: 0 auto;
+  }
+}
+
+/* nav
+/*-----------------------------------------------------------------------*/
+#nav {
+  position: relative;
+}
+
+#prev,
+#next {
+  position: absolute;
+  display: block;
+  cursor: pointer;
+  height: 700px;
+  border: none;
+  background: none;
+  color: #DDDAD5;
+  font-size: 40px;
+  p {
+    padding-top: -webkit-calc((700px / 2) - 30px);
+    padding-top: calc((700px / 2) - 30px);
+  }
+}
+
+#prev {
+  display: none;
+  left: 0;
+}
+
+#next {
+  right: 0;
+}
+
+/* calendar
+/*-----------------------------------------------------------------------*/
+
+#calendar {
+  width: 90%;
+  min-width: 900px;
+  height: 400px;
+  margin: 0 auto 20px;
+  overflow: hidden;
+}
+
+  #days,
+  #times {
+    position: relative;
+    box-sizing: border-box;
+    border: 5px solid #F1EEE8;
+    & > ul {
+      position: absolute;
+      left: 0;
+      width: -webkit-calc(100% * 12);
+      width: calc(100% * 12);
+      border-spacing: 0;
+      & > li {
+        float: left;
+        box-sizing: border-box;
+        width: calc(100% / 84);
+      }
+    }
+  }
+
+  /* days */
+  #days {
+    height: 40px;
+    background: #F1EEE8;
+    & > ul li {
+      padding-top: 10px;
+      p {
+          text-align: center;
+          .date {
+            margin-right: 5px;
+          }
+          .day {
+            font-size: 10px;
+            opacity: .8;
+          }
+        }
+    }
+  }
+      
+  /* times */
+  #times {
+    height: 700px;
+    overflow-x: hidden;
+    & > ul > li {
+      border-right: 1px solid #E9E3CD;
+      &:nth-child(7n) {
+        border-right: none;
+      }
+      &:last-child {
+        border-right: 5px solid #E9E3CD;
+      }
+      .timeArea ul.time {
+        display: block;
+        height: 40px;
+        li.place {
+          float: left;
+          width: -webkit-calc(100% / 4);
+          width: calc(100% / 4);
+          height: 100%;
+          border-bottom: 1px dashed #E9E3CD;
+        }
+      }
+    }
+    & > ul > li.today {
+      background: #FFFAF7;
+    }
+  }
+            
+
+
