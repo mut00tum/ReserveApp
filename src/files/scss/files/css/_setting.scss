@@ -1,9 +1,14 @@
 // setting
-$baseColor:#0cae62;
-$bgColor:#eeebe6;
-$gray:#6b6b6b;
-$brown:#9e8b64;
-$baseSubColor:#94bf23;
+$color: (
+  base   : #fff,
+  bg     : #f0dcba,
+  red    : #f0b0d1,
+  orange : #f0bb98,
+  green  : #b2e1cd,
+  blue   : #b4dfe3,
+  brown  : #877860
+);
+//cf).map-get($color, red);
 
 $baseFontSize:16px;
 $baseTitleSize:30px;

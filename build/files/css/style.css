@@ -1,8 +1,31 @@
 @charset "UTF-8";
 @import url(common/layout.css);
+@import url(reserveCard.css);
 /*extend*/
 /* 設定 */
 /* ReserveColor
 /*-----------------------------------------------------------------------*/
-#times .timeArea .time .reserved {
-  background: #EB8CAD; }
+#times .timeArea .time .place {
+  cursor: pointer; }
+  #times .timeArea .time .place:hover {
+    background: #fef6e5; }
+
+#times .timeArea .time .P9A {
+  background: #f0b0d1; }
+  #times .timeArea .time .P9A:hover {
+    background: #f4c5dd; }
+
+#times .timeArea .time .P9B {
+  background: #f0bb98; }
+  #times .timeArea .time .P9B:hover {
+    background: #f3caae; }
+
+#times .timeArea .time .P1A {
+  background: #b2e1cd; }
+  #times .timeArea .time .P1A:hover {
+    background: #c4e8d9; }
+
+#times .timeArea .time .P1B {
+  background: #b4dfe3; }
+  #times .timeArea .time .P1B:hover {
+    background: #c7e7ea; }

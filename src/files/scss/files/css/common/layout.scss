@@ -67,7 +67,7 @@
 #calendar {
   width: 90%;
   min-width: 900px;
-  height: 400px;
+  height: 100%;
   margin: 0 auto 20px;
   overflow: hidden;
 }
@@ -112,9 +112,10 @@
       
   /* times */
   #times {
-    height: 700px;
-    overflow-x: hidden;
+    height: calc( 40px * 26 );
+    overflow: hidden;
     & > ul > li {
+      box-sizing: border-box;
       border-right: 1px solid #E9E3CD;
       &:nth-child(7n) {
         border-right: none;
@@ -130,6 +131,7 @@
           width: -webkit-calc(100% / 4);
           width: calc(100% / 4);
           height: 100%;
+          box-sizing: border-box;
           border-bottom: 1px dashed #E9E3CD;
         }
       }
