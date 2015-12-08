@@ -12,12 +12,12 @@ module.exports = {
 
   // jsのビルド設定
   js: {
-    src: src + '/files/js/**/*.js',
+    src: src + '/js/**/*.js',
     dest: dest
   },
 
   sass: {
-    src: src + '/files/scss/**/*scss',
+    src: src + '/scss/**/*scss',
     dest: dest
   },
 
@@ -26,14 +26,14 @@ module.exports = {
   },
 
   watch: {
-    sass: relativeSrcPath  + '/files/scss/**/*scss',
-    js  : relativeSrcPath  + '/files/js/**/*.js',
+    sass: relativeSrcPath  + '/scss/**/*scss',
+    js  : relativeSrcPath  + '/js/**/*.js',
     html: relativeDestPath + '/**/*.html'
   },
 
   // webpackの設定
   webpack: {
-    entry: src + '/files/js/app.js',
+    entry: src + '/js/app.js',
     output: {
       filename: dest + '/files/js/app.js'
     },  
