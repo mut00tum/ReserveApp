@@ -2,3 +2,16 @@
 @import "common/layout.css";
 @import "setting";
 /* 設定 */
+
+/* ReserveColor
+/*-----------------------------------------------------------------------*/
+
+#times {
+  .timeArea {
+    .time {
+      .reserved {
+        background: #EB8CAD;
+      }
+    }
+  }
+}

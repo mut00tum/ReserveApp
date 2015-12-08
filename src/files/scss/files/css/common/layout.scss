@@ -80,13 +80,13 @@
     & > ul {
       position: absolute;
       left: 0;
-      width: -webkit-calc(100% * 12);
-      width: calc(100% * 12);
+      width: -webkit-calc(100% * 9);
+      width: calc(100% * 9);
       border-spacing: 0;
       & > li {
         float: left;
         box-sizing: border-box;
-        width: calc(100% / 84);
+        width: calc(100% / 63);
       }
     }
   }

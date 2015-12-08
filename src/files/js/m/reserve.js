@@ -4,13 +4,12 @@ module.exports = function ReserveModule() {
   // モデルクラス
   var Reserve = function ( data ) {
     this.position = m.prop( data.position );
-  };
+  }
 
     //クラス
     Reserve.save = function( reserve ) {
-      console.log( reserve );
       localStorage.setItem( "position", JSON.stringify( reserve ) );
-    };
+    }
 
     //クラス ：localStorageに保存してある文字列→JSON
     // ReserveモデルをJSONの各プロパティでインスタンス化して配列に保存。  
@@ -20,15 +19,12 @@ module.exports = function ReserveModule() {
         str , obj;
 
       str = localStorage.getItem( "position" );
-      // console.log(str)
 
       if (str) {
           //localStorage から get した文字列をJSONに。
           var json = JSON.parse(str);
-          // console.log( json )
 
           for (var i = 0; i < json.length; i++) {
-              // console.log( json[i] )
               booking.push( new Reserve( json[i] ));
           }
           // console.log(booking[0].position())
@@ -42,6 +38,7 @@ module.exports = function ReserveModule() {
     init : function() {
       vm.dObj     = new Date();
       vm.position = m.prop('');
+      vm.reserve  = m.prop('');
       vm.list     = Reserve.list();
       vm.place    = m.prop('');      
       vm.date     = m.prop('');
@@ -50,20 +47,13 @@ module.exports = function ReserveModule() {
       vm.people   = m.prop('');
       vm.name     = m.prop('');
           
-      vm.setTargetDate = function(){
-        var
-          arr = vm.date().split('_');
-        return arr;
-      },
       vm.clickSubmitButton = function(){
 
         var
-          input , reserve , position;
+          reserve , position;
 
-        input = vm.place() + '/' + vm.date() + '/' + vm.time() + '/' + vm.hour() + '/' +  vm.people() + '/' + vm.name();
-
-        // vm.position に input を格納
-        vm.position( input );
+        // vm.position に getPosition() を格納
+        vm.position( vm.getPosition() );
 
         //モデルの position を vm.position で初期化
         reserve = new Reserve({ position : vm.position() });
@@ -76,29 +66,53 @@ module.exports = function ReserveModule() {
         Reserve.save( vm.list() )
         
       },
-      vm.addList = function ( position ){
-
-
-      },
-      vm.getPosition = function (){
+      vm.getPosition = function(){
         var
           position = '';
 
+        position = vm.date() + '_' + vm.time() + '_' + vm.place();
+
         return position;
+      },
+      vm.getHour = function() {
+        var
+          hour = vm.hour();
+
+        return hour;
+      },
+      vm.getMemberInfo = function(){
+        var
+          member = '';
+
+        member = vm.people() + '_' + vm.name();
+
+        return member;
+      },
+      vm.getReserveList = function(){
+
+        var 
+          data = localStorage.getItem( "position" ),
+          list  = JSON.parse( data ),
+          reserveList = [],
+          prop;
+
+        if ( data ) {
+
+          var length = list.length;
+          for( var i = 0; i < length; i++ ) {
+            prop = list[i].position;
+            reserveList.push( prop );
+          }
+          // console.log( list[0].position );
+        }
+
+        return reserveList;
+
       }
     },
-    test : function (){
-      
+    test : function(){
        // console.log(localStorage.getItem('position'))
-
-      // for(var i = 0; i < localStorage.length ; i++) {
-      //   console.log(localStorage.key(i));   
-      // }
-
-      // for(var i in localStorage) {
-      //   console.log(localStorage[i]);
-      // }
-      // console.log( localStorage.getItem("0") );
+       console.log( vm.getReserveList() );
 
     },
     clear : function() {
@@ -108,19 +122,24 @@ module.exports = function ReserveModule() {
 
   var Calendar = {
 
-    controller : function () {
+    controller : function() {
       // console.log(vm)
 
       vm.init( );
-      vm.getWeekDay = function ( d ) {
+      vm.setTargetDate = function(){
+        var
+          arr = vm.date().split('_');
+        return arr;
+      },
+      vm.getWeekDay = function( d ) {
         var weekArr = [
           'sun' , 'mon', 'tue' , 'wed' , 'thu' , 'fri' , 'sat'
         ];
         return weekArr[d];
       },
-      vm.getWeekArr = function ( dObj ) {
+      vm.getWeekArr = function( dObj ) {
         var
-          term = 84,  // ▼ CSS：#days ul,#times ul{ width }
+          term = 63,  // ▼ CSS：#days ul,#times ul{ width }
           arr  = [],
           d , day , date;
 
@@ -135,16 +154,16 @@ module.exports = function ReserveModule() {
         }
         return arr;
       },
-      vm.getTimeArea = function () {
+      vm.getTimeArea = function() {
         return [
-          '0800' , '0830' , '0900' , '0930' , '1000' , '1030' , '1100' , '1130' , '1200' , '1230' ,
-          '1300' , '1330' , '1400' , '1430' , '1500' , '1530' , '1600' , '1630' , '1700' , '1730' ,
-          '1800' , '1830' , '1900' , '1930' , '2000' , '2030'
+          '0800','0830','0900','0930','1000','1030','1100','1130','1200','1230',
+          '1300','1330','1400','1430','1500','1530','1600','1630','1700','1730',
+          '1800','1830','1900','1930','2000','2030'
         ];
       },
       vm.getPlaces = function () {
         return [
-          '9F_A' , '9F_B' , '1F_A' , '1F_B'
+          '9F_A','9F_B','1F_A','1F_B'
         ];
       }
     },
@@ -157,7 +176,7 @@ module.exports = function ReserveModule() {
 
       function addTodayClass( d ) {
         var
-          Class = "",
+          Class = '',
           calSt  = getToday(),
           dSt    = d.toLocaleDateString();
           // date   = addDateClass( d );
@@ -174,7 +193,7 @@ module.exports = function ReserveModule() {
         return d.getFullYear() + "_" + (d.getMonth() + 1) + "_" + d.getDate();
       }
 
-      function multi(){
+      function addMultiProp(){
           var handlers = [].slice.call( arguments );
           return function execute(){
               var args = [].slice.call( arguments );
@@ -183,6 +202,26 @@ module.exports = function ReserveModule() {
                   fn.apply( ctxt, args );
               } );
           };
+      }
+
+      function checkReserve( d,t,p ) {
+
+        var
+          Class = '',
+          idArr = vm.getReserveList(),
+          calendarId = addDateClass( d ) + '_' + t + '_' + p,
+          length;
+
+        length = idArr.length;
+
+        Class = calendarId;
+        for( var i = 0; i < length; i++ ){
+          if ( idArr[i] == calendarId ){
+            Class = 'reserved' + ' ' + calendarId;
+          } 
+        }
+        return Class;
+
       }
 
       return  m( '.wrapp' , [
@@ -211,21 +250,23 @@ module.exports = function ReserveModule() {
             m( 'ul#uiTimesList' , vm.getWeekArr( vm.dObj ).map(function ( d ) {
               return  m( 'li' , {
                 onclick: m.withAttr( 'name' , vm.date ),
-                class: addTodayClass( d ),
-                name : addDateClass( d )
+                class  : addTodayClass( d ),
+                name   : addDateClass( d )
               } , [
                 m( '.timeArea' , vm.getTimeArea().map(function ( t ) {
                   return  m( 'ul.time' , {
-                    onclick: multi(
+                    onclick: addMultiProp(
                       m.withAttr( 'name' , vm.time )
                       // m.withAttr( 'name' ,  vm.date)
                       ),
                     name: t
                     } ,
-                    vm.getPlaces().map(function ( n ) {
+                    vm.getPlaces().map(function ( p ) {
                       return  m( 'li.place' , {
-                        id: vm.getPosition(),
-                        name: n
+                        onclick : m.withAttr( 'name' , vm.place ),
+                        // id      : addDateClass( d ) + '_' + t + '_' + p,
+                        class   : checkReserve( d,t,p ),
+                        name    : p
                       })
                     }));
                   }))
@@ -236,21 +277,21 @@ module.exports = function ReserveModule() {
         m( 'form#reserve' , [
           m('h2', 'reserve'),
           m('ul', [
-            m('li', [
-              m('h3', '場所'),
-              m( 'label' , [
-                m( "input[type='radio'][name='area'][value='9FA']" , {onclick: m.withAttr( "value", vm.place)})
-              ] , '9F/大' ),
-              m( 'label' , [
-                m( "input[type='radio'][name='area'][value='9FB']" , {onclick: m.withAttr( "value", vm.place)})
-              ] , '9F/小' ),
-              m( 'label' , [
-                m( "input[type='radio'][name='area'][value='1FA']" , {onclick: m.withAttr( "value", vm.place)})
-              ] , '1F/窓口側' ),
-              m( 'label' , [
-                m( "input[type='radio'][name='area'][value='1FB']" , {onclick: m.withAttr( "value", vm.place)})
-              ] , '1F/コンビニ側' )
-            ]),
+            // m('li', [
+            //   m('h3', '場所'),
+            //   m( 'label' , [
+            //     m( "input[type='radio'][name='area'][value='9FA']" , {onclick: m.withAttr( "value", vm.place)})
+            //   ] , '9F/大' ),
+            //   m( 'label' , [
+            //     m( "input[type='radio'][name='area'][value='9FB']" , {onclick: m.withAttr( "value", vm.place)})
+            //   ] , '9F/小' ),
+            //   m( 'label' , [
+            //     m( "input[type='radio'][name='area'][value='1FA']" , {onclick: m.withAttr( "value", vm.place)})
+            //   ] , '1F/窓口側' ),
+            //   m( 'label' , [
+            //     m( "input[type='radio'][name='area'][value='1FB']" , {onclick: m.withAttr( "value", vm.place)})
+            //   ] , '1F/コンビニ側' )
+            // ]),
             m( 'li', [
               m( 'h3' , '日にち' ),
               m( 'p#reserveDate' , vm.setTargetDate() )

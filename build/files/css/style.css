@@ -2,3 +2,7 @@
 @import url(common/layout.css);
 /*extend*/
 /* 設定 */
+/* ReserveColor
+/*-----------------------------------------------------------------------*/
+#times .timeArea .time .reserved {
+  background: #EB8CAD; }

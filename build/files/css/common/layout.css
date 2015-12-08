@@ -68,13 +68,13 @@
   #times > ul {
     position: absolute;
     left: 0;
-    width: calc(100% * 12);
+    width: calc(100% * 9);
     border-spacing: 0; }
     #days > ul > li,
     #times > ul > li {
       float: left;
       box-sizing: border-box;
-      width: calc(100% / 84); }
+      width: calc(100% / 63); }
 
 /* days */
 #days {
