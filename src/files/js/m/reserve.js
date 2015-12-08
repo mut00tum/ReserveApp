@@ -1,31 +1,37 @@
 var m       = require( 'mithril' );
 
 module.exports = function ReserveModule() {
-  // モデル
+  // モデルクラス
   var Reserve = function ( data ) {
     this.position = m.prop( data.position );
   };
 
     //クラス
     Reserve.save = function( reserve ) {
+      console.log( reserve );
       localStorage.setItem( "position", JSON.stringify( reserve ) );
     };
 
-    //クラス
+    //クラス ：localStorageに保存してある文字列→JSON
+    // ReserveモデルをJSONの各プロパティでインスタンス化して配列に保存。  
     Reserve.list = function() {
       var
         booking = [],
         str , obj;
 
       str = localStorage.getItem( "position" );
-      if (str) {
-          var json = JSON.parse(str);
-          console.log(json)
-          booking.push( json )
+      // console.log(str)
 
-          // for (var i = 0; i < json.length; i++) {
-          //     booking.push( new Reserve( json[i] ));
-          // }
+      if (str) {
+          //localStorage から get した文字列をJSONに。
+          var json = JSON.parse(str);
+          // console.log( json )
+
+          for (var i = 0; i < json.length; i++) {
+              // console.log( json[i] )
+              booking.push( new Reserve( json[i] ));
+          }
+          // console.log(booking[0].position())
       }
 
     return m.prop( booking );
@@ -46,32 +52,29 @@ module.exports = function ReserveModule() {
           
       vm.setTargetDate = function(){
         var
-          arr = vm.date().split('_'),
+          arr = vm.date().split('_');
         return arr;
       },
       vm.clickSubmitButton = function(){
 
         var
-          appointment , reserve , position;
+          input , reserve , position;
 
-        appointment = vm.place() + '/' + vm.date() + '/' + vm.time() + '/' + vm.hour() + '/' +  vm.people() + '/' + vm.name();
+        input = vm.place() + '/' + vm.date() + '/' + vm.time() + '/' + vm.hour() + '/' +  vm.people() + '/' + vm.name();
 
-        // vm.position に appointment を格納
-        vm.position( appointment );
+        // vm.position に input を格納
+        vm.position( input );
 
         //モデルの position を vm.position で初期化
         reserve = new Reserve({ position : vm.position() });
-        // console.log(reserve.position());
+        // console.log(reserve);
 
-        vm.list().push( reserve.position() );
+        //※「インスタンス化したモデル」をpushする
+        vm.list().push( reserve );
+
+        vm.position( '' );
         Reserve.save( vm.list() )
-
-        // モデルの position を取得
-        // position = reserve.position()
-
         
-        // vm.addList( position );
-
       },
       vm.addList = function ( position ){
 
@@ -86,7 +89,7 @@ module.exports = function ReserveModule() {
     },
     test : function (){
       
-       console.log(localStorage.getItem('position'))
+       // console.log(localStorage.getItem('position'))
 
       // for(var i = 0; i < localStorage.length ; i++) {
       //   console.log(localStorage.key(i));   
