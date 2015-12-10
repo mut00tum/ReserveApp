@@ -1,0 +1,77 @@
+@charset "UTF-8";
+@import "setting";
+/* 設定 */
+
+/* ReserveCard
+/*-----------------------------------------------------------------------*/
+#reserveCard {
+  position: fixed;
+  top: 170px;
+  right: 0; 
+  width: 350px;
+  padding-top: 10px;
+  border-radius: 15px 0 0 15px;
+  z-index: 10;
+  background: rgba( map-get($color, bg) , .6 );
+  overflow: hidden;
+  h2 {
+    padding: 0 20px 5px 0;
+    color: map-get( $color , pale );
+    text-align: right;
+    border-bottom: 1px solid rgba( map-get($color, pale) , .4 );
+    font-size: 12px;
+    font-weight: bold;
+  }
+}
+
+#reserveCard ul {
+  li {
+    float: left;
+    width: 100%;
+    min-height: 68px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba( #fff , .7 );
+    h3 {
+      float: left;
+    }
+    .val {
+      float: right;
+      font-size: 30px;
+    }
+    .wrap {
+      float: right;
+      width: 130px;
+      input {
+        position: relative;
+        top: 5px;
+        float: left;
+        width: 100px;
+        height: 36px;
+      }
+      .unit {
+        position: relative;
+        top: 15px;
+        float: right;
+      }
+    }
+  }
+}
+
+#submit {
+  width: 100%;
+  margin: 30px 0;
+  text-align: center;
+  p {
+    display: inline-block;
+    padding: 5px 30px;
+    color: map-get( $color , emerald );
+    border: 2px solid map-get( $color , emerald );
+    font-size: 30px;
+    cursor: pointer;
+    &:hover {
+      color: #fff;
+      background: map-get( $color , emerald );
+    }
+  }
+}
