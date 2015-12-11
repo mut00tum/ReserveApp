@@ -14,6 +14,9 @@
         &:hover {
           background: #fef6e5;
         }
+        &.current {
+          background: #fdedcb;
+        }
       }
       .P9A {
         background: map-get($color, red);

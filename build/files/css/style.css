@@ -9,6 +9,8 @@
   cursor: pointer; }
   #times .timeArea .time .place:hover {
     background: #fef6e5; }
+  #times .timeArea .time .place.current {
+    background: #fdedcb; }
 
 #times .timeArea .time .P9A {
   background: #f0b0d1; }

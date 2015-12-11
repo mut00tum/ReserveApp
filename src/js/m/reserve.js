@@ -3,11 +3,12 @@ var m  = require( 'mithril' );
 module.exports = function ReserveModule() {
   // モデルクラス
   var Reserve = function ( data ) {
-    this.position = m.prop( data.position );
-    this.place    = m.prop( data.place );
-    this.hour     = m.prop( data.hour );
-    this.member   = m.prop( data.member );
-    this.person   = m.prop( data.person );
+    this.timestamp = m.prop( data.timestamp );
+    this.position  = m.prop( data.position );
+    this.place     = m.prop( data.place );
+    this.hour      = m.prop( data.hour );
+    this.member    = m.prop( data.member );
+    this.person    = m.prop( data.person );
   }
 
     //クラス
@@ -24,7 +25,6 @@ module.exports = function ReserveModule() {
         str , obj;
 
       str = localStorage.getItem( "reserved" );
-      // console.log( 'load:' + str);
 
       if (str) {
           //localStorage から get した文字列をJSONに。
@@ -40,31 +40,34 @@ module.exports = function ReserveModule() {
   // ビューモデル
   var vm = {
     init : function() {
-      vm.dObj     = new Date();
-      vm.position = m.prop('');
-      vm.reserve  = m.prop('');
-      vm.list     = Reserve.list();
-      vm.place    = m.prop('');      
-      vm.date     = m.prop('');
-      vm.time     = m.prop('');
-      vm.hour     = m.prop('');
-      vm.member   = m.prop('');
-      vm.person   = m.prop('');
+      vm.dObj      = new Date();
+      vm.timestamp = m.prop('');
+      vm.position  = m.prop('');
+      vm.list      = Reserve.list();
+      vm.place     = m.prop('');      
+      vm.date      = m.prop('');
+      vm.time      = m.prop('');
+      vm.hour      = m.prop('');
+      vm.member    = m.prop('');
+      vm.person    = m.prop('');
           
       vm.clickSubmitButton = function(){
         var
           reserve = [],
-          position , place , hour , member , person;
+          obj     = {};
 
-        // vm.position に getPosition() を格納
         vm.position( vm.getPosition() );
+        vm.timestamp( vm.getTimestamp() );
 
         if ( vm.hour() > 0.5 ) {
           vm.addGainReserve( vm.time() , vm.hour() );
         } else {
           vm.addReserve();
         }
-                
+        // key = vm.addKey();
+        // obj = { key[timestamp] : reserve };
+        // console.log( reserve )
+        //※「インスタンス化したモデル」をpushする
         Reserve.save( vm.list() )
 
         vm.position( '' );
@@ -72,20 +75,17 @@ module.exports = function ReserveModule() {
         vm.hour( '' );
         vm.member( '' );
         vm.person( '' );
-
-        // vm.checkReserve();
-
       },
       vm.addReserve = function() {
-        //モデルの プロパティ を 初期化
-        reserve = new Reserve({ 
-          position : vm.position(),
-          place    : vm.place(),
-          hour     : vm.hour(),
-          member   : vm.member(),
-          person   : vm.person()
+        reserve = new Reserve({
+          timestamp : vm.timestamp(),
+          position  : vm.position(),
+          place     : vm.place(),
+          hour      : vm.hour(),
+          member    : vm.member(),
+          person    : vm.person()
         });
-        //※「インスタンス化したモデル」をpushする
+
         vm.list().push( reserve );
       },
       vm.addGainReserve = function( t , h ) {
@@ -93,21 +93,23 @@ module.exports = function ReserveModule() {
           Class        = '',
           date  = vm.date(),
           place = vm.place(),
+          timestamp = vm.timestamp(),
+          arr = [],
           length , term , gainPosition , member , person;
       
-        term = vm.getReserveTimes( t , h );
-        
-        for ( var i = 1; i < term.length; i++ ) {
+        term   = vm.getReserveTimes( t , h );
+        length = term.length - 1;
+
+        for ( var i = 0; i < length; i++ ) {
           gainPosition = date + '_' + term[i];
-
           reserve = new Reserve({ 
-            position : gainPosition,
-            place    : place,
-            hour     : h,
-            member   : vm.member(),
-            person   : vm.person()
+            timestamp : timestamp,
+            position  : gainPosition,
+            place     : place,
+            hour      : h,
+            member    : vm.member(),
+            person    : vm.person()
           });
-
           vm.list().push( reserve );
         }
       },
@@ -142,9 +144,6 @@ module.exports = function ReserveModule() {
       vm.addDateClass = function( d ) {
         return d.getFullYear() + "_" + (d.getMonth() + 1) + "_" + d.getDate();
       },
-      vm.getJsonPosition = function() {
-
-      },
       vm.checkReserve = function( d,t,p ) {
         var
           Class        = '',
@@ -153,7 +152,7 @@ module.exports = function ReserveModule() {
           length , place;
 
         length = positionList.length;
-        console.log( length )
+        // console.log( length )
         Class  = calendarId;
 
         for( var i = 0; i < length; i++ ){
@@ -192,7 +191,7 @@ module.exports = function ReserveModule() {
     },
     test : function(){
        console.log(localStorage.getItem('reserved'))
-       console.log( vm.getPositionList());
+       // console.log( vm.getPositionList());
        // console.log( vm.getHourList());
     },
     clear : function() {
@@ -249,7 +248,7 @@ module.exports = function ReserveModule() {
           '0.5': 1, '1': 2, '1.5': 3, '2': 4, '2.5': 5, '3': 6, '3.5': 7, '4': 8, '4.5': 9,
           '5': 10, '5.5': 11, '6': 12, '6.5': 13, '7': 14, '7.5': 15, '8': 16
         }
-      }
+      },
       vm.getReserveTimes = function( time , hour ) {
         var
           // time        = vm.time(),
@@ -265,7 +264,11 @@ module.exports = function ReserveModule() {
         for( var i = matchOrder; i < length; i++ ) {
           arr.push( timeList[i] )
         }
-        return arr 
+        return arr;
+      },
+      vm.getTimestamp = function ( d ) {
+        var stamp =  Math.floor( new Date().getTime() / 100 );
+        return stamp;
       }
     },
 
@@ -280,7 +283,6 @@ module.exports = function ReserveModule() {
           Class = '',
           calSt  = getToday(),
           dSt    = d.toLocaleDateString();
-          // date   = vm.addDateClass( d );
 
         if ( calSt == dSt ) {
           Class = 'today';
@@ -326,9 +328,9 @@ module.exports = function ReserveModule() {
           m( '#times' , [
             m( 'ul#uiTimesList' , vm.setWeekArr( vm.dObj ).map(function ( d ) {
               return  m( 'li' , {
-                onclick: m.withAttr( 'name' , vm.date ),
-                class  : addTodayClass( d ),
-                name   : vm.addDateClass( d )
+                onclick : m.withAttr( 'name' , vm.date ),
+                class   : addTodayClass( d ),
+                name    : vm.addDateClass( d )
               } , [
                 m( '.timeArea' , vm.setTimeArea().map(function ( t ) {
                   return  m( 'ul.time' , {
@@ -359,7 +361,7 @@ module.exports = function ReserveModule() {
             ]),
             m( 'li', [
               m( 'h3' , 'Date' ),
-              m( 'p.val' , vm.setTargetDate() )
+              m( 'p.val' , vm.date() )
             ]),
             m('li.place', [
               m('h3', 'Time'),

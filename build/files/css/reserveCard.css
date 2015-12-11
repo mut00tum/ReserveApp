@@ -4,6 +4,7 @@
 /* ReserveCard
 /*-----------------------------------------------------------------------*/
 #reserveCard {
+  display: none;
   position: fixed;
   top: 170px;
   right: 0;
