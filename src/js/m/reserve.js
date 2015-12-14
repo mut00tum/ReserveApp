@@ -64,9 +64,6 @@ module.exports = function ReserveModule() {
         } else {
           vm.addReserve();
         }
-        // key = vm.addKey();
-        // obj = { key[timestamp] : reserve };
-        // console.log( reserve )
         //※「インスタンス化したモデル」をpushする
         Reserve.save( vm.list() )
 
@@ -124,75 +121,86 @@ module.exports = function ReserveModule() {
 
         return json
       },
-      vm.getPositionList = function(){
-        var 
-          json         = vm.getJson(),
-          positionList = [],
-          position , place , hour , prop;
+      // vm.getPositionList = function(){
+      //   var 
+      //     json         = vm.getJson(),
+      //     positionList = [],
+      //     position , place , hour , timestamp , prop;
 
-        if ( json ) {
-          var length = json.length;
-          for( var i = 0; i < length; i++ ) {
-            position = json[i].position;
-            place    = json[i].place;
-            prop     = position + '_' + place;
-            positionList.push( prop );
-          }
-        }
-        return positionList;
-      },
+      //   if ( json ) {
+      //     var length = json.length;
+      //     for( var i = 0; i < length; i++ ) {
+      //       position  = json[i].position;
+      //       place     = json[i].place;
+      //       timestamp = json[i].timestamp;
+      //       prop      = position + '_' + place+ '_' + timestamp;
+      //       positionList.push( prop );
+      //     }
+      //   }
+      //   return positionList;
+      // },
       vm.addDateClass = function( d ) {
         return d.getFullYear() + "_" + (d.getMonth() + 1) + "_" + d.getDate();
       },
       vm.checkReserve = function( d,t,p ) {
         var
-          Class        = '',
-          positionList = vm.getPositionList(),
-          calendarId   = vm.addDateClass( d ) + '_' + t + '_' + p,
-          length , place;
-
-        length = positionList.length;
-        // console.log( length )
+          Class      = '',
+          stamp       = '',
+          json       = vm.getJson(),
+          calendarId = vm.addDateClass( d ) + '_' + t + '_' + p,
+          length     = 0,
+          place , src , reservePosition , time , place , position;
+         
         Class  = calendarId;
+
+        if( json ) {
+          length = json.length;
+        }
 
         for( var i = 0; i < length; i++ ){
 
-          if ( positionList[i] == calendarId ){
+          position  = json[i].position;
+          place     = json[i].place;
+          timestamp = json[i].timestamp;
+          reservePosition  = position + '_' + place;
+
+          if ( reservePosition == calendarId ){
+            Class += ' ' + 'reserved';
+            stamp = timestamp;
+
             
-            place = splitText( positionList[i] , 4 );
-            // console.log(place)
             switch( place ) {
               case '9FA':
-                Class = 'reserved' + ' ' + 'P9A' + ' ' + calendarId;
+                Class += ' ' + 'P9A';
                 break;
               case '9FB':
-                Class = 'reserved' + ' ' + 'P9B' + ' ' + calendarId;
+                Class += ' ' + 'P9B';
                 break;
               case '1FA':
-                Class = 'reserved' + ' ' + 'P1A' + ' ' + calendarId;
+                Class += ' ' + 'P1A';
                 break;
               case '1FB':
-                Class = 'reserved' + ' ' + 'P1B' + ' ' + calendarId;
+                Class += ' ' + 'P1B';
                 break;
             }
           } 
         }
 
-        function splitText( str , num ) {
-          var arr   = str.split('_');
+        function splitText( src , num ) {
+          var arr   = src.split('_');
           var val = arr[ num ];
           return val;
         }
-
-        // console.log(Class)
-
-        return Class;
+        // console.log( stamp )
+        return { 
+          Class : Class,
+          stamp : stamp
+        }
       }
     },
     test : function(){
+      // console.log( vm.getJson() )
        console.log(localStorage.getItem('reserved'))
-       // console.log( vm.getPositionList());
-       // console.log( vm.getHourList());
     },
     clear : function() {
       localStorage.clear();
@@ -342,9 +350,10 @@ module.exports = function ReserveModule() {
                     } ,
                     vm.setPlaces().map(function ( p ) {
                       return  m( 'li.place' , {
-                        onclick : m.withAttr( 'name' , vm.place ),
-                        class   : vm.checkReserve( d,t,p ),
-                        name    : p
+                        onclick      : m.withAttr( 'name' , vm.place ),
+                        class        : vm.checkReserve( d,t,p ).Class,
+                        name         : p,
+                        'data-stamp' : vm.checkReserve( d,t,p ).stamp
                       })
                     }));
                   }))
