@@ -1,9 +1,9 @@
 @charset "UTF-8";
 /*extend*/
 /* 設定 */
-/* ReserveCard
+/* card
 /*-----------------------------------------------------------------------*/
-#reserveCard {
+#card {
   display: none;
   position: fixed;
   top: 170px;
@@ -14,7 +14,7 @@
   z-index: 10;
   background: rgba(240, 220, 186, 0.6);
   overflow: hidden; }
-  #reserveCard h2 {
+  #card h2 {
     padding: 0 20px 5px 0;
     color: #877860;
     text-align: right;
@@ -22,28 +22,28 @@
     font-size: 12px;
     font-weight: bold; }
 
-#reserveCard ul li {
+#card ul li {
   float: left;
   width: 100%;
   min-height: 68px;
   padding: 10px 20px;
   box-sizing: border-box;
   border-bottom: 1px solid rgba(255, 255, 255, 0.7); }
-  #reserveCard ul li h3 {
+  #card ul li h3 {
     float: left; }
-  #reserveCard ul li .val {
+  #card ul li .val {
     float: right;
     font-size: 30px; }
-  #reserveCard ul li .wrap {
+  #card ul li .wrap {
     float: right;
     width: 130px; }
-    #reserveCard ul li .wrap input {
+    #card ul li .wrap input {
       position: relative;
       top: 5px;
       float: left;
       width: 100px;
       height: 36px; }
-    #reserveCard ul li .wrap .unit {
+    #card ul li .wrap .unit {
       position: relative;
       top: 15px;
       float: right; }

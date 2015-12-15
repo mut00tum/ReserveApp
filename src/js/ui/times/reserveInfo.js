@@ -6,7 +6,7 @@ module.exports = function ReserveInfo() {
 
   $Map.reserved.on( 'mouseover' , function(){
 
-    console.log( getTimestamp( $(this) ) )
+    // console.log( getTimestamp( $(this) ) )
 
   });
   

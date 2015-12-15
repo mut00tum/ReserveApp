@@ -2,9 +2,9 @@
 @import "setting";
 /* 設定 */
 
-/* ReserveCard
+/* card
 /*-----------------------------------------------------------------------*/
-#reserveCard {
+#card {
   display: none;
   position: fixed;
   top: 170px;
@@ -25,7 +25,7 @@
   }
 }
 
-#reserveCard ul {
+#card ul {
   li {
     float: left;
     width: 100%;

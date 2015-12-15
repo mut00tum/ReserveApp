@@ -4,12 +4,12 @@ require( 'TimelineMax' );
 module.exports = function ChangeWeek() {
   var
     $Map = {
-      card  : $( '#reserveCard' ),
+      card  : $( '#card' ),
       btn   : $( '#submit' ),
       place : $( '#uiTimesList' ).find( '.place' )
     },
     Size_Map = {
-      card : $( '#reserveCard' ).width()
+      card : $( '#card' ).width()
     },
     SPEED_MAP = {
       OPEN  : .2,
