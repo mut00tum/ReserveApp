@@ -1,7 +1,7 @@
 require( 'TweenMax' );
 require( 'TimelineMax' );
 
-module.exports = function ChangeWeek() {
+module.exports = function SlideCard() {
   var
     $Map = {
       card  : $( '#card' ),

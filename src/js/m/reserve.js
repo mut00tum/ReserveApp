@@ -13,6 +13,20 @@ module.exports = function ReserveModule() {
   }
 
     Reserve.save = function( reserve ) {
+      // var
+      //   arr       = [],
+      //   start     = 0,
+      //   listNum   = 0;
+      // console.log( reserve )
+      // for( var i = 0; i < reserve.length; i++ ) {
+      //   var num = i;
+      //   if ( reserve[i].reserved() == false ) {
+      //     // console.log( reserve[i])
+      //     reserve.splice( i , 1 );
+      //   }
+      // }
+      // console.log( reserve )
+
       localStorage.setItem( "reserved", JSON.stringify( reserve ) );
     }
 
@@ -74,6 +88,9 @@ module.exports = function ReserveModule() {
         vm.person( '' );
         vm.initCardVal();
       },
+      vm.clickCancelButton = function() {
+       
+      },
       vm.addReserve = function() {
         reserve = new Reserve({
           timestamp : vm.timestamp(),
@@ -123,32 +140,7 @@ module.exports = function ReserveModule() {
           json = JSON.parse( data );
 
         return json
-      },
-      vm.getCardVal = function() {
-        return {
-          hour   : $( '#cardHour' ).val(),
-          member : $( '#cardMember' ).val(),
-          person : $( '#cardPerson' ).val()
-        }
-      },
-      vm.initCardVal = function() {
-
-        var
-          $Map = {
-            place : $( '#uiTimesList' ).find( '.reserved' )
-          };
-
-        if( $Map.place ) {
-          $Map.place.on( 'click' , function(){
-            console.log('on')
-          })
-        }
-        
-
-        $( '#cardHour' ).val(''),
-        $( '#cardMember' ).val(''),
-        $( '#cardPerson' ).val('')
-      }
+      }      
     },
     test : function(){
        console.log(localStorage.getItem('reserved'))
@@ -232,6 +224,21 @@ module.exports = function ReserveModule() {
       vm.addDateClass = function( d ) {
         return d.getFullYear() + "_" + (d.getMonth() + 1) + "_" + d.getDate();
       },
+      vm.getCardVal = function() {
+        return {
+          hour   : $( '#cardHour' ).val(),
+          member : $( '#cardMember' ).val(),
+          person : $( '#cardPerson' ).val()
+        }
+      },
+      vm.initCardVal = function() {
+        $( '#cardHour' ).val('');
+        $( '#cardMember' ).val('');
+        $( '#cardPerson' ).val('');
+        vm.hour( 0 );
+        vm.member( 0 );
+        vm.person( '' );
+      },
       vm.checkReserve = function( d,t,p ) {
         var
           json       = vm.getJson(),
@@ -243,7 +250,7 @@ module.exports = function ReserveModule() {
           member     = 0,
           person     = '',
           place , src , reservePosition , time , position;
-         
+        
         Class  = calendarId;
         if( json ) {
           length = json.length;
@@ -270,7 +277,61 @@ module.exports = function ReserveModule() {
           member : member,
           person : person
         }
+      },
+      vm.getReserveVal = function() {
+        var
+          target    = $('.reserved'),
+          placeArea = $('.place'),
+          json      = vm.getJson(),
+          stamp;
+        
+        placeArea.on( 'click' , function() {
+          vm.initCardVal();
+          if( $(this).hasClass( 'reserved' ) ){
+            setValCard( $(this) );
+          }
+        });
+
+        target.on( 'click' , function() {
+          setValCard( $(this) );
+        });
+        function setValCard( t ) {
+
+          if( json ){          
+            stamp = t.attr( 'data-stamp' );
+            for( var i = 0; i < json.length; i++ ) {
+              var num = i;
+              if (json[i].timestamp == stamp) {
+                $( '#cardHour' ).val( json[i].hour ),
+                $( '#cardMember' ).val( json[i].member ),
+                $( '#cardPerson' ).val( json[i].person )
+                vm.hour( json[i].hour )
+                vm.member( json[i].member )
+                vm.person( json[i].person )
+              }
+            }
+          }
+        }
+        // function getCancelVal() {
+        //   var
+        //     arr       = [],
+        //     start     = 0,
+        //     listNum   = 0;
+
+        //   for( var i = 0; i < json.length; i++ ) {
+        //     var num = i;
+        //     if (json[i].timestamp == stamp) {
+        //       arr.push(num)
+        //     }
+        //   }
+        //   start   = arr[0];
+        //   listNum = arr.length;
+        //   arr     = []
+        //   console.log( start , listNum )
+        //   return [ start , listNum ];
+        // }
       }
+
     },
 
     view : function () {
@@ -304,22 +365,7 @@ module.exports = function ReserveModule() {
           };
       }
 
-      function getReserveVal() {
-
-      var
-        target = $('.reserved'),
-        stamp;
-      target.on( 'click' , function() {
-        stamp = $(this).attr( 'data-stamp' );
-        
-        
-        
-      });
-
-
-      }
-
-      getReserveVal();
+      vm.getReserveVal()
 
       return  m( '.wrapp' , [
         m( 'nav#nav' , [
@@ -424,6 +470,9 @@ module.exports = function ReserveModule() {
           ]),
           m('#submit', [
             m('p', { onclick: vm.clickSubmitButton } , '予約する' )
+          ]),
+          m('#cancel', [
+            m('p', { onclick: vm.clickCancelButton } , '予約を取り消す' )
           ])
         ]),
         m( '#info' , [

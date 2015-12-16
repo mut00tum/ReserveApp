@@ -1,8 +1,8 @@
-var reserve     = require( './m/reserve' );
-var resize      = require( './ui/resize' );
-var changeWeek  = require( './ui/changeWeek' );
-var times       = require( './ui/times' );
-var reserveCard = require( './ui/reserveCard' );
+var reserve    = require( './m/reserve' );
+var resize     = require( './ui/resize' );
+var changeWeek = require( './ui/changeWeek' );
+var times      = require( './ui/times' );
+var card       = require( './ui/card' );
 
 // mithril
 reserve();
@@ -10,4 +10,4 @@ reserve();
 // UI
 changeWeek();
 times();
-reserveCard(); 
+card(); 
