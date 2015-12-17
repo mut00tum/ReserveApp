@@ -4,9 +4,10 @@ require( 'TimelineMax' );
 module.exports = function SlideCard() {
   var
     $Map = {
-      card  : $( '#card' ),
-      btn   : $( '#submit' ),
-      place : $( '#uiTimesList' ).find( '.place' )
+      card   : $( '#card' ),
+      submit : $( '#submit' ),
+      cancel : $( '#cancel' ),
+      place  : $( '#uiTimesList' ).find( '.place' )
     },
     Size_Map = {
       card : $( '#card' ).width()
@@ -26,9 +27,13 @@ module.exports = function SlideCard() {
     open();
   });
 
-  $Map.btn.on( 'click' , function(){
+  $Map.submit.on( 'click' , function(){
     close();
     // removeCurrent();
+  });
+
+  $Map.cancel.on( 'click' , function(){
+    close();
   });
 
   function open() {
