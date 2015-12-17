@@ -22,8 +22,9 @@ module.exports = function ReserveModule() {
         str , obj;
       str = localStorage.getItem( "reserved" );
       if (str) {
-          var json = JSON.parse(str);
-          for (var i = 0; i < json.length; i++) {
+          var json   = JSON.parse(str);
+          var length = json.length;
+          for (var i = 0; i < length; i++) {
             booking.push( new Reserve( json[i] ) );
           }
       }
@@ -45,11 +46,13 @@ module.exports = function ReserveModule() {
       vm.person    = m.prop('');
       vm.reserved  = m.prop(false);
       vm.target    = m.prop('');
+      vm.json      = m.prop('');
           
       vm.clickSubmitButton = function(){
         var
           reserve = [],
           obj     = {};
+
         vm.timestamp( vm.getTimestamp() );
         vm.position( vm.getPosition() );
         vm.member( vm.getCardVal().member );
@@ -63,9 +66,7 @@ module.exports = function ReserveModule() {
         }
         Reserve.save( vm.list() )
         vm.initCardVal();
-      },
-      vm.clickCancelButton = function() {
-       
+        vm.saveJson();
       },
       vm.addReserve = function() {
         reserve = new Reserve({
@@ -104,16 +105,17 @@ module.exports = function ReserveModule() {
       vm.cancelReserve = function() {
         // m.startComputation();
         var
-          json    = vm.getJson(),
+          json    = vm.json(),
           target  = vm.target(),
           arr     = [],
           start   = 0,
           listNum = 0,
-          stamp , num ;
+          stamp , length , num ;
 
         if( json && target ) {
+          length = json.length;
           stamp  = target.attr( 'data-stamp' );
-          for( var i = 0; i < json.length; i++ ) {
+          for( var i = 0; i < length; i++ ) {
             num = i;
             if (json[i].timestamp == stamp) {
               arr.push(num)
@@ -124,6 +126,7 @@ module.exports = function ReserveModule() {
           json.splice( start , listNum );
           arr     = [];
           Reserve.save( json );
+          vm.saveJson();
         }
         // m.endComputation();
       },
@@ -131,11 +134,12 @@ module.exports = function ReserveModule() {
         var position = vm.date() + '_' + vm.time();
         return position;
       },
-      vm.getJson = function() {
+      vm.saveJson = function() {
         var 
           data = localStorage.getItem( "reserved" ),
           json = JSON.parse( data );
-        return json
+          vm.json( json );
+        // return json
       }      
     },
     test : function(){
@@ -150,6 +154,7 @@ module.exports = function ReserveModule() {
 
     controller : function() {
       vm.init( );
+      vm.saveJson();
       vm.setTargetDate = function(){
         var
           arr = vm.date().split('_');
@@ -242,7 +247,7 @@ module.exports = function ReserveModule() {
       },
       vm.checkReserve = function( d,t,p ) {
         var
-          json   = vm.getJson(),
+          json   = vm.json(),
           id     = vm.addDateClass( d ) + '_' + t + '_' + p,
           Class  = '',
           stamp  = '',
@@ -252,8 +257,7 @@ module.exports = function ReserveModule() {
           place , position;
         
         if( json ) {
-          length = json.length;
-        
+          var length = json.length;
           for( var i = 0; i < length; i++ ){
             place    = json[i].place;
             position = vm.getReservePsition( json , i )
@@ -272,7 +276,7 @@ module.exports = function ReserveModule() {
         var
           reserved  = $('.reserved'),
           placeArea = $('.place'),
-          json      = vm.getJson(),
+          json      = vm.json(),
           target    = '',
           id , position , place;
         
@@ -291,7 +295,8 @@ module.exports = function ReserveModule() {
         function setCard( t ) {
           if( json ){          
             id = t.attr( 'id' );
-            for( var i = 0; i < json.length; i++ ) {
+            var length = json.length;
+            for( var i = 0; i < length; i++ ) {
               position = vm.getReservePsition( json , i )
               if (position == id) {
                 $( '#cardHour' ).val( json[i].hour ),
@@ -304,9 +309,6 @@ module.exports = function ReserveModule() {
             }
           }
         }
-        // return {
-        //   cancelReserve : cancelReserve
-        // }
       }
     },
 
