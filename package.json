@@ -1,5 +1,5 @@
 {
-  "name": "htdocs",
+  "name": "mtgReserveApp",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,8 +8,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "body-parser": "^1.14.2",
     "browser-sync": "^2.8.2",
     "browserify": "^11.2.0",
+    "express": "^4.13.3",
     "gsap": "^1.18.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",
@@ -23,6 +25,7 @@
     "gulp-webpack": "^1.5.0",
     "jquery": "^2.1.4",
     "mithril": "^0.2.0",
+    "mongodb": "^2.0.52",
     "require-dir": "^0.3.0",
     "webpack": "^1.12.6"
   },
