@@ -14,22 +14,26 @@ module.exports = function SlideCard() {
     },
     SPEED_MAP = {
       OPEN  : .2,
-      CLOSE : .5
+      CLOSE : .7
     },
     Class = 'current';
 
   TweenMax.set( $Map.card , {
-    right : - Size_Map.card,
+    right   : - Size_Map.card,
     display : 'block'
   });
 
   $Map.place.on( 'click' , function(){
-    open();
+    setTimeout( function(){
+      open();
+    } , 100 );
+  
   });
 
   $Map.submit.on( 'click' , function(){
-    close();
-    // removeCurrent();
+    setTimeout( function(){
+      close();
+    } , 300 );    
   });
 
   $Map.cancel.on( 'click' , function(){
@@ -43,6 +47,10 @@ module.exports = function SlideCard() {
   }
 
   function close () {
+    TweenMax.set( $Map.card , {
+      right   : 0,
+      display : 'block'
+    });
     TweenMax.to( $Map.card , SPEED_MAP.CLOSE ,{
       right : - Size_Map.card
     });

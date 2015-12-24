@@ -15,7 +15,13 @@
           background: #fef6e5;
         }
         &.current {
-          background: #fdedcb;
+          
+          &:before {
+            display: block;
+            height: 100%;
+            content: "";
+            background: rgba(#fdedcb , .5);
+          }
         }
       }
       .P9A {

@@ -21,6 +21,10 @@ module.exports = function ReserveModule() {
     Reserve.list = function() {
       return m.request({ method: "GET", url: "/reserved"  });           
     }
+
+    Reserve.cancel = function( reserve ) {
+      m.request({ method: "POST", url: "/cancel" , data: reserve });         
+    }
   
   // ビューモデル
   var vm = {
@@ -37,9 +41,10 @@ module.exports = function ReserveModule() {
       vm.person    = m.prop('');
       vm.reserved  = m.prop(false);
       vm.target    = m.prop('');
-      vm.json      = m.prop('');
+      vm.json      = m.prop('');;
           
       vm.clickSubmitButton = function(){
+        // m.startComputation();
         var
           reserve   = [],
           obj       = {},
@@ -59,10 +64,16 @@ module.exports = function ReserveModule() {
           Reserve.save( vm.addReserve() );
         }
 
-        // Reserve.save( vm.list() )
+        m.request({ method: "GET", url: "/reserved"  })
+        .then( function(data){
+          vm.json( data );
+          m.redraw();
+          initCardVal();
+        });
 
-        initCardVal();
-        vm.getJsonReq();
+        function judge() {
+
+        }
 
         function getCardVal() {
           return {
@@ -74,6 +85,8 @@ module.exports = function ReserveModule() {
             person : $( '#cardPerson' ).val()
           }
         }
+        // m.redraw();
+        // m.endComputation();
       },
       vm.addReserve = function() {
         reserve = new Reserve({
@@ -127,6 +140,7 @@ module.exports = function ReserveModule() {
           }
           return arr;
         }
+
         return list;
       },
       vm.cancelReserve = function() {
@@ -149,26 +163,31 @@ module.exports = function ReserveModule() {
           }
           start   = arr[0];
           listNum = arr.length;
-          json.splice( start , listNum );
+          json    = json.splice( start , listNum );
           arr     = [];
-          Reserve.save( json );
-          vm.getJsonReq();
+          Reserve.cancel( json );
         }
       },
       vm.getJsonReq = function() {
-
         m.request({ method: "GET", url: "/reserved"  })
           .then( function( value ){
             vm.json( value );
         });
-
       }
     },
     test : function(){
-       console.log(localStorage.getItem('reserved'))
+       console.log(vm.json())
     },
     clear : function() {
-      localStorage.clear();
+      m.request({ method: "GET", url: "/reset"  });
+    },
+    redraw : function() {
+      m.request({ method: "GET", url: "/reserved"  })
+      .then( function(data){
+        vm.json( data );
+        m.redraw();
+        initCardVal();
+      });
     }
   };
 
@@ -177,8 +196,6 @@ module.exports = function ReserveModule() {
     controller : function() {
       vm.init( );
       vm.getJsonReq();
-
-      // m.request({ method: "GET", url: "/reserved" , initialValue: [] });
 
       setTimeArea = function() {
         return [
@@ -194,8 +211,8 @@ module.exports = function ReserveModule() {
         return json[i].position + '_' + json[i].place;
       },
       initCardVal = function() {
-        $( '#cardHour' ).val('');
-        $( '#cardMember' ).val('');
+        $( '#cardHour' ).val(0);
+        $( '#cardMember' ).val(0);
         $( '#cardPerson' ).val('');
         vm.hour( 0 );
         vm.member( 0 );
@@ -269,8 +286,7 @@ module.exports = function ReserveModule() {
     },
 
     view : function ( ctrl ) {
-
-      // getReserve();
+      getReserve();
       function setWeekDay( d ) {
         var weekArr = [
           'sun' , 'mon', 'tue' , 'wed' , 'thu' , 'fri' , 'sat'
@@ -333,6 +349,7 @@ module.exports = function ReserveModule() {
         ]),
         m( 'button#test' , { onclick: vm.test } , 'test' ),
         m( 'button#test' , { onclick: vm.clear } , 'clear' ),
+        m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
         m( '#calendar' , [
           m( '#days' , [
             m( 'ul' , setWeekArr( vm.dObj ).map(function ( d ) {
