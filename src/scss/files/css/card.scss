@@ -5,23 +5,41 @@
 /* card
 /*-----------------------------------------------------------------------*/
 #card {
-  display: none;
+  display: block;
   position: fixed;
   top: 170px;
-  right: 0; 
+  right: -450px; 
   width: 350px;
-  padding-top: 10px;
+  padding-right: 100px;
   border-radius: 15px 0 0 15px;
   z-index: 10;
   background: rgba( map-get($color, bg) , .6 );
   overflow: hidden;
+}
+
+#card .header {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba( map-get($color, pale) , .4 );
   h2 {
-    padding: 0 20px 5px 0;
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    padding: 0 0 0 15px;
     color: map-get( $color , pale );
-    text-align: right;
-    border-bottom: 1px solid rgba( map-get($color, pale) , .4 );
     font-size: 12px;
-    font-weight: bold;
+  }
+  #closeBtn {
+    float: right;
+    margin: 0 0 0 20px;
+    padding: 6px 15px;
+    color: #fff;
+    background: map-get($color , brightPale );
+    cursor: pointer;
+    &:hover {
+      background: darken(map-get($color , brightPale ) , 15);
+    }
   }
 }
 

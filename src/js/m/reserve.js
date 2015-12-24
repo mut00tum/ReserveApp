@@ -44,7 +44,6 @@ module.exports = function ReserveModule() {
       vm.json      = m.prop('');;
           
       vm.clickSubmitButton = function(){
-        // m.startComputation();
         var
           reserve   = [],
           obj       = {},
@@ -67,7 +66,7 @@ module.exports = function ReserveModule() {
         m.request({ method: "GET", url: "/reserved"  })
         .then( function(data){
           vm.json( data );
-          m.redraw();
+          // m.redraw();
           initCardVal();
         });
 
@@ -85,8 +84,6 @@ module.exports = function ReserveModule() {
             person : $( '#cardPerson' ).val()
           }
         }
-        // m.redraw();
-        // m.endComputation();
       },
       vm.addReserve = function() {
         reserve = new Reserve({
@@ -338,7 +335,8 @@ module.exports = function ReserveModule() {
           };
       }      
 
-      return  m( '.wrapp' , { config: changeWeek } , [
+      return  m( '.wrap' , { config: changeWeek } , [
+        m( 'h1' , 'Meeting Space Reservation' ),
         m( 'nav#nav' , [
           m( '#prev', [
             m( 'p' , '〈' )
@@ -392,7 +390,10 @@ module.exports = function ReserveModule() {
           ])          
         ]),
         m( 'form#card' , { config: card } , [
-          m('h2', '予約カード'),
+          m( '.header' , [
+            m('h2', '予約カード'),
+            m('p#closeBtn', '×')
+          ]),
           m('ul', [
             m('li.place', [
               m('h3', 'Place'),
