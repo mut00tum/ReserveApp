@@ -34,7 +34,7 @@ app.get("/reserved", function (req, res) {
     loading( function ( item ){
       res.send( item );
     });
-    console.log( 'loading' )
+    // console.log( 'loading' )
   } catch(e) {
     console.log( 'GET : error!' )
   }
@@ -45,7 +45,7 @@ app.post("/reserved", function (req, res) {
     save( req.body );
     // ▼ Mithril / m.request用レスポンス 
     res.status(200).end();
-    console.log( 'save' )
+    // console.log( 'save' )
   } catch(e) {
     console.log( 'POST : error!' )
   }
@@ -56,7 +56,7 @@ app.post("/cancel", function (req, res) {
     cancel( req, res );
     // ▼ Mithril / m.request用レスポンス
     res.status(200).end();
-    console.log( 'cancel' )
+    // console.log( 'cancel' )
   } catch(e) {
     console.log( 'POST : error!' );
     console.log( e )

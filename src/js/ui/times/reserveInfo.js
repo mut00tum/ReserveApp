@@ -1,7 +1,7 @@
 module.exports = function ReserveInfo() {
   var
     $Map = {
-      reserved : $( '#uiTimesList' ).find( '.reserved' )
+      reserved : $( '#timesList' ).find( '.reserved' )
     };
 
   $Map.reserved.on( 'mouseover' , function(){

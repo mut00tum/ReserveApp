@@ -54,18 +54,14 @@
   width: 90%;
   min-width: 900px;
   height: 100%;
-  margin: 0 auto 20px;
-  overflow: hidden; }
+  margin: 0 auto 20px; }
 
 #days,
 #times {
-  position: relative;
   box-sizing: border-box;
   border: 5px solid #F1EEE8; }
   #days > ul,
   #times > ul {
-    position: absolute;
-    left: 0;
     width: calc(100% * 5);
     border-spacing: 0; }
     #days > ul > li,
@@ -76,37 +72,55 @@
 
 /* days */
 #days {
+  position: relative;
   height: 40px;
-  background: #F1EEE8; }
-  #days > ul li {
-    padding-top: 10px; }
-    #days > ul li p {
-      text-align: center; }
-      #days > ul li p .date {
-        margin-right: 5px; }
-      #days > ul li p .day {
-        font-size: 10px;
-        opacity: .8; }
+  background: #F1EEE8;
+  overflow: hidden;
+  z-index: 1; }
+  #days > ul {
+    position: absolute; }
+    #days > ul > li {
+      padding-top: 10px; }
+      #days > ul > li p {
+        text-align: center; }
+        #days > ul > li p .date {
+          margin-right: 5px; }
+        #days > ul > li p .day {
+          font-size: 10px;
+          opacity: .8; }
+
+#days.fixed {
+  position: fixed;
+  top: 0;
+  width: 90%;
+  min-width: 900px; }
 
 /* times */
 #times {
+  position: relative;
   height: calc( 40px * 26 );
   overflow: hidden; }
-  #times > ul > li {
-    box-sizing: border-box;
-    border-right: 1px solid #E9E3CD; }
-    #times > ul > li:nth-child(7n) {
-      border-right: none; }
-    #times > ul > li:last-child {
-      border-right: 5px solid #E9E3CD; }
-    #times > ul > li .timeArea ul.time {
-      display: block;
-      height: 40px; }
-      #times > ul > li .timeArea ul.time li.place {
-        float: left;
-        width: calc(100% / 4);
-        height: 100%;
-        box-sizing: border-box;
-        border-bottom: 1px dashed #E9E3CD; }
+  #times > ul {
+    position: absolute;
+    left: 0; }
+    #times > ul > li {
+      box-sizing: border-box;
+      border-right: 1px solid #E9E3CD; }
+      #times > ul > li:nth-child(7n) {
+        border-right: none; }
+      #times > ul > li:last-child {
+        border-right: 5px solid #E9E3CD; }
+      #times > ul > li .timeArea ul.time {
+        display: block;
+        height: 40px; }
+        #times > ul > li .timeArea ul.time li.place {
+          float: left;
+          width: calc(100% / 4);
+          height: 100%;
+          box-sizing: border-box;
+          border-bottom: 1px dashed #E9E3CD; }
   #times > ul > li.today {
     background: #FFFAF7; }
+
+#times.fixed {
+  top: 40px; }

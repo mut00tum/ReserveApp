@@ -5,11 +5,11 @@ require( 'TimelineMax' );
 module.exports = function SlideCard() {
   var
     $Map = {
-      card   : $( '#card' ),
-      submit : $( '#submit' ),
-      cancel : $( '#cancel' ),
+      card     : $( '#card' ),
+      submit   : $( '#submit' ),
+      cancel   : $( '#cancel' ),
       closeBtn : $( '#closeBtn' ),
-      place  : $( '#uiTimesList' ).find( '.place' )
+      place    : $( '#timesList' ).find( '.place' )
     },
     Size_Map = {
       card    : $( '#card' ).width(),

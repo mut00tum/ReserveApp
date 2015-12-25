@@ -1,5 +1,3 @@
-// var changeWeek = require( './changeWeek' );
-
 module.exports = function ResizeWindow( func ) {
   var
     timer = false,

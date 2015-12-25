@@ -1,7 +1,7 @@
-var m          = require( 'mithril' );
-var changeWeek = require( '../ui/changeWeek' );
-var card       = require( '../ui/card' );
-var times      = require( '../ui/times' );
+var m        = require( 'mithril' );
+var calendar = require( '../ui/calendar/changeWeek' );
+var card     = require( '../ui/card' );
+var times    = require( '../ui/times' );
 
 module.exports = function ReserveModule() {
  
@@ -29,10 +29,9 @@ module.exports = function ReserveModule() {
   // ビューモデル
   var vm = {
     init : function() {
-      vm.dObj      = new Date();
+      vm.list      = Reserve.list();
       vm.timestamp = m.prop('');
       vm.position  = m.prop('');
-      vm.list      = Reserve.list();
       vm.place     = m.prop('');      
       vm.date      = m.prop('');
       vm.time      = m.prop('');
@@ -41,7 +40,8 @@ module.exports = function ReserveModule() {
       vm.person    = m.prop('');
       vm.reserved  = m.prop(false);
       vm.target    = m.prop('');
-      vm.json      = m.prop('');;
+      vm.json      = m.prop('');
+       clnCount = m.prop(0);
           
       vm.clickSubmitButton = function(){
         var
@@ -323,7 +323,6 @@ module.exports = function ReserveModule() {
         }
         return Class;
       }
-
       function addMultiProp(){
           var handlers = [].slice.call( arguments );
           return function execute(){
@@ -333,15 +332,40 @@ module.exports = function ReserveModule() {
                   fn.apply( ctxt, args );
               } );
           };
-      }      
+      }
+      function calendarVal(){
+        var
+         
+          num = clnCount();
 
-      return  m( '.wrap' , { config: changeWeek } , [
+          // console.log( clnCount() )
+        function plus(){
+          console.log( 'plus' )
+          num++;
+          clnCount( num )
+        }
+
+        function minus(){
+          // console.log( 'minus' )
+          num--;
+          clnCount( num )
+        }
+
+        return {
+          plus : plus,
+          minus : minus
+        }
+
+      }
+
+
+      return  m( '.wrap' , { config: calendar } , [
         m( 'h1' , 'Meeting Space Reservation' ),
         m( 'nav#nav' , [
-          m( '#prev', [
+          m( '#prev' , [
             m( 'p' , '〈' )
           ]),
-          m( '#next',[
+          m( '#next' , [
             m( 'p' ,  '〉' )
           ]),
         ]),
@@ -350,7 +374,7 @@ module.exports = function ReserveModule() {
         m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
         m( '#calendar' , [
           m( '#days' , [
-            m( 'ul' , setWeekArr( vm.dObj ).map(function ( d ) {
+            m( 'ul' , setWeekArr( new Date() ).map(function ( d ) {
               return  m( 'li' , [
                   m( 'p' , [
                     m( 'span.date' , d.getDate() ),
@@ -360,8 +384,8 @@ module.exports = function ReserveModule() {
               }))
           ]),
           m( '#times' , { config: times } , [
-            m( 'ul#uiTimesList' , setWeekArr( vm.dObj ).map(function ( d ) {
-              return  m( 'li' , {
+            m( 'ul#timesList' , setWeekArr( new Date() ).map(function ( d ) {
+              return  m( 'li.date' , {
                 class   : addTodayClass( d ),
                 name    : addDateClass( d )
               } , [

@@ -66,17 +66,13 @@
   min-width: 900px;
   height: 100%;
   margin: 0 auto 20px;
-  overflow: hidden;
 }
-
+  
   #days,
   #times {
-    position: relative;
     box-sizing: border-box;
     border: 5px solid #F1EEE8;
     & > ul {
-      position: absolute;
-      left: 0;
       width: -webkit-calc(100% * 5);
       width: calc(100% * 5);
       border-spacing: 0;
@@ -90,11 +86,16 @@
 
   /* days */
   #days {
+    position: relative;
     height: 40px;
     background: #F1EEE8;
-    & > ul li {
-      padding-top: 10px;
-      p {
+    overflow: hidden;
+    z-index: 1;
+    & > ul {
+      position: absolute;
+      & > li {
+        padding-top: 10px;
+        p {
           text-align: center;
           .date {
             margin-right: 5px;
@@ -104,36 +105,52 @@
             opacity: .8;
           }
         }
+      }
     }
+  }
+  #days.fixed {
+      position: fixed;
+      top: 0;
+      // top: -40px;
+      width: 90%;
+      min-width: 900px;
   }
       
   /* times */
   #times {
+    position: relative;
     height: calc( 40px * 26 );
     overflow: hidden;
-    & > ul > li {
-      box-sizing: border-box;
-      border-right: 1px solid #E9E3CD;
-      &:nth-child(7n) {
-        border-right: none;
-      }
-      &:last-child {
-        border-right: 5px solid #E9E3CD;
-      }
-      .timeArea ul.time {
-        display: block;
-        height: 40px;
-        li.place {
-          float: left;
-          width: -webkit-calc(100% / 4);
-          width: calc(100% / 4);
-          height: 100%;
-          box-sizing: border-box;
-          border-bottom: 1px dashed #E9E3CD;
+    & > ul {
+      position: absolute;
+      left: 0;
+      &  > li {
+        box-sizing: border-box;
+        border-right: 1px solid #E9E3CD;
+        &:nth-child(7n) {
+          border-right: none;
+        }
+        &:last-child {
+          border-right: 5px solid #E9E3CD;
+        }
+        .timeArea ul.time {
+          display: block;
+          height: 40px;
+          li.place {
+            float: left;
+            width: -webkit-calc(100% / 4);
+            width: calc(100% / 4);
+            height: 100%;
+            box-sizing: border-box;
+            border-bottom: 1px dashed #E9E3CD;
+          }
         }
       }
-    }
+    }    
     & > ul > li.today {
       background: #FFFAF7;
     }
+  }
+  #times.fixed {
+    top: 40px;
   }

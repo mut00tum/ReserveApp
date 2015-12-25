@@ -1,7 +1,7 @@
 module.exports = function AttachCurrent() {
   var
     $Map = {
-      place : $( '#uiTimesList' ).find( '.place' )
+      place : $( '#timesList' ).find( '.place' )
     },
     Class = 'current';
 
