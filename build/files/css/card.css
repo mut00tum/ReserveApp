@@ -49,15 +49,38 @@
   #card ul li .val {
     float: right;
     font-size: 30px; }
+  #card ul li input {
+    position: relative;
+    top: 5px;
+    float: left;
+    width: 100px;
+    height: 36px;
+    border: none;
+    text-align: center;
+    font-size: 20px; }
+  #card ul li input[type=number] {
+    position: relative; }
+  #card ul li input[type=number]::-webkit-inner-spin-button,
+  #card ul li input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    width: 1em;
+    opacity: 1;
+    /* shows Spin Buttons per default (Chrome >= 39) */
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: url(../img/card/spinner.png) center center no-repeat; }
+  #card ul li .name {
+    width: auto;
+    float: right;
+    padding: 2px 5px;
+    text-align: center;
+    font-size: 20px; }
   #card ul li .wrap {
     float: right;
     width: 130px; }
-    #card ul li .wrap input {
-      position: relative;
-      top: 5px;
-      float: left;
-      width: 100px;
-      height: 36px; }
     #card ul li .wrap .unit {
       position: relative;
       top: 15px;

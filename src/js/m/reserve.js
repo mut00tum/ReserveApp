@@ -451,7 +451,7 @@ module.exports = function ReserveModule() {
             ]),
             m( 'li', [
               m( 'h3', 'Name' ),
-              m( "input#cardPerson.val[name='name'][size='10'][type='text']" , {
+              m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , {
                 value : vm.person()
               })
             ])
