@@ -9,7 +9,7 @@ module.exports = function Check() {
       person : $( '#cardPerson' ).val()
     }
 
-    console.log($Map.hour)
+    // console.log($Map.hour)
 
     // if( $Map.hour )
 

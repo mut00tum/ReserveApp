@@ -7,7 +7,7 @@
   display: block;
   position: fixed;
   top: 170px;
-  right: -450px;
+  right: -100px;
   width: 350px;
   padding-right: 100px;
   border-radius: 15px 0 0 15px;
@@ -51,40 +51,54 @@
     font-size: 30px; }
   #card ul li input {
     position: relative;
-    top: 5px;
+    top: 0;
     float: left;
     width: 100px;
     height: 36px;
     border: none;
     text-align: center;
     font-size: 20px; }
-  #card ul li input[type=number] {
-    position: relative; }
   #card ul li input[type=number]::-webkit-inner-spin-button,
   #card ul li input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    width: 1em;
-    opacity: 1;
-    /* shows Spin Buttons per default (Chrome >= 39) */
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: url(../img/card/spinner.png) center center no-repeat; }
-  #card ul li .name {
-    width: auto;
+    -webkit-appearance: none; }
+  #card ul li .number {
     float: right;
-    padding: 2px 5px;
-    text-align: center;
-    font-size: 20px; }
-  #card ul li .wrap {
-    float: right;
-    width: 130px; }
-    #card ul li .wrap .unit {
+    width: 130px;
+    margin-top: 5px; }
+    #card ul li .number .sppinner {
+      position: relative;
+      float: left; }
+      #card ul li .number .sppinner .up,
+      #card ul li .number .sppinner .down {
+        position: absolute;
+        box-sizing: border-box;
+        right: 0px;
+        width: 18px;
+        height: 18px;
+        padding-top: 2px;
+        color: #fff;
+        background: #cdb287;
+        text-align: center;
+        font-size: 10px;
+        cursor: pointer; }
+        #card ul li .number .sppinner .up:hover,
+        #card ul li .number .sppinner .down:hover {
+          background: #b78f51; }
+      #card ul li .number .sppinner .up {
+        top: 0; }
+      #card ul li .number .sppinner .down {
+        top: 18px; }
+    #card ul li .number .unit {
       position: relative;
       top: 15px;
       float: right; }
+  #card ul li .name {
+    float: right;
+    width: auto;
+    margin-top: 5px;
+    padding: 2px 5px;
+    text-align: center;
+    font-size: 20px; }
 
 #submit {
   width: 100%;

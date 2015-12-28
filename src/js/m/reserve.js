@@ -433,19 +433,29 @@ module.exports = function ReserveModule() {
             ]),
             m( 'li', [
               m( 'h3', 'Hour' ),
-              m( '.wrap' , [
-                m( "input#cardHour[name='num'][size='2'][type='number'][step='0.5'][min='0.5'][max='8']" , {
-                  value : vm.hour()
-                }),
+              m( '.number' , [
+                // m( "input#cardHour[name='num'][size='2'][type='number'][step='0.5'][min='0.5'][max='8']" , {
+                //   value : vm.hour()
+                // }),
+                m( '.sppinner.hour' , [
+                  m( "input#cardHour[name='num']" , vm.hour() ),
+                  m( 'p.up' , '▲' ),
+                  m( 'p.down' , '▼' )
+                ] ),
                 m( 'p.unit', 'h' )
               ])
             ]),
             m( 'li', [
               m( 'h3', 'Member' ),
-              m( '.wrap' , [
-                m( "input#cardMember[name='num'][size='2'][type='number'][min='1'][max='20']" , {
-                  value : vm.member()
-                }),
+              m( '.number' , [
+                // m( "input#cardMember[name='num'][size='2'][type='number'][min='1'][max='20']" , {
+                //   value : vm.member()
+                // }),
+                m( '.sppinner.member' , [
+                  m( "input#cardMember[name='num']" , vm.member() ),
+                  m( 'p.up' , '▲' ),
+                  m( 'p.down' , '▼' )
+                ] ),
                 m( 'p.unit', '人' )
               ])              
             ]),
