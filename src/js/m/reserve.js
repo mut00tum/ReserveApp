@@ -41,7 +41,6 @@ module.exports = function ReserveModule() {
       vm.reserved  = m.prop(false);
       vm.target    = m.prop('');
       vm.json      = m.prop('');
-       clnCount = m.prop(0);
           
       vm.clickSubmitButton = function(){
         var
@@ -208,8 +207,8 @@ module.exports = function ReserveModule() {
         return json[i].position + '_' + json[i].place;
       },
       initCardVal = function() {
-        $( '#cardHour' ).val(0);
-        $( '#cardMember' ).val(0);
+        $( '#cardHour' ).val( 0 );
+        $( '#cardMember' ).val( 0 );
         $( '#cardPerson' ).val('');
         vm.hour( 0 );
         vm.member( 0 );
@@ -333,31 +332,6 @@ module.exports = function ReserveModule() {
               } );
           };
       }
-      function calendarVal(){
-        var
-         
-          num = clnCount();
-
-          // console.log( clnCount() )
-        function plus(){
-          console.log( 'plus' )
-          num++;
-          clnCount( num )
-        }
-
-        function minus(){
-          // console.log( 'minus' )
-          num--;
-          clnCount( num )
-        }
-
-        return {
-          plus : plus,
-          minus : minus
-        }
-
-      }
-
 
       return  m( '.wrap' , { config: calendar } , [
         m( 'h1' , 'Meeting Space Reservation' ),

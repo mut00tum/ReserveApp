@@ -6,14 +6,16 @@
 /* ReserveColor
 /*-----------------------------------------------------------------------*/
 #times .timeArea .time .place {
-  cursor: pointer; }
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+          transition: all 0.3s; }
   #times .timeArea .time .place:hover {
     background: #fef6e5; }
   #times .timeArea .time .place.current:before {
     display: block;
     height: 100%;
     content: "";
-    background: rgba(253, 237, 203, 0.5); }
+    background: rgba(253, 237, 203, 0.6); }
 
 #times .timeArea .time .P9A {
   background: #f0b0d1; }

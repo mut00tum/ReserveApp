@@ -5,47 +5,76 @@ module.exports = function Spinner() {
     memberField = card.find('.member'),
     $Map = {
       spinner : card.find( '.spinner' ),
-      up      : card.find( '.up' ),
-      down    : card.find( '.down' ),
       place   : $( '#timesList' ).find( '.place' )
     },
     Hour = {
-      up    : hourField.find( '.up' ),
-      down  : hourField.find( '.down' ),
-      val   : 0,
-      num   : 0
+      filed  : hourField.find( 'input' ),
+      up     : hourField.find( '.up' ),
+      down   : hourField.find( '.down' ),
+      setVal : 0,
+      num    : 0,
+      max    : 8,
+      min    : 0.5
     },
     Member = {
-      up   : memberField.find( '.up' ),
-      down : memberField.find( '.down' )
+      filed  : memberField.find( 'input' ),
+      up     : memberField.find( '.up' ),
+      down   : memberField.find( '.down' ),
+      setVal : 0,
+      num    : 0,
+      max    : 8,
+      min    : 1
     },
-    parent , val;
+    parent;
+  
+    Hour.num      = 0;
+    Member.num    = 0;
+    // console.log( 'spinner' );
 
-    // Val.map( function( ) )
-    // $Map.place.on( 'click' , function(){
-    //   Field.hour.val( '0' );
-    // });
+    $Map.place.on( 'click' , function(){
+      Hour.num     = 0;
+      Member.num   = 0;
+    });
+
+    Hour.filed.change(function(){
+      Hour.num = Number( Hour.filed.val() );
+      if( Hour.filed.val() > Hour.max ) {
+        Hour.filed.val( Hour.max );
+        Hour.num = Hour.max - 0.5;
+      }
+      if( Hour.filed.val() <= Hour.min ) {
+        Hour.filed.val( Hour.min );
+        Hour.num = Hour.min + 0.5;
+      }
+    })
 
     Hour.up.on( 'click' , function(){
 
-      parent = $(this).parent();
-      filed  = parent.find('input');
-
-      Hour.val = String( Hour.num + 0.5 );
+      if( Hour.filed.val() >= Hour.max ) {
+        Hour.num = Hour.max - 0.5;
+      }
+      Hour.setVal = String( Hour.num + 0.5 );
       Hour.num = Hour.num + 0.5;
-      
-      filed.val( Hour.val );
+      Hour.filed.val( Hour.setVal );
+
+    });
+
+    Hour.down.on( 'click' , function(){
+      if( Hour.filed.val() <= Hour.min ) {
+        Hour.num = Hour.min + 0.5;
+      }
+      Hour.setVal = String( Hour.num - 0.5 );
+      Hour.num = Hour.num - 0.5;      
+      Hour.filed.val( Hour.setVal );
 
     });
 
 
-    // $Map.down.on( 'click' , function(){
-    //   parent = $(this).parent();
-    //   filed  = parent.find('input');
+    function maximum( max , sum ) {
+      return max - sum;
+    }
 
-    //   val = String( num - 0.5 );
-    //   filed.val( val );
-    //   num = num - 0.5;
-    // });
+
+
 
 }
