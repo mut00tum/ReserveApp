@@ -8,8 +8,8 @@
   display: block;
   position: fixed;
   top: 170px;
-  // right: -450px;
-  right: -100px; //test 
+  right: -450px;
+  // right: -100px; //test 
   width: 350px;
   padding-right: 100px;
   border-radius: 15px 0 0 15px;
@@ -58,10 +58,19 @@
     .val {
       float: right;
       font-size: 30px;
+      .year {
+        margin-right: 8px;
+        font-size: 60%;
+        color: map-get( $color , gray );
+      }
+      .month {
+        margin-right: 5px;
+      }
     }
     input {
       position: relative;
       top: 0;
+      left: 0;
       float: left;
       width: 100px;
       height: 36px;
@@ -80,6 +89,7 @@
       .sppinner {
         position: relative;
         float: left;
+        overflow: hidden;
         .up,
         .down {
           position: absolute;
@@ -121,13 +131,28 @@
   }
 }
 
+#cardPlace,
+#cardDate,
+#cardTime {
+  position: relative;
+  opacity: 0;
+}
+
 #submit {
   width: 100%;
   margin: 30px 0 20px;
   text-align: center;
-  p {
+  p.send,
+  p.still {
     display: inline-block;
     padding: 5px 30px;
+    color: map-get( $color , lightGray );
+    border: 2px solid map-get( $color , lightGray );
+    font-size: 30px;
+    transition: all .3s;
+  }
+  p.send {
+    display: none;
     color: map-get( $color , emerald );
     border: 2px solid map-get( $color , emerald );
     font-size: 30px;

@@ -6,7 +6,7 @@ module.exports = function SlideCard() {
   var
     $Map = {
       card     : $( '#card' ),
-      submit   : $( '#submit' ),
+      submit   : $( '#submit' ).find( '.send' ),
       cancel   : $( '#cancel' ),
       closeBtn : $( '#closeBtn' ),
       place    : $( '#timesList' ).find( '.place' )

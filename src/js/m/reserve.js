@@ -65,7 +65,6 @@ module.exports = function ReserveModule() {
         m.request({ method: "GET", url: "/reserved"  })
         .then( function(data){
           vm.json( data );
-          // m.redraw();
           initCardVal();
         });
 
@@ -96,7 +95,6 @@ module.exports = function ReserveModule() {
         });
 
         return reserve        
-        // vm.list().push( reserve );
       },
       vm.addGainReserve = function( t , h ) {
         var
@@ -322,7 +320,7 @@ module.exports = function ReserveModule() {
         }
         return Class;
       }
-      function addMultiProp(){
+      function addMultiProp() {
           var handlers = [].slice.call( arguments );
           return function execute(){
               var args = [].slice.call( arguments );
@@ -331,6 +329,49 @@ module.exports = function ReserveModule() {
                   fn.apply( ctxt, args );
               } );
           };
+      }
+      function setCardPlace( p ) {
+        var
+          textMap = {
+            'P9A' : '9F 大',
+            'P9B' : '9F 小',
+            'P1A' : '1F コンビニ側',
+            'P1B' : '1F 窓口側'
+          }
+        return textMap[ p ];
+      }
+
+      function setCardDay( d ) {
+        var
+          arr   = [],
+          year  = '', month = '', date  = '';
+
+        if( d ) {
+          arr   = d.split( '_' );
+          year  = arr[0] + '年';
+          month = arr[1] + '月';
+          date  = arr[2] + '日';
+        }
+        return {
+          year  : year,
+          month : month,
+          date  : date
+        };
+      }
+
+      function setCardTime( t ) {
+        var
+          hour    = '',
+          minutes = '',
+          time    = '';
+
+        if( t ) {
+          hour    = t.substr( 0 , 2 );
+          minutes = t.substr( 2 , 4 );
+          time = hour + ':' + minutes;
+        }
+        
+        return time;
       }
 
       return  m( '.wrap' , { config: calendar } , [
@@ -395,24 +436,25 @@ module.exports = function ReserveModule() {
           m('ul', [
             m('li.place', [
               m('h3', 'Place'),
-              m( 'p#cardPlace.val' , vm.place() )
+              m( 'p#cardPlace.val' , setCardPlace( vm.place() ) )
             ]),
             m( 'li', [
               m( 'h3' , 'Date' ),
-              m( 'p#cardDate.val' , vm.date() )
+              m( 'p#cardDate.val' , [
+                m( 'span.year' , setCardDay(vm.date()).year ), 
+                m( 'span.month' , setCardDay(vm.date()).month ),
+                m( 'span.date' , setCardDay(vm.date()).date ) 
+              ])
             ]),
             m('li.place', [
               m('h3', 'Time'),
-              m( 'p#cardTime.val' , vm.time() )
+              m( 'p#cardTime.val' , setCardTime( vm.time() ) )
             ]),
             m( 'li', [
               m( 'h3', 'Hour' ),
               m( '.number' , [
-                // m( "input#cardHour[name='num'][size='2'][type='number'][step='0.5'][min='0.5'][max='8']" , {
-                //   value : vm.hour()
-                // }),
                 m( '.sppinner.hour' , [
-                  m( "input#cardHour[name='num']" , vm.hour() ),
+                  m( "input#cardHour[name='num'][type='number']" , vm.hour() ),
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
                 ] ),
@@ -422,11 +464,8 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( 'h3', 'Member' ),
               m( '.number' , [
-                // m( "input#cardMember[name='num'][size='2'][type='number'][min='1'][max='20']" , {
-                //   value : vm.member()
-                // }),
                 m( '.sppinner.member' , [
-                  m( "input#cardMember[name='num']" , vm.member() ),
+                  m( "input#cardMember[name='num'][type='number']" , vm.member() ),
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
                 ] ),
@@ -441,7 +480,8 @@ module.exports = function ReserveModule() {
             ])
           ]),
           m('#submit', [
-            m('p', { onclick: vm.clickSubmitButton } , '予約する' )
+            m('p.send', { onclick: vm.clickSubmitButton } , '予約する' ),
+            m('p.still' , '予約する' )
           ]),
           m('#cancel', [
             m('p', { onclick: vm.cancelReserve } , '予約を取り消す' )

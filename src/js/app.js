@@ -3,6 +3,7 @@ var reserve    = require( './m/reserve' );
 // var changeWeek = require( './ui/changeWeek' );
 // var times      = require( './ui/times' );
 // var card       = require( './ui/card' );
+// var sppinner  = require( './ui/card/spinner' );
 
 // mithril
 reserve();
@@ -11,3 +12,4 @@ reserve();
   // changeWeek();
   // times();
   // card(); 
+  // sppinner();
