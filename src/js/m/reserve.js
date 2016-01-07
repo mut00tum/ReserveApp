@@ -16,6 +16,9 @@ module.exports = function ReserveModule() {
 
     Reserve.save = function( reserve ) {
       m.request({ method: "POST", url: "/reserved" , data: reserve });
+      // .then( function(data){
+      //   console.log( data )
+      // });
     }
 
     Reserve.list = function() {
@@ -67,10 +70,6 @@ module.exports = function ReserveModule() {
           vm.json( data );
           initCardVal();
         });
-
-        function judge() {
-
-        }
 
         function getCardVal() {
           return {
@@ -188,6 +187,11 @@ module.exports = function ReserveModule() {
   var Calendar = {
 
     controller : function() {
+
+      setInterval(function(){
+        vm.getJsonReq();
+      } , 5000 );
+
       vm.init( );
       vm.getJsonReq();
 
@@ -231,12 +235,14 @@ module.exports = function ReserveModule() {
             if ( position == id ){
               Class += ' ' + 'reserved' + ' ' + place;
               stamp  = json[i].timestamp;
+              person = json[i].person;
             } 
           }
         }
         return { 
-          Class : Class,
-          stamp : stamp
+          Class  : Class,
+          stamp  : stamp,
+          person : person
         }
       },
       getReserve = function() {
@@ -280,6 +286,8 @@ module.exports = function ReserveModule() {
     },
 
     view : function ( ctrl ) {
+
+      // vm.getJsonReq();
       getReserve();
       function setWeekDay( d ) {
         var weekArr = [
@@ -406,6 +414,7 @@ module.exports = function ReserveModule() {
               } , [
                 m( '.timeArea' , setTimeArea().map(function ( t ) {
                   return  m( 'ul.time' , {
+                    // onclick: vm.redraw,
                     name: t
                     } ,
                     setPlaces().map(function ( p ) {
@@ -415,12 +424,13 @@ module.exports = function ReserveModule() {
                           m.withAttr( 'data-date'  , vm.date ),
                           m.withAttr( 'data-time'  , vm.time )
                         ),
-                        id           : addDateClass( d ) + '_' + t + '_' + p,
-                        class        : checkReserve( d,t,p ).Class,
-                        'data-stamp' : checkReserve( d,t,p ).stamp,
-                        'data-place' : p,
-                        'data-date'  : addDateClass( d ),
-                        'data-time'  : t                
+                        id            : addDateClass( d ) + '_' + t + '_' + p,
+                        class         : checkReserve( d,t,p ).Class,
+                        'data-stamp'  : checkReserve( d,t,p ).stamp,
+                        'data-place'  : p,
+                        'data-date'   : addDateClass( d ),
+                        'data-time'   : t,
+                        'date-person' : checkReserve( d,t,p ).person 
                       })
                     }));
                   }))
@@ -474,9 +484,7 @@ module.exports = function ReserveModule() {
             ]),
             m( 'li', [
               m( 'h3', 'Name' ),
-              m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , {
-                value : vm.person()
-              })
+              m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , vm.person() )
             ])
           ]),
           m('#submit', [

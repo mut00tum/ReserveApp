@@ -2,7 +2,6 @@ var
   express     = require( 'express' ),
   fs          = require( 'fs' ),
   bodyParser  = require( 'body-parser' ),
-  // mongo      = require( './mongo' ),
   MongoClient = require('mongodb').MongoClient,
   settings    = require('./settings'),
   db , myCollection;
@@ -42,8 +41,9 @@ app.get("/reserved", function (req, res) {
 
 app.post("/reserved", function (req, res) {  
   try {
+    // same( req , res );
     save( req.body );
-    // ▼ Mithril / m.request用レスポンス 
+    
     res.status(200).end();
     // console.log( 'save' )
   } catch(e) {
@@ -54,7 +54,6 @@ app.post("/reserved", function (req, res) {
 app.post("/cancel", function (req, res) {
   try {
     cancel( req, res );
-    // ▼ Mithril / m.request用レスポンス
     res.status(200).end();
     // console.log( 'cancel' )
   } catch(e) {
@@ -81,7 +80,7 @@ function save( post ) {
   });
 }
 
-function cancel( req , res ){
+function cancel( req ){
   var data = req.body;
   data.forEach( function( list ){
     myCollection.remove( { timestamp: list.timestamp } ,
@@ -91,6 +90,23 @@ function cancel( req , res ){
     )
   })
 }
+
+// function same( req , res ){
+//   var data = req.body;
+//   data.forEach( function( list ){
+//     if( myCollection.find({ position: list.position }) ) {
+//       myCollection.find( { position: list.position } ,
+//         function( err, result ) {
+//           if (err) { return console.log(err); }
+//           console.log( 'same' );
+//         }
+//       )
+//     } else {
+//       res.status(200).end();
+//     } 
+//   })
+//   res.status(200).end();
+// }
 
 console.log( 'start listening at 8000' );
 app.listen(8000);
