@@ -46,6 +46,14 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.7); }
   #card ul li h3 {
     float: left; }
+  #card ul li .hourTitle {
+    float: left;
+    width: 70px; }
+    #card ul li .hourTitle p.notice {
+      display: inline-block;
+      float: left;
+      font-size: 80%;
+      color: #e76565; }
   #card ul li .val {
     float: right;
     font-size: 30px; }
@@ -113,6 +121,14 @@
 #cardTime {
   position: relative;
   opacity: 0; }
+
+#card .info {
+  float: right;
+  text-align: right;
+  font-size: 26px; }
+  #card .info span {
+    padding-left: 10px;
+    font-size: 60%; }
 
 #submit {
   width: 100%;

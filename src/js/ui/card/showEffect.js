@@ -3,6 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function ShowEffect() {
+  m.startComputation();
   var
     Card = {
       place : $( '#cardPlace' ),
@@ -29,5 +30,5 @@ module.exports = function ShowEffect() {
     } , .075 );
 
   });
-
+  m.endComputation();
 }

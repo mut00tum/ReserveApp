@@ -16,6 +16,7 @@ module.exports = function ReserveModule() {
 
     Reserve.save = function( reserve ) {
       m.request({ method: "POST", url: "/reserved" , data: reserve });
+      // ▼ resデバッグ
       // .then( function(data){
       //   console.log( data )
       // });
@@ -123,11 +124,8 @@ module.exports = function ReserveModule() {
             timeList    = setTimeArea(),
             matchOrder  = timeList.indexOf( time ),
             arr         = [],
-            hourValList = {
-              '0.5': 1, '1': 2, '1.5': 3, '2': 4, '2.5': 5, '3': 6, '3.5': 7, '4': 8, '4.5': 9,
-              '5': 10, '5.5': 11, '6': 12, '6.5': 13, '7': 14, '7.5': 15, '8': 16
-            } ,
-            length = ( matchOrder + 1 ) + hourValList[hour];
+            length = ( matchOrder + 1 ) + hour * 2;
+
           for( var i = matchOrder; i < length; i++ ) {
             arr.push( timeList[i] )
           }
@@ -188,9 +186,10 @@ module.exports = function ReserveModule() {
 
     controller : function() {
 
-      setInterval(function(){
-        vm.getJsonReq();
-      } , 5000 );
+      // ▼ ローカルクライアント同期用 
+      // setInterval(function(){
+      //   vm.getJsonReq();
+      // } , 5000 );
 
       vm.init( );
       vm.getJsonReq();
@@ -461,13 +460,17 @@ module.exports = function ReserveModule() {
               m( 'p#cardTime.val' , setCardTime( vm.time() ) )
             ]),
             m( 'li', [
-              m( 'h3', 'Hour' ),
+              m( '.hourTitle' , [
+                m( 'h3', 'Hour' ),
+                m( 'p.notice' , 'アラート' ),
+              ]),
               m( '.number' , [
                 m( '.sppinner.hour' , [
                   m( "input#cardHour[name='num'][type='number']" , vm.hour() ),
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
-                ] ),
+                ]),
+                m( 'p.info' , vm.hour() , m( 'span' , 'h' ) ),
                 m( 'p.unit', 'h' )
               ])
             ]),
@@ -478,13 +481,15 @@ module.exports = function ReserveModule() {
                   m( "input#cardMember[name='num'][type='number']" , vm.member() ),
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
-                ] ),
+                ]),
+                m( 'p.info' , vm.member() , m( 'span' , '人' ) ),
                 m( 'p.unit', '人' )
               ])              
             ]),
             m( 'li', [
               m( 'h3', 'Name' ),
-              m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , vm.person() )
+              m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , vm.person() ),
+              m( 'p.info' , vm.person() ),
             ])
           ]),
           m('#submit', [

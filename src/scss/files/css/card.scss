@@ -55,6 +55,16 @@
     h3 {
       float: left;
     }
+    .hourTitle {
+      float: left;
+      width: 70px;
+        p.notice {
+        display: inline-block;
+        float: left;
+        font-size: 80%;
+        color: map-get( $color , red );
+      }
+    }    
     .val {
       float: right;
       font-size: 30px;
@@ -137,6 +147,27 @@
   position: relative;
   opacity: 0;
 }
+
+#card .info {
+  // display: none;
+  float: right;
+  text-align: right;
+  font-size: 26px;
+  span {
+    padding-left: 10px;
+    font-size: 60%;
+  }
+}
+// ▼ test
+// input {
+//   display: none;
+// }
+// .sppinner {
+//   display: none;
+// }
+// .unit {
+//   display: none;
+// }
 
 #submit {
   width: 100%;

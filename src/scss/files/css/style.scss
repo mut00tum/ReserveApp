@@ -53,9 +53,9 @@
         }
       }
       .P9A {
-        background: map-get($color, red);
+        background: map-get($color, redPink);
         &:hover {
-          background: lighten( map-get($color, red) , 5% );
+          background: lighten( map-get($color, redPink) , 5% );
         }
       }
       .P9B {

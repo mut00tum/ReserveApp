@@ -3,6 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function Spinner() {
+  m.startComputation();
   var
     card = $( '#card' ),
     hourField   = card.find('.hour'),
@@ -32,10 +33,6 @@ module.exports = function Spinner() {
       min    : 1,
       sum    : 1
     };
-
-    // init
-    // Hour.filed.val( 0 );
-    // Member.filed.val( 0 );
 
     setSpinner( Hour.filed , Hour.up , Hour.down , Hour.setVal , Hour.num , setHourLimit() , Hour.min , Hour.sum , 'hour' );
     setSpinner( Member.filed , Member.up , Member.down , Member.setVal , Member.num , Member.max , Member.min , Member.sum , 'member');
@@ -88,7 +85,7 @@ module.exports = function Spinner() {
         if( sort == 'hour' ) {
           max = setHourLimit();
         }
-        if( filed.val() <= min ) {
+        if( filed.val() < min ) {
           num = min;
         }
         setVal = String( num - sum );
@@ -132,5 +129,5 @@ module.exports = function Spinner() {
 
       return max;
     }
-
+  m.endComputation();
 }

@@ -1,8 +1,9 @@
 require( 'TweenMax' );
 require( 'TimelineMax' );
-// var m = require( 'mithril' );
+var m = require( 'mithril' );
 
 module.exports = function SlideCard() {
+  m.startComputation();
   var
     $Map = {
       card     : $( '#card' ),
@@ -21,8 +22,8 @@ module.exports = function SlideCard() {
       BTN   : .3
     },
     DELAY = {
-      OPEN  : 100,
-      CLOSE : 100
+      OPEN  : 70,
+      CLOSE : 70
     },
     EASE = {
       OPEN  : Power2.easeOut,
@@ -32,6 +33,7 @@ module.exports = function SlideCard() {
     Class = 'current';
 
   $Map.place.on( 'click' , function(){
+    // open();
     setTimeout( function(){
       open();
     } , DELAY.OPEN );
@@ -44,7 +46,7 @@ module.exports = function SlideCard() {
   });
 
   $Map.cancel.on( 'click' , function(){
-    close( SPEED.BTN , EASE.CLOSE );
+    cancelClose( SPEED.BTN , EASE.CLOSE );
   });
 
   $Map.closeBtn.on( 'click' , function(){
@@ -66,6 +68,15 @@ module.exports = function SlideCard() {
     });
   }
 
+  function cancelClose ( speed , ease ) {
+    // setOpen();
+    TweenMax.to( $Map.card , speed ,{
+      right : - Size_Map.card - Size_Map.padding,
+      ease  : ease,
+      delay : .4
+    });
+  }
+
   function setOpen() {
     TweenMax.set( $Map.card , {
       right : 0
@@ -75,5 +86,5 @@ module.exports = function SlideCard() {
   function removeCurrent() {
     $Map.place.removeClass( Class );
   }
-
+  m.endComputation();
 }

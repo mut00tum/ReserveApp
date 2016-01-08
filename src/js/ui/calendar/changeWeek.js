@@ -1,8 +1,10 @@
 require( 'TweenMax' );
 require( 'TimelineMax' );
 var resize  = require( '../window/resize' );
+var m = require( 'mithril' );
 
 module.exports = function ChangeWeek() {
+  m.startComputation();
   var
     $Map = {
       prev      : $( '#prev' ),
@@ -113,17 +115,19 @@ module.exports = function ChangeWeek() {
     var      
       SPEED_MAP = {
         HIDE : .15,
-        MOVE : .5
+        MOVE : .3
       },
       TL = new TimelineMax();
 
    TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.HIDE , {
-        opacity : 0
+        opacity : 0,
+        // delay : .1
       })
       .to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
         left    : w,
         opacity : 1,
         ease: Expo.easeOut
+        // delay : .15
       });
 
     return TL;
@@ -133,17 +137,19 @@ module.exports = function ChangeWeek() {
     var      
       SPEED_MAP = {
         HIDE : .15,
-        MOVE : .5
+        MOVE : .3
       },
       TL = new TimelineMax();
 
     TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.HIDE , {
-       opacity : 0
+       opacity : 0,
+       // delay : .1
       })
       .to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
         left    : w,
         opacity : 1,
         ease: Expo.easeOut
+        // delay : .15
       });
 
     return TL;
@@ -175,5 +181,5 @@ module.exports = function ChangeWeek() {
     Value.position = Value.position + Value.clnWidth;
     return Value.position;
   }
-
+  m.endComputation();
 }

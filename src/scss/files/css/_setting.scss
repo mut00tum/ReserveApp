@@ -2,7 +2,7 @@
 $color: (
   base       : #fff,
   bg         : #f0dcba,
-  red        : #f0b0d1,
+  redPink    : #f0b0d1,
   orange     : #f0bb98,
   green      : #b2e1cd,
   blue       : #b4dfe3,
@@ -10,7 +10,8 @@ $color: (
   pale       : #877860,
   lightGray  : #BFBFBF,
   gray       : #595959,
-  emerald    : #5bd68c
+  emerald    : #5bd68c,
+  red        : #e76565
 );
 //cf).map-get($color, red);
 
