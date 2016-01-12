@@ -1,8 +1,16 @@
 @charset "UTF-8";
 @import url(base.css);
+/*extend*/
 /* 設定 */
 /* test
 /*-----------------------------------------------------------------------*/
+.testArea {
+  position: fixed;
+  top: 0;
+  right: 50px;
+  width: 300px;
+  z-index: 100; }
+
 #test {
   position: relative;
   left: 50px;
@@ -13,48 +21,89 @@
 /*-----------------------------------------------------------------------*/
 #all {
   width: 100%;
+  min-width: 900px;
   margin: 0 auto;
   font-family: 'Open Sans'; }
-  #all h1 {
-    padding-top: 30px;
-    padding-left: 5%;
-    margin-bottom: 30px;
+
+/* header
+/*-----------------------------------------------------------------------*/
+#header {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 5% 30px 7%; }
+  #header h1 {
+    float: left;
     font-size: 14px;
     letter-spacing: .3em; }
+  #header .explain {
+    float: right; }
+    #header .explain ul li {
+      float: left;
+      margin-right: 10px;
+      text-align: right; }
+      #header .explain ul li:last-child {
+        margin-right: 0; }
+      #header .explain ul li p {
+        display: inline-block;
+        font-size: 12px; }
+      #header .explain ul li .box {
+        width: 10px;
+        height: 10px;
+        margin-right: 3px; }
+        #header .explain ul li .box.P9A {
+          background: #f0b0d1; }
+        #header .explain ul li .box.P9B {
+          background: #f0bb98; }
+        #header .explain ul li .box.P1A {
+          background: #b2e1cd; }
+        #header .explain ul li .box.P1B {
+          background: #b4dfe3; }
 
 /* nav
 /*-----------------------------------------------------------------------*/
 #nav {
-  position: relative; }
+  position: relative;
+  z-index: 50; }
 
 #prev,
 #next {
   position: absolute;
+  top: -1px;
   display: block;
+  text-align: center;
   cursor: pointer;
-  height: 700px;
-  border: none;
-  background: none;
-  color: #DDDAD5;
-  font-size: 40px; }
+  -webkit-transition: all, 0.2s;
+          transition: all, 0.2s; }
   #prev p,
   #next p {
-    padding-top: calc((700px / 2) - 30px); }
+    color: #cabfa9;
+    font-size: 30px; }
+  #prev:hover p,
+  #next:hover p {
+    color: #ded7c8; }
 
 #prev {
   display: none;
-  left: 0; }
+  width: 7%;
+  left: 1%; }
+  #prev:hover {
+    left: 0%; }
 
 #next {
-  right: 0; }
+  width: 5%;
+  right: 0px; }
+  #next:hover {
+    right: -10px; }
 
 /* calendar
-/*-----------------------------------------------------------------------*/
+/*--------------------------------------------------*/
 #calendar {
-  width: 90%;
-  min-width: 900px;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
   height: 100%;
-  margin: 0 auto 20px; }
+  padding: 0 5% 0 7%; }
 
 #days,
 #times {
@@ -70,57 +119,119 @@
       box-sizing: border-box;
       width: calc(100% / 35); }
 
-/* days */
+/* days
+  /*--------------------------------------------------*/
 #days {
   position: relative;
   height: 40px;
   background: #F1EEE8;
   overflow: hidden;
   z-index: 1; }
-  #days > ul {
+  #days ul {
     position: absolute; }
-    #days > ul > li {
+    #days ul li {
       padding-top: 10px; }
-      #days > ul > li p {
-        text-align: center; }
-        #days > ul > li p .date {
+      #days ul li p {
+        text-align: center;
+        -webkit-user-select: none;
+           -moz-user-select: none;
+            -ms-user-select: none;
+                user-select: none; }
+        #days ul li p .month {
+          margin-right: 3px; }
+        #days ul li p .date {
           margin-right: 5px; }
-        #days > ul > li p .day {
+        #days ul li p .day {
           font-size: 10px;
           opacity: .8; }
 
 #days.fixed {
   position: fixed;
+  box-sizing: border-box;
   top: 0;
-  width: 90%;
-  min-width: 900px; }
+  width: calc( 100% - ( 5% + 7% )); }
+  #days.fixed p {
+    position: relative;
+    top: -5px; }
 
-/* times */
+/* times
+  /*--------------------------------------------------*/
 #times {
   position: relative;
   height: calc( 40px * 26 );
   overflow: hidden; }
-  #times > ul {
+  #times #timesList {
     position: absolute;
     left: 0; }
-    #times > ul > li {
+    #times #timesList > li.date {
       box-sizing: border-box;
       border-right: 1px solid #E9E3CD; }
-      #times > ul > li:nth-child(7n) {
+      #times #timesList > li.date:nth-child(7n) {
         border-right: none; }
-      #times > ul > li:last-child {
+      #times #timesList > li.date:last-child {
         border-right: 5px solid #E9E3CD; }
-      #times > ul > li .timeArea ul.time {
+      #times #timesList > li.date .timeArea ul.time {
+        position: relative;
         display: block;
         height: 40px; }
-        #times > ul > li .timeArea ul.time li.place {
+        #times #timesList > li.date .timeArea ul.time li.place {
+          position: relative;
           float: left;
-          width: calc(100% / 4);
+          width: calc(100% / 4 - 2px);
           height: 100%;
+          margin: 0 1px;
           box-sizing: border-box;
-          border-bottom: 1px dashed #E9E3CD; }
+          border-bottom: 1px dashed #E9E3CD;
+          z-index: 0; }
   #times > ul > li.today {
     background: #FFFAF7; }
 
 #times.fixed {
+  top: 40px; }
+
+#timesList {
+  text-align: center; }
+  #timesList .initial {
+    display: none; }
+  #timesList .timeArea .place[data-first="true"] .initial {
+    display: inline-block;
+    color: #fff;
+    font-size: 12px;
+    z-index: 10; }
+
+/* time zone
+  /*--------------------------------------------------*/
+#timeZone {
+  float: left;
+  width: 7%;
+  margin-left: -7%;
+  margin-top: calc( 40px - 5px);
+  height: calc( 40px * 26 );
+  overflow: hidden; }
+
+#timeZone li.zone {
+  position: relative;
+  height: 40px;
+  text-align: right; }
+
+#timeZone li.zone p {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  width: 100%;
+  color: #cdb287;
+  font-size: 12px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
+
+#timeZone li.zone:first-child p {
+  top: 7px; }
+
+#timeZone li.zone:nth-child(even) p {
+  font-size: 8px;
+  color: #BFBFBF; }
+
+#timeZone.fixed {
   top: 40px; }

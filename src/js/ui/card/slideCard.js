@@ -22,8 +22,8 @@ module.exports = function SlideCard() {
       BTN   : .3
     },
     DELAY = {
-      OPEN  : 70,
-      CLOSE : 70
+      OPEN  : .25,
+      CLOSE : .15
     },
     EASE = {
       OPEN  : Power2.easeOut,
@@ -33,16 +33,17 @@ module.exports = function SlideCard() {
     Class = 'current';
 
   $Map.place.on( 'click' , function(){
-    // open();
-    setTimeout( function(){
-      open();
-    } , DELAY.OPEN );
+    open();
+    // setTimeout( function(){
+    //   open();
+    // } , DELAY.OPEN );
   });
 
   $Map.submit.on( 'click' , function(){
-    setTimeout( function(){
-      close( SPEED.CLOSE , EASE.SUBMIT );
-    } , DELAY.CLOSE );
+    close();
+    // setTimeout( function(){
+    //   close( SPEED.CLOSE , EASE.SUBMIT );
+    // } , DELAY.CLOSE );
   });
 
   $Map.cancel.on( 'click' , function(){
@@ -54,17 +55,27 @@ module.exports = function SlideCard() {
   });
 
   function open() {
-    TweenMax.to( $Map.card , SPEED.OPEN ,{
+    var tween = TweenMax.to( $Map.card , SPEED.OPEN ,{
       right : - Size_Map.padding,
-      ease  : EASE.OPEN
+      ease  : EASE.OPEN,
+      delay : DELAY.OPEN,
+      onComplete: function(){
+        this.pause( this.totalDuration() );
+      }
     });
+
+    // tween.pause(tween.totalDuration())
+    // tween.kill();
   }
 
   function close ( speed , ease ) {
-    // setOpen();
-    TweenMax.to( $Map.card , speed ,{
+    var tween = TweenMax.to( $Map.card , speed ,{
       right : - Size_Map.card - Size_Map.padding,
-      ease  : ease
+      ease  : ease,
+      delay : DELAY.CLOSE,
+      onComplete: function(){
+        this.pause( this.totalDuration() );
+      }
     });
   }
 

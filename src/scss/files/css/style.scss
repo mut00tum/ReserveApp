@@ -41,21 +41,67 @@
         cursor: pointer;
         transition: all .3s;
         &:hover {
-          background: #fef6e5;
+          background: map-get( $color , brightOrange );
         }
         &.current {
           &:before {
             display: block;
             height: 100%;
             content: "";
-            background: rgba(#fdedcb , .6);
+            // background: darken( map-get( $color , brightOrange ) , 3% );
+          }
+        }
+        &[data-place="P9A"] {
+          &:hover {
+            // background: lighten( map-get($color, redPink) , 10% );
+          }
+          &.current {
+            &:before {
+              background: darken( map-get( $color , redPink ) , 12% );
+            }
+          }
+        }
+        &[data-place="P9B"] {
+          &:hover {
+            // background: lighten( map-get($color, orange) , 10% );
+          }
+          &.current {
+            &:before {
+              background: darken( map-get( $color , orange ) , 12% );
+            }
+          }
+        }
+        &[data-place="P1A"] {
+          &:hover {
+            // background: lighten( map-get($color, green) , 10% );
+          }
+          &.current {
+            &:before {
+              background: darken( map-get( $color , green ) , 12% );
+            }
+          }
+        }
+        &[data-place="P1B"] {
+          &:hover {
+            // background: lighten( map-get($color, blue) , 10% );
+          }
+          &.current {
+            &:before {
+              background: darken( map-get( $color , blue ) , 12% );
+            }
           }
         }
       }
+
       .P9A {
         background: map-get($color, redPink);
         &:hover {
           background: lighten( map-get($color, redPink) , 5% );
+        }
+        &.current {
+          &:before {
+            background: darken( map-get( $color , redPink ) , 6% );
+          }
         }
       }
       .P9B {
@@ -63,17 +109,32 @@
         &:hover {
           background: lighten( map-get($color, orange) , 5% );
         }
+        &.current {
+          &:before {
+            background: darken( map-get( $color , orange ) , 6% );
+          }
+        }
       }
       .P1A {
         background: map-get($color, green);
         &:hover {
           background: lighten( map-get($color, green) , 5% );
         }
+        &.current {
+          &:before {
+            background: darken( map-get( $color , green ) , 6% );
+          }
+        }
       }
       .P1B {
         background: map-get($color, blue);
         &:hover {
           background: lighten( map-get($color, blue) , 5% );
+        }
+        &.current {
+          &:before {
+            background: darken( map-get( $color , blue ) , 6% );
+          }
         }
       }
       .reserved {

@@ -1,6 +1,6 @@
 // setting
 $color: (
-  base       : #fff,
+  base       : #F1EEE8,
   bg         : #f0dcba,
   redPink    : #f0b0d1,
   orange     : #f0bb98,
@@ -11,17 +11,20 @@ $color: (
   lightGray  : #BFBFBF,
   gray       : #595959,
   emerald    : #5bd68c,
-  red        : #e76565
+  red        : #e76565,
+  brightOrange : #fff2d7
 );
-//cf).map-get($color, red);
+
+$weekTerm   : 35;
+$hourHeight : 40px;
+$timesTotal : 26;
+$RightWidth : 5%;
+$zoneWidth  : 7%;
 
 $baseFontSize:16px;
 $baseTitleSize:30px;
 $baseSubSize:24px;
 
-$mobileFontSize:22px;
-$mobileTitleSize:36px;
-$mobileSubSize:30px;
 
 // Dir
 $commonImgDir  : "../../img/common/";

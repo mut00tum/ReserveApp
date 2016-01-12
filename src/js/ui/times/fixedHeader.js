@@ -3,7 +3,8 @@ module.exports = function FixedHeader() {
     $Map = {
       calendar : $( '#calendar' ),
       header   : $( '#days' ),
-      times    : $( '#times' )
+      times    : $( '#times' ),
+      zone     : $( '#timeZone' )
     },
     VALUE = {
       SCROLL : 300,
@@ -30,11 +31,13 @@ module.exports = function FixedHeader() {
     function addClass() {
       $Map.header.addClass('fixed');
       $Map.times.addClass('fixed');
+      $Map.zone.addClass('fixed');
     }
 
     function removeClass() {
       $Map.header.removeClass('fixed');
       $Map.times.removeClass('fixed');
+      $Map.zone.removeClass('fixed');
     }
 
 }

@@ -98,7 +98,6 @@ module.exports = function Check() {
         } 
         showSend();
       }
-      
     }
 
     if( Check.hour ) {

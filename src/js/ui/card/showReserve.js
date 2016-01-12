@@ -23,28 +23,26 @@ module.exports = function Confirm() {
   Map.place.on( 'click' , function( ){
     var self = $( this );
 
-    setInfo().hide();
-    setInput().show();  
+    set().hide( infoList );
+    set().show( inputList );  
     
     if( self.hasClass( Class ) ) {
-      setInput().hide();
-      setInfo().show();
+      set().hide( inputList );
+      set().show( infoList );
     } 
     
   });
 
-  function setInput() {
+  function set() {
 
-    function show() {
-      // console.log( 'show:' + list )
-      TweenMax.set( inputList , {
+    function show( list ) {
+      TweenMax.set( list , {
         display : 'block'
       });
     }
 
-    function hide() {
-      // console.log( 'hide:' + inputList )
-      TweenMax.set( inputList , {
+    function hide( list ) {
+      TweenMax.set( list , {
         display : 'none'
       });
     }
@@ -54,28 +52,5 @@ module.exports = function Confirm() {
       hide : hide
     }    
   }
-
-  function setInfo() {
-
-    function show() {
-      // console.log( 'show:' + list )
-      TweenMax.set( infoList , {
-        display : 'block'
-      });
-    }
-
-    function hide() {
-      // console.log( 'hide:' + list )
-      TweenMax.set( infoList , {
-        display : 'none'
-      });
-    }
-
-    return {
-      show : show,
-      hide : hide
-    }    
-  }
-
   m.endComputation();
 }
