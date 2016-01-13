@@ -5,7 +5,7 @@
 /* test
 /*-----------------------------------------------------------------------*/
 .testArea {
-  position: fixed;
+  position: relative;
   top: 0;
   right: 50px;
   width: 300px;
@@ -28,73 +28,90 @@
 /* header
 /*-----------------------------------------------------------------------*/
 #header {
+  position: relative;
   float: left;
   width: 100%;
   box-sizing: border-box;
-  padding: 20px 5% 30px 7%; }
+  padding: 20px 5% 30px 7%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 30; }
   #header h1 {
     float: left;
     font-size: 14px;
     letter-spacing: .3em; }
-  #header .explain {
+  #header .items {
     float: right; }
-    #header .explain ul li {
-      float: left;
-      margin-right: 10px;
-      text-align: right; }
-      #header .explain ul li:last-child {
-        margin-right: 0; }
-      #header .explain ul li p {
-        display: inline-block;
-        font-size: 12px; }
-      #header .explain ul li .box {
-        width: 10px;
-        height: 10px;
-        margin-right: 3px; }
-        #header .explain ul li .box.P9A {
-          background: #f0b0d1; }
-        #header .explain ul li .box.P9B {
-          background: #f0bb98; }
-        #header .explain ul li .box.P1A {
-          background: #b2e1cd; }
-        #header .explain ul li .box.P1B {
-          background: #b4dfe3; }
 
-/* nav
-/*-----------------------------------------------------------------------*/
+#header .explain {
+  float: left;
+  position: relative; }
+  #header .explain ul li {
+    float: left;
+    margin-right: 10px;
+    text-align: right; }
+    #header .explain ul li:last-child {
+      margin-right: 0; }
+    #header .explain ul li p {
+      display: inline-block;
+      font-size: 12px; }
+    #header .explain ul li .box {
+      width: 10px;
+      height: 10px;
+      margin-right: 3px; }
+      #header .explain ul li .box.P9A {
+        background: #f0b0d1; }
+      #header .explain ul li .box.P9B {
+        background: #f0bb98; }
+      #header .explain ul li .box.P1A {
+        background: #b2e1cd; }
+      #header .explain ul li .box.P1B {
+        background: #b4dfe3; }
+
 #nav {
-  position: relative;
+  float: left;
+  width: 50px;
+  padding-left: 30px;
   z-index: 50; }
-
-#prev,
-#next {
-  position: absolute;
-  top: -1px;
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  -webkit-transition: all, 0.2s;
-          transition: all, 0.2s; }
-  #prev p,
-  #next p {
-    color: #cabfa9;
-    font-size: 30px; }
-  #prev:hover p,
-  #next:hover p {
-    color: #ded7c8; }
-
-#prev {
-  display: none;
-  width: 7%;
-  left: 1%; }
-  #prev:hover {
-    left: 0%; }
-
-#next {
-  width: 5%;
-  right: 0px; }
-  #next:hover {
-    right: -10px; }
+  #nav #prev,
+  #nav #next {
+    box-sizing: border-box;
+    width: 25px;
+    text-align: center;
+    background: #dcc9ab;
+    cursor: pointer; }
+    #nav #prev.still,
+    #nav #next.still {
+      background: #e5e5e5;
+      pointer-events: none; }
+    #nav #prev p,
+    #nav #next p {
+      position: relative;
+      color: #fff;
+      font-size: 16px;
+      -webkit-transition: all, 0.15s;
+              transition: all, 0.15s; }
+    #nav #prev:hover,
+    #nav #next:hover {
+      background: #cdb287; }
+  #nav #prev {
+    float: left;
+    border-right: 1px solid #fff;
+    border-radius: 5px 0 0 5px; }
+    #nav #prev p {
+      right: 5px; }
+    #nav #prev:hover p {
+      right: 10px; }
+  #nav #next {
+    float: right;
+    border-left: 1px solid #fff;
+    border-radius: 0 5px 5px 0; }
+    #nav #next p {
+      left: 5px; }
+    #nav #next:hover p {
+      left: 10px; }
 
 /* calendar
 /*--------------------------------------------------*/
@@ -103,6 +120,7 @@
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  margin-bottom: 80px;
   padding: 0 5% 0 7%; }
 
 #days,
@@ -177,14 +195,19 @@
         #times #timesList > li.date .timeArea ul.time li.place {
           position: relative;
           float: left;
-          width: calc(100% / 4 - 2px);
+          width: calc(100% / 4);
           height: 100%;
-          margin: 0 1px;
           box-sizing: border-box;
+          border-left: 1px solid #fff;
+          border-right: 1px solid #fff;
           border-bottom: 1px dashed #E9E3CD;
           z-index: 0; }
-  #times > ul > li.today {
-    background: #FFFAF7; }
+
+#times #timesList > li.date.today {
+  background: #FFFAF7; }
+  #times #timesList > li.date.today .timeArea ul.time li.place {
+    border-left: 1px solid #FFFAF7;
+    border-right: 1px solid #FFFAF7; }
 
 #times.fixed {
   top: 40px; }
@@ -193,11 +216,16 @@
   text-align: center; }
   #timesList .initial {
     display: none; }
-  #timesList .timeArea .place[data-first="true"] .initial {
-    display: inline-block;
-    color: #fff;
-    font-size: 12px;
-    z-index: 10; }
+  #timesList .timeArea .place[data-first="true"] {
+    padding-top: 2px;
+    border-top: 2px solid #fff;
+    border-radius: 5px 5px 0 0; }
+    #timesList .timeArea .place[data-first="true"] .initial {
+      display: inline-block;
+      padding-top: 8px;
+      color: #fff;
+      font-size: 12px;
+      z-index: 10; }
 
 /* time zone
   /*--------------------------------------------------*/

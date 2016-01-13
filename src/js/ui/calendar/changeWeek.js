@@ -18,7 +18,8 @@ module.exports = function ChangeWeek() {
       count    : 0,
       position : 0,
       clnWidth : 0
-    };  
+    },
+    Class = 'still';
 
   var 
     dates      = $Map.timesList.children(),
@@ -47,12 +48,15 @@ module.exports = function ChangeWeek() {
     
     Value.clnWidth = getMoveWidth();
     setGoValue();
+    // ▼テスト
+    // console.log( 'Value.count= '+ Value.count )
+    // console.log( 'Value.position= '+ Value.position )
 
     if( Math.abs(Value.position) == Value.clnWidth ) {
       setShow( $Map.prev );
     }
     if( Math.abs(Value.position) >= Value.clnWidth * ( dateLength - 1 ) ) {
-      setHide( $Map.next );
+      setStill( $Map.next );
     }
     getGoAnimation( Value.position );
    });
@@ -60,9 +64,12 @@ module.exports = function ChangeWeek() {
   $Map.prev.on( 'click' , function(){
 
     Value.clnWidth = getMoveWidth();
+    // ▼テスト
+    // console.log( 'Value.count= '+ Value.count )
+    // console.log( 'Value.position= '+ Value.position )
 
     if( Math.abs( Value.position ) == Value.clnWidth ) {
-      setHide( $Map.prev );
+      setStill( $Map.prev );
     }
     if( Math.abs(Value.position) >= Value.clnWidth * ( dateLength - 2 ) ) {
       setShow( $Map.next );
@@ -87,27 +94,30 @@ module.exports = function ChangeWeek() {
     return false;
   }
 
-  function setHide( t ) {
-    TweenMax.set( t , {
-      display : 'none'
-    });
+  function getMoveWidth() {
+    return $Map.times.prop('clientWidth');
+  }
+
+  function setStill( t ) {
+    t.addClass( Class );
+    // TweenMax.set( t , {
+    //   pointerEvents : 'none',
+    // });
   }
 
   function setShow( t ) {
-    TweenMax.set( t , {
-      display : 'block'
+    t.removeClass(function() {
+      return Class;
     });
-  }
-
-  function getMoveWidth() {
-    var width = $Map.times.prop('clientWidth');
-    return width;
+    // TweenMax.set( t , {
+    //   pointerEvents : 'auto'
+    // });
   }
 
   function setClnState( w ) {
     TweenMax.set( [$Map.daysList, $Map.timesList] , {
       left    : w,
-      opacity : 1,
+      opacity : 1
     });
   }
 
@@ -121,13 +131,16 @@ module.exports = function ChangeWeek() {
 
    TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.HIDE , {
         opacity : 0,
-        // delay : .1
+        // delay   : .1
       })
       .to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
         left    : w,
         opacity : 1,
-        ease: Expo.easeOut
-        // delay : .15
+        // delay   : .15,
+        ease: Expo.easeOut,
+        onComplete: function(){
+          this.pause( this.totalDuration() );
+        }
       });
 
     return TL;
@@ -142,14 +155,18 @@ module.exports = function ChangeWeek() {
       TL = new TimelineMax();
 
     TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.HIDE , {
-       opacity : 0,
-       // delay : .1
+        opacity : 0,
+        // delay   : .1       
       })
       .to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
         left    : w,
         opacity : 1,
-        ease: Expo.easeOut
-        // delay : .15
+        // delay   : .15,
+        ease    : Expo.easeOut,
+        onComplete: function(){
+          this.pause( this.totalDuration() );
+        }
+        
       });
 
     return TL;

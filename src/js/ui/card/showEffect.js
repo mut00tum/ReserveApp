@@ -3,7 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function ShowEffect() {
-  m.startComputation();
+  // m.startComputation();
   var
     Card = {
       place : $( '#cardPlace' ),
@@ -22,13 +22,16 @@ module.exports = function ShowEffect() {
       opacity : 0
     });
 
-    TweenMax.staggerTo( arr , .2 , {
+    var tween = TweenMax.staggerTo( arr , .2 , {
       bottom : 0,
       opacity : 1,
       delay: .3,
-      ease : Power4.easeOut
+      ease : Power4.easeOut,
+      onComplete: function(){
+        this.pause( this.totalDuration() );
+      }
     } , .075 );
 
   });
-  m.endComputation();
+  // m.endComputation();
 }

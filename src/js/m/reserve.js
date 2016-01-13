@@ -1,5 +1,5 @@
 var m        = require( 'mithril' );
-var calendar = require( '../ui/calendar/changeWeek' );
+var calendar = require( '../ui/calendar' );
 var card     = require( '../ui/card' );
 var times    = require( '../ui/times' );
 
@@ -17,7 +17,7 @@ module.exports = function ReserveModule() {
 
     Reserve.save = function( reserve ) {
       m.request({ method: "POST", url: "/reserved" , data: reserve });
-      // ▼ resデバッグ
+      // ▼ node / resデバッグ
       // .then( function(data){
       //   console.log( data )
       // });
@@ -43,7 +43,6 @@ module.exports = function ReserveModule() {
       vm.hour      = m.prop('');
       vm.member    = m.prop('');
       vm.person    = m.prop('');
-      // vm.reserved  = m.prop(false);
       vm.target    = m.prop('');
       vm.json      = m.prop('');
       vm.first     = m.prop(false);
@@ -59,7 +58,6 @@ module.exports = function ReserveModule() {
         vm.position( position );
         vm.member( getCardVal().member );
         vm.person( getCardVal().person );
-        // vm.reserved( true );
 
         if ( getCardVal().hour > 0.5 ) {
           var gainReserve = vm.addGainReserve( vm.time() , getCardVal().hour );
@@ -72,7 +70,7 @@ module.exports = function ReserveModule() {
         m.request({ method: "GET", url: "/reserved"  })
         .then( function(data){
           vm.json( data );
-          initCardVal();
+          // initCardVal();
         });
 
         function getCardVal() {
@@ -257,14 +255,20 @@ module.exports = function ReserveModule() {
       },
       getReserve = function() {
         var
-          reserved  = $('.reserved'),
-          placeArea = $('.place'),
-          json      = vm.json(),
-          target    = '',
+          reserved   = $( '.reserved' ),
+          placeArea  = $( '.place' ),
+          infoHour   = $( '#infoHour' ),
+          infoMember = $( '#infoMember' ),
+          infoPerson = $( '#infoPerson' ),
+          json       = vm.json(),
+          target     = '',
           id , position , place;
         
         placeArea.on( 'click' , function() {
           initCardVal();
+          infoHour.text('');
+          infoMember.text('');
+          infoPerson.text('');
           if( $(this).hasClass( 'reserved' ) ){
             setCard( $(this) );
           }
@@ -282,12 +286,9 @@ module.exports = function ReserveModule() {
             for( var i = 0; i < length; i++ ) {
               position = getReservePsition( json , i )
               if (position == id) {
-                $( '#cardHour' ).val( json[i].hour );
-                $( '#cardMember' ).val( json[i].member );
-                $( '#cardPerson' ).val( json[i].person );
-                vm.hour( json[i].hour );
-                vm.member( json[i].member );
-                vm.person( json[i].person );
+                infoHour.text( json[i].hour );
+                infoMember.text( json[i].member );
+                infoPerson.text( json[i].person );
               }
             }
           }
@@ -297,8 +298,8 @@ module.exports = function ReserveModule() {
 
     view : function ( ctrl ) {
 
-      // vm.getJsonReq();
       getReserve();
+
       function setWeekDay( d ) {
         var weekArr = [
           'sun' , 'mon', 'tue' , 'wed' , 'thu' , 'fri' , 'sat'
@@ -418,28 +419,30 @@ module.exports = function ReserveModule() {
       return  m( '.contents' , { config: calendar } , [
         m( 'headar#header' , [
           m( 'h1' , 'Meeting Space Reservation' ),
-          m( '.explain' , [
-            m( 'ul' , [
-              m( 'li' , m( 'p.box.P9A' , '' ) , m( 'p.text' , '9F/大' ) ),
-              m( 'li' , m( 'p.box.P9B' , '' ) , m( 'p.text' , '9F/小' ) ),
-              m( 'li' , m( 'p.box.P1A' , '' ) , m( 'p.text' , '1F/コンビニ側' ) ),
-              m( 'li' , m( 'p.box.P1B' , '' ) , m( 'p.text' , '1F/窓口側' ) )
+          m( '.items' , [
+            m( '.explain' , [
+              m( 'ul' , [
+                m( 'li' , m( 'p.box.P9A' , '' ) , m( 'p.text' , '9F/大' ) ),
+                m( 'li' , m( 'p.box.P9B' , '' ) , m( 'p.text' , '9F/小' ) ),
+                m( 'li' , m( 'p.box.P1A' , '' ) , m( 'p.text' , '1F/コンビニ側' ) ),
+                m( 'li' , m( 'p.box.P1B' , '' ) , m( 'p.text' , '1F/窓口側' ) )
+              ])
+            ]),
+            m( 'nav#nav' , [
+              m( '#prev.still' , [
+                m( 'p' , '〈' )
+              ]),
+              m( '#next' , [
+                m( 'p' ,  '〉' )
+              ]),
             ])
-          ]),
+          ]),          
         ]),       
-        m( 'nav#nav' , [
-          m( '#prev' , [
-            m( 'p' , '〈' )
-          ]),
-          m( '#next' , [
-            m( 'p' ,  '〉' )
-          ]),
-        ]),
-        m( '.testArea' , [
-          m( 'button#test' , { onclick: vm.test } , 'test' ),
-          m( 'button#test' , { onclick: vm.clear } , 'clear' ),
-          m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
-        ]),
+        // m( '.testArea' , [
+        //   m( 'button#test' , { onclick: vm.test } , 'test' ),
+        //   m( 'button#test' , { onclick: vm.clear } , 'clear' ),
+        //   m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
+        // ]),
         m( '#calendar' , [
           m( 'ul#timeZone' , setTimeArea().map(function ( t ) {
             return m( 'li.zone' , [
@@ -465,7 +468,7 @@ module.exports = function ReserveModule() {
               } , [
                 m( '.timeArea' , setTimeArea().map(function ( t ) {
                   return  m( 'ul.time' , {
-                    // onclick: vm.redraw,
+                    // onclick: vm.getJsonReq,
                     name  : t
                     } ,
                     setPlaces().map(function ( p ) {
@@ -477,7 +480,7 @@ module.exports = function ReserveModule() {
                         ),
                         id            : addDateClass( d ) + '_' + t + '_' + p,
                         class         : checkReserve( d,t,p ).Class,
-                        // 'data-stamp'  : checkReserve( d,t,p ).stamp,
+                        'data-stamp'  : checkReserve( d,t,p ).stamp,
                         'data-place'  : p,
                         'data-date'   : addDateClass( d ),
                         'data-time'   : t,
@@ -515,7 +518,7 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( '.hourTitle' , [
                 m( 'h3', 'Hour' ),
-                m( 'p.notice' , 'アラート' ),
+                m( 'p#hourNotice' , '' ),
               ]),
               m( '.number' , [
                 m( '.sppinner.hour' , [
@@ -523,7 +526,7 @@ module.exports = function ReserveModule() {
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
                 ]),
-                m( 'p.info' , vm.hour() , m( 'span' , 'h' ) ),
+                m( 'p#infoHour.info' , '' , m( 'span' , 'h' ) ),
                 m( 'p.unit', 'h' )
               ])
             ]),
@@ -535,14 +538,14 @@ module.exports = function ReserveModule() {
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
                 ]),
-                m( 'p.info' , vm.member() , m( 'span' , '人' ) ),
+                m( 'p#infoMember.info' , '' , m( 'span' , '人' ) ),
                 m( 'p.unit', '人' )
               ])              
             ]),
             m( 'li', [
               m( 'h3', 'Name' ),
               m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , vm.person() ),
-              m( 'p.info' , vm.person() ),
+              m( 'p#infoPerson.info' , '' ),
             ])
           ]),
           m('#submit', [

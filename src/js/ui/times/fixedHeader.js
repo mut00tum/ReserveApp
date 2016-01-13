@@ -1,16 +1,16 @@
 module.exports = function FixedHeader() {
   var
     $Map = {
-      calendar : $( '#calendar' ),
-      header   : $( '#days' ),
-      times    : $( '#times' ),
-      zone     : $( '#timeZone' )
+      days   : $( '#days' ),
+      header : $( '#days' ),
+      times  : $( '#times' ),
+      zone   : $( '#timeZone' )
     },
     VALUE = {
       SCROLL : 300,
       SPEED  : 300
     },
-    top       = $Map.calendar.position().top,
+    top       = $Map.days.position().top,
     windowTop = $(window).scrollTop(),
     scroll;
 

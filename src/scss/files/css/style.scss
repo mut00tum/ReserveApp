@@ -39,7 +39,7 @@
       // }
       .place {
         cursor: pointer;
-        transition: all .3s;
+        transition: all .15s;
         &:hover {
           background: map-get( $color , brightOrange );
         }

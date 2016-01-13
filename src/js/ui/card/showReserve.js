@@ -3,7 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function Confirm() {
-  m.startComputation();
+  // m.startComputation();
   var
     Map = {
       hour     : $( '#cardHour' ),
@@ -52,5 +52,5 @@ module.exports = function Confirm() {
       hide : hide
     }    
   }
-  m.endComputation();
+  // m.endComputation();
 }

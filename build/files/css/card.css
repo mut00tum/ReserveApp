@@ -6,7 +6,7 @@
 #card {
   display: block;
   position: fixed;
-  top: 170px;
+  top: 130px;
   right: -450px;
   width: 350px;
   padding-right: 100px;
@@ -48,8 +48,8 @@
     float: left; }
   #card ul li .hourTitle {
     float: left;
-    width: 70px; }
-    #card ul li .hourTitle p.notice {
+    width: 140px; }
+    #card ul li .hourTitle #hourNotice {
       display: inline-block;
       float: left;
       font-size: 80%;

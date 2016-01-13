@@ -6,7 +6,7 @@
 /* test
 /*-----------------------------------------------------------------------*/
 .testArea {
-  position: fixed;
+  position: relative;
   top: 0;
   right: 50px;
   width: 300px;
@@ -31,94 +31,115 @@
 /* header
 /*-----------------------------------------------------------------------*/
 #header {
+  position: relative;
   float: left;
   width: 100%;
   box-sizing: border-box;
   padding: 20px $RightWidth 30px $zoneWidth;
+  user-select: none;
+  z-index: 30;
   h1 {
     float: left;
-    
     font-size: 14px;
     letter-spacing: .3em;
   }
-  .explain {
+  .items {
     float: right;
-    ul {
-      li {
-        float: left;
-        margin-right: 10px;
-        text-align: right;
-        &:last-child {
-          margin-right: 0;
+  }
+}
+
+#header .explain {
+  float: left;
+  position: relative;
+  ul {
+    li {
+      float: left;
+      margin-right: 10px;
+      text-align: right;
+      &:last-child {
+        margin-right: 0;
+      }
+      p {
+        display: inline-block;
+        font-size: 12px;
+      }
+      .box {
+        width: 10px;
+        height: 10px;
+        margin-right: 3px;
+        &.P9A{
+          background: map-get( $color , redPink );
         }
-        p {
-          display: inline-block;
-          font-size: 12px;
+        &.P9B{
+          background: map-get( $color , orange );
         }
-        .box {
-          width: 10px;
-          height: 10px;
-          margin-right: 3px;
-          &.P9A{
-            background: map-get( $color , redPink );
-          }
-          &.P9B{
-            background: map-get( $color , orange );
-          }
-          &.P1A{
-            background: map-get( $color , green );
-          }
-          &.P1B{
-            background: map-get( $color , blue );
-          }
+        &.P1A{
+          background: map-get( $color , green );
+        }
+        &.P1B{
+          background: map-get( $color , blue );
         }
       }
     }
   }
 }
-
-/* nav
-/*-----------------------------------------------------------------------*/
+  
 #nav {
-  position: relative;
-  z-index: 50;
-}
-
-#prev,
-#next {
-  position: absolute;
-  top: -1px;
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  transition: all , .2s;
-  p {
-    color: darken( map-get( $color , base ) , 20% );
-    font-size: 30px;    
-  }
-  &:hover {
+  float: left;
+  width: 50px;
+  padding-left: 30px;
+  z-index: 50;  
+  #prev,
+  #next {
+    box-sizing: border-box;
+    width: 25px;
+    text-align: center;
+    background: lighten( map-get( $color , brightPale ) , 10% );
+    cursor: pointer;
+    // transition: all , .3s;
+    &.still {
+      background: lighten( map-get( $color , lightGray ) , 15% );
+      pointer-events : none;
+    }
     p {
-      color: darken( map-get( $color , base ) , 10% );
+      position: relative;
+      color: #fff;
+      font-size: 16px;    
+      transition: all , .15s;
+    }
+    &:hover {
+      background: map-get( $color , brightPale );
+    }
+  }
+  #prev {
+    float: left;
+    border-right: 1px solid #fff;
+    border-radius:  5px 0 0 5px;
+    p {
+      right: 5px;
+      
+    }
+    &:hover p {
+      right: 10px;
+    }
+  }
+  #next {
+    float: right;
+    border-left: 1px solid #fff;
+    border-radius: 0 5px 5px 0;
+    // width: $RightWidth;
+    // right: 0px;
+    p {
+      left: 5px;
+    }
+    &:hover p {
+      left: 10px;
     }
   }
 }
 
-#prev {
-  display: none;
-  width: $zoneWidth;
-  left: 1%;
-  &:hover {
-    left: 0%;
-  }
-}
 
-#next {
-  width: $RightWidth;
-  right: 0px;
-  &:hover {
-    right: -10px;
-  }
-}
+
 
 /* calendar
 /*--------------------------------------------------*/
@@ -128,6 +149,7 @@
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  margin-bottom: 80px;
   padding: 0 $RightWidth 0 $zoneWidth;
 }
   
@@ -214,18 +236,24 @@
           li.place {
             position: relative;
             float: left;
-            width: calc(100% / 4 - 2px);
+            width: calc(100% / 4);
             height: 100%;
-            margin: 0 1px;
             box-sizing: border-box;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #fff;
             border-bottom: 1px dashed #E9E3CD;
             z-index: 0;
           }
         }
       }
     }    
-    & > ul > li.today {
-      background: #FFFAF7;
+  }
+
+  #times #timesList > li.date.today {
+    background: map-get( $color , today );
+    .timeArea ul.time li.place {
+      border-left: 1px solid map-get( $color , today );
+      border-right: 1px solid map-get( $color , today );
     }
   }
 
@@ -240,8 +268,12 @@
       display: none;
     }
     .timeArea .place[data-first="true"] {
+      padding-top: 2px;
+      border-top: 2px solid #fff;
+      border-radius: 5px 5px 0 0;
       .initial {
         display: inline-block;
+        padding-top: 8px;
         color: #fff;
         font-size: 12px;
         z-index: 10;

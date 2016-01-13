@@ -7,7 +7,7 @@
 #card {
   display: block;
   position: fixed;
-  top: 170px;
+  top: 130px;
   right: -450px;
   // right: -100px; //test 
   width: 350px;
@@ -57,8 +57,8 @@
     }
     .hourTitle {
       float: left;
-      width: 70px;
-        p.notice {
+      width: 140px;
+        #hourNotice {
         display: inline-block;
         float: left;
         font-size: 80%;

@@ -3,7 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function Spinner() {
-  m.startComputation();
+  // m.startComputation();
   var
     card = $( '#card' ),
     hourField   = card.find('.hour'),
@@ -116,9 +116,9 @@ module.exports = function Spinner() {
     function setHourLimit( ) {
       var
         limitMap = {
-          '13:00':7.5, '13:30':7, '14:00':6.5, '14:30':6, '15:00':5.5, '15:30':5,
-          '16:00':4.5, '16:30':4, '17:00':3.5, '17:30':3, '18:00':2.5, '18:30':2,
-          '19:00':1.5, '19:30':1, '2:000':0.5, '20:30':0
+          '13:00':8, '13:30':7.5, '14:00':7, '14:30':6.5, '15:00':6, '15:30':5.5,
+          '16:00':5, '16:30':4.5, '17:00':4, '17:30':3.5, '18:00':3, '18:30':2.5,
+          '19:00':2, '19:30':1.5, '20:00':1, '20:30':0.5
         },
         timeText = $Map.time.text(),
         max = 8;
@@ -129,5 +129,5 @@ module.exports = function Spinner() {
 
       return max;
     }
-  m.endComputation();
+  // m.endComputation();
 }

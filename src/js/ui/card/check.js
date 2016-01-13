@@ -1,7 +1,7 @@
 var m = require( 'mithril' );
 
 module.exports = function Check() {
-  m.startComputation();
+  // m.startComputation();
   var
     Map = {
       hour   : $( '#cardHour' ),
@@ -11,7 +11,11 @@ module.exports = function Check() {
       down   : $( '#card' ).find( '.down' ),
       send   : $( '#submit' ).find('.send'),
       still  : $( '#submit' ).find('.still'),
-      place  : $( '#timesList' ).find( '.place' )
+      place  : $( '#timesList' ).find( '.place' ),
+      notice : $( '#hourNotice' )
+    },
+    TextMap = {
+      notice : '予約が入っています'
     },
     timeList = [
       '0800','0830','0900','0930','1000','1030','1100','1130','1200','1230',
@@ -27,8 +31,12 @@ module.exports = function Check() {
     Id            = '',
     matchOrder , length;
 
+  //init
+  setNotice().hide();
+
   Map.place.on( 'click' , function( ){
     getPlaceId( $(this) );
+    setNotice().hide();
     showStill();
   });
 
@@ -65,9 +73,23 @@ module.exports = function Check() {
       hour    : Map.hour.val()   == hourStill,
       member  : Map.member.val() == memberStill,
       person  : Map.person.val() == personStill
-    };
+    },
+    hour   = Math.round(Map.hour.val() * 10 ) / 10;
+    member = Math.floor(Map.member.val());
 
-    if( !Check.hour && !Check.member && !Check.person) {
+    if ( !(hour % 0.5) == 0) {
+      var setNum = String(hour).substr( 0,2 );
+      var num    = String(hour).substr( 2,1 );
+      if ( num < 5  ) { num = 0; }
+      if ( num > 5  ) { num = 5; }
+      hour = Number( setNum + num );
+    }
+    // console.log( hour )
+
+    Map.hour.val( hour );
+    Map.member.val( member );
+
+    if( !Check.hour ) {
       if( Id ) {
         var
           IdArr   = Id.split( '_' ),
@@ -90,12 +112,14 @@ module.exports = function Check() {
           while ( i < length ) {
             var id = '#' + preList[i];
             if ( $( id ).hasClass('reserved') ) {
+              setNotice().show();
               showStill();
               return false;
             }
             i++
           }
-        } 
+        }
+        setNotice().hide();
         showSend();
       }
     }
@@ -113,13 +137,11 @@ module.exports = function Check() {
   }
 
   function showSend() {
-    // console.log( 'Send!!' )
     Map.still.css( { display: 'none' } );
     Map.send.css( { display: 'inline-block' } );
   }
 
   function showStill() {
-    // console.log( 'Still!!' )
     Map.send.css( { display: 'none' } );
     Map.still.css( { display: 'inline-block' } );
   }
@@ -131,5 +153,19 @@ module.exports = function Check() {
     return Map.hour.val()
   }
 
-  m.endComputation();
+  function setNotice() {
+    function show() {
+      Map.notice.text( TextMap.notice );
+    }
+    function hide() {
+      Map.notice.text('');
+    }
+    return {
+      show : show,
+      hide : hide
+    }
+
+  }
+
+  // m.endComputation();
 }
