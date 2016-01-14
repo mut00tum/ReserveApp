@@ -4,7 +4,7 @@ var card     = require( '../ui/card' );
 var times    = require( '../ui/times' );
 
 module.exports = function ReserveModule() {
- 
+
   var Reserve = function ( data ) {
     this.timestamp = m.prop( data.timestamp );
     this.position  = m.prop( data.position );
@@ -24,20 +24,20 @@ module.exports = function ReserveModule() {
     }
 
     Reserve.list = function() {
-      return m.request({ method: "GET", url: "/reserved"  });        
+      return m.request({ method: "GET", url: "/reserved"  });
     }
 
     Reserve.cancel = function( reserve ) {
-      m.request({ method: "POST", url: "/cancel" , data: reserve });         
+      m.request({ method: "POST", url: "/cancel" , data: reserve });
     }
-  
+
   // ビューモデル
   var vm = {
     init : function() {
       vm.list      = Reserve.list();
       vm.timestamp = m.prop('');
       vm.position  = m.prop('');
-      vm.place     = m.prop('');      
+      vm.place     = m.prop('');
       vm.date      = m.prop('');
       vm.time      = m.prop('');
       vm.hour      = m.prop('');
@@ -46,7 +46,8 @@ module.exports = function ReserveModule() {
       vm.target    = m.prop('');
       vm.json      = m.prop('');
       vm.first     = m.prop(false);
-          
+      vm.setStatus = m.prop(  )
+
       vm.clickSubmitButton = function(){
         var
           reserve   = [],
@@ -95,14 +96,14 @@ module.exports = function ReserveModule() {
           first     : vm.first()
         });
 
-        return reserve        
+        return reserve
       },
       vm.addGainReserve = function( t , h ) {
         var
           Class = '',
           list  = [],
           length , term , gainPosition;
-      
+
         term   = getReserveTimes( t , h );
         length = term.length - 1;
 
@@ -113,7 +114,7 @@ module.exports = function ReserveModule() {
           } else {
             vm.first( false )
           }
-          reserve = new Reserve({ 
+          reserve = new Reserve({
             timestamp : vm.timestamp(),
             position  : gainPosition,
             place     : vm.place(),
@@ -183,7 +184,6 @@ module.exports = function ReserveModule() {
       .then( function(data){
         vm.json( data );
         m.redraw();
-        initCardVal();
       });
     }
   };
@@ -192,7 +192,7 @@ module.exports = function ReserveModule() {
 
     controller : function() {
 
-      // ▼ ローカルクライアント同期用 
+      // ▼ ローカルクライアント同期用
       // setInterval(function(){
       //   vm.getJsonReq();
       // } , 5000 );
@@ -239,39 +239,39 @@ module.exports = function ReserveModule() {
             place    = json[i].place;
             position = getReservePsition( json , i )
             if ( position == id ){
-              Class += ' ' + 'reserved' + ' ' + place;              
+              Class += ' ' + 'reserved' + ' ' + place;
               stamp  = json[i].timestamp;
               person = json[i].person;
               first  = json[i].first;
-            } 
+            }
           }
         }
-        return { 
+        return {
           Class  : Class,
           stamp  : stamp,
           person : person,
           first  : first
         }
       },
-      getReserve = function() {
+      setCardVal = function() {
         var
           reserved   = $( '.reserved' ),
-          placeArea  = $( '.place' ),
+          place      = $( '.place' ),
           infoHour   = $( '#infoHour' ),
           infoMember = $( '#infoMember' ),
           infoPerson = $( '#infoPerson' ),
           json       = vm.json(),
           target     = '',
           id , position , place;
-        
-        placeArea.on( 'click' , function() {
+
+        place.on( 'click' , function() {
           initCardVal();
           infoHour.text('');
           infoMember.text('');
           infoPerson.text('');
-          if( $(this).hasClass( 'reserved' ) ){
-            setCard( $(this) );
-          }
+          // if( $(this).hasClass( 'reserved' ) ){
+          //   setCard( $(this) );
+          // }
         });
 
         reserved.on( 'click' , function() {
@@ -280,7 +280,7 @@ module.exports = function ReserveModule() {
         });
 
         function setCard( t ) {
-          if( json ){          
+          if( json ){
             id = t.attr( 'id' );
             var length = json.length;
             for( var i = 0; i < length; i++ ) {
@@ -298,7 +298,8 @@ module.exports = function ReserveModule() {
 
     view : function ( ctrl ) {
 
-      getReserve();
+      setCardVal();
+      // vm.getJsonReq();
 
       function setWeekDay( d ) {
         var weekArr = [
@@ -359,7 +360,6 @@ module.exports = function ReserveModule() {
           }
         return textMap[ p ];
       }
-
       function setCardDay( d ) {
         var
           arr   = [],
@@ -377,7 +377,6 @@ module.exports = function ReserveModule() {
           date  : date
         };
       }
-
       function setCardTime( t ) {
         var
           hour    = '',
@@ -409,7 +408,6 @@ module.exports = function ReserveModule() {
         }
         return setTime;
       }
-
       function setInitial( n ) {
         if( !n == '' ){
           return n.substr( 0 , 2 );
@@ -436,13 +434,13 @@ module.exports = function ReserveModule() {
                 m( 'p' ,  '〉' )
               ]),
             ])
-          ]),          
-        ]),       
-        // m( '.testArea' , [
-        //   m( 'button#test' , { onclick: vm.test } , 'test' ),
-        //   m( 'button#test' , { onclick: vm.clear } , 'clear' ),
-        //   m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
-        // ]),
+          ]),
+        ]),
+        m( '.testArea' , [
+          m( 'button#test' , { onclick: vm.test } , 'test' ),
+          m( 'button#test' , { onclick: vm.clear } , 'clear' ),
+          m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
+        ]),
         m( '#calendar' , [
           m( 'ul#timeZone' , setTimeArea().map(function ( t ) {
             return m( 'li.zone' , [
@@ -506,9 +504,9 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( 'h3' , 'Date' ),
               m( 'p#cardDate.val' , [
-                m( 'span.year' , setCardDay(vm.date()).year ), 
+                m( 'span.year' , setCardDay(vm.date()).year ),
                 m( 'span.month' , setCardDay(vm.date()).month ),
-                m( 'span.date' , setCardDay(vm.date()).date ) 
+                m( 'span.date' , setCardDay(vm.date()).date )
               ])
             ]),
             m('li.place', [
@@ -540,7 +538,7 @@ module.exports = function ReserveModule() {
                 ]),
                 m( 'p#infoMember.info' , '' , m( 'span' , '人' ) ),
                 m( 'p.unit', '人' )
-              ])              
+              ])
             ]),
             m( 'li', [
               m( 'h3', 'Name' ),

@@ -21,7 +21,7 @@ module.exports = function ChangeWeek() {
     },
     Class = 'still';
 
-  var 
+  var
     dates      = $Map.timesList.children(),
     dateLength = dates.length / 7,
     nowPosition , length
@@ -45,12 +45,12 @@ module.exports = function ChangeWeek() {
   resize( setClnPosition );
 
   $Map.next.on( 'click' , function(){
-    
+
     Value.clnWidth = getMoveWidth();
     setGoValue();
     // ▼テスト
-    // console.log( 'Value.count= '+ Value.count )
-    // console.log( 'Value.position= '+ Value.position )
+    console.log( 'Value.count= '+ Value.count )
+    console.log( 'Value.position= '+ Value.position )
 
     if( Math.abs(Value.position) == Value.clnWidth ) {
       setShow( $Map.prev );
@@ -58,15 +58,15 @@ module.exports = function ChangeWeek() {
     if( Math.abs(Value.position) >= Value.clnWidth * ( dateLength - 1 ) ) {
       setStill( $Map.next );
     }
-    getGoAnimation( Value.position );
+    getSlideAnimation( Value.position );
    });
- 
+
   $Map.prev.on( 'click' , function(){
 
     Value.clnWidth = getMoveWidth();
     // ▼テスト
-    // console.log( 'Value.count= '+ Value.count )
-    // console.log( 'Value.position= '+ Value.position )
+    console.log( 'Value.count= '+ Value.count )
+    console.log( 'Value.position= '+ Value.position )
 
     if( Math.abs( Value.position ) == Value.clnWidth ) {
       setStill( $Map.prev );
@@ -75,7 +75,7 @@ module.exports = function ChangeWeek() {
       setShow( $Map.next );
     }
     setBackValue();
-    getGoAnimation( Value.position );
+    getSlideAnimation( Value.position );
 
   });
 
@@ -87,7 +87,7 @@ module.exports = function ChangeWeek() {
     var
       num   = Value.count,
       value = getMoveWidth();
-    
+
     Value.position = - ( value * ( num ) );
     getRePotsitionAnimation( Value.position );
 
@@ -121,65 +121,42 @@ module.exports = function ChangeWeek() {
     });
   }
 
-  function getGoAnimation( w ) {
-    var      
-      SPEED_MAP = {
-        HIDE : .15,
-        MOVE : .3
+  function getSlideAnimation( w ) {
+    var
+      SPEED = {
+        HIDE : .05,
+        MOVE : .02
       },
+      EASE = {
+        MOVE : Back.easeOut.config(1.4)
+      },
+      t  = [$Map.daysList, $Map.timesList],
       TL = new TimelineMax();
 
-   TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.HIDE , {
+    TL.to( t , SPEED.HIDE , {
         opacity : 0,
-        // delay   : .1
       })
-      .to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
+      .to( t , SPEED.MOVE , {
         left    : w,
         opacity : 1,
-        // delay   : .15,
-        ease: Expo.easeOut,
+        ease    : EASE.MOVE,
         onComplete: function(){
           this.pause( this.totalDuration() );
         }
-      });
-
-    return TL;
-  }
-
-  function getBackAnimation( w ) {
-    var      
-      SPEED_MAP = {
-        HIDE : .15,
-        MOVE : .3
-      },
-      TL = new TimelineMax();
-
-    TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.HIDE , {
-        opacity : 0,
-        // delay   : .1       
-      })
-      .to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
-        left    : w,
-        opacity : 1,
-        // delay   : .15,
-        ease    : Expo.easeOut,
-        onComplete: function(){
-          this.pause( this.totalDuration() );
-        }
-        
       });
 
     return TL;
   }
 
   function getRePotsitionAnimation( w ) {
-    var      
-      SPEED_MAP = {
+    var
+      SPEED = {
         MOVE : .4
       },
+      t  = [$Map.daysList, $Map.timesList],
       TL = new TimelineMax();
 
-    TL.to( [$Map.daysList, $Map.timesList] , SPEED_MAP.MOVE , {
+    TL.to( t , SPEED.MOVE , {
         left    : w,
         ease: Expo.easeOut
       });
