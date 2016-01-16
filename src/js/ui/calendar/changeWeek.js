@@ -49,8 +49,8 @@ module.exports = function ChangeWeek() {
     Value.clnWidth = getMoveWidth();
     setGoValue();
     // ▼テスト
-    console.log( 'Value.count= '+ Value.count )
-    console.log( 'Value.position= '+ Value.position )
+    // console.log( 'Value.count= '+ Value.count )
+    // console.log( 'Value.position= '+ Value.position )
 
     if( Math.abs(Value.position) == Value.clnWidth ) {
       setShow( $Map.prev );
@@ -65,8 +65,8 @@ module.exports = function ChangeWeek() {
 
     Value.clnWidth = getMoveWidth();
     // ▼テスト
-    console.log( 'Value.count= '+ Value.count )
-    console.log( 'Value.position= '+ Value.position )
+    // console.log( 'Value.count= '+ Value.count )
+    // console.log( 'Value.position= '+ Value.position )
 
     if( Math.abs( Value.position ) == Value.clnWidth ) {
       setStill( $Map.prev );
