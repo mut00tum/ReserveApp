@@ -3,6 +3,7 @@ var calendar = require( '../ui/calendar' );
 var card     = require( '../ui/card' );
 var times    = require( '../ui/times' );
 var timeArea = require( '../data/timeArea' );
+var socket   = require( 'socket.io-client' )( 'http://localhost:8000' );
 
 module.exports = function ReserveModule() {
 
@@ -16,12 +17,22 @@ module.exports = function ReserveModule() {
     this.first     = m.prop( data.first );
   }
 
+    function Save( reserve ) {
+      socket.emit( 'saveData' , reserve );
+    }
+
     Reserve.save = function( reserve ) {
-      m.request({ method: "POST", url: "/reserved" , data: reserve });
-      // ▼ node / resデバッグ
-      // .then( function(data){
-      //   console.log( data )
+      // socket.on( 'reserveData' , function( data , fn ){
+      //   var answer = confirm( data.message );
+      //   fn( answer );
+      //   // socket.emit( 'reserveData', function( reserve ){
+      //   //   console.log( reserve )
+      //   //   console.log( 'send: ' + reserve );
+      //   // });
+
       // });
+      m.request({ method: "POST", url: "/reserved" , data: reserve });
+
     }
 
     Reserve.list = function() {
@@ -62,10 +73,10 @@ module.exports = function ReserveModule() {
 
         if ( getCardVal().hour > 0.5 ) {
           var reserve = vm.addGainReserve( vm.time() , getCardVal().hour );
-          Reserve.save( reserve );
+          Save( reserve );
         } else {
           vm.first( true );
-          Reserve.save( vm.addReserve() );
+          Save( vm.addReserve() );
         }
 
         vm.getJsonReq();
@@ -160,10 +171,21 @@ module.exports = function ReserveModule() {
       },
       vm.getJsonReq = function() {
         // ▼テスト
-        console.log( 'getJsonReq' )
-        m.request({ method: "GET", url: "/reserved"  })
-          .then( function( value ){
-            vm.json( value );
+        // console.log( 'getJsonReq' )
+        // m.request({ method: "GET", url: "/reserved"  })
+        //   .then( function( value ){
+        //     vm.json( value );
+        // });
+
+        socket.on( 'reserveData' , function( data , fn ){
+          // var answer = confirm( data.message );
+          // fn( answer );
+          console.log( data )
+          // socket.emit( 'reserveData', function( reserve ){
+          //   console.log( reserve )
+          //   console.log( 'send: ' + reserve );
+          // });
+
         });
 
       },
@@ -221,7 +243,7 @@ module.exports = function ReserveModule() {
           id , position , place;
 
         place.on( 'click' , function() {
-          vm.getJsonReq();
+          // vm.getJsonReq();
           initCardVal();
           infoHour.text('');
           infoMember.text('');

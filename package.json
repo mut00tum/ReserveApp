@@ -27,6 +27,8 @@
     "mithril": "^0.2.0",
     "mongodb": "^2.0.52",
     "require-dir": "^0.3.0",
+    "socket.io": "^1.4.4",
+    "socket.io-client": "^1.4.4",
     "webpack": "^1.12.6"
   },
   "dependencies": {

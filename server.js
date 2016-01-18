@@ -2,11 +2,15 @@ var
   express     = require( 'express' ),
   fs          = require( 'fs' ),
   bodyParser  = require( 'body-parser' ),
-  MongoClient = require('mongodb').MongoClient,
-  settings    = require('./settings'),
+  MongoClient = require( 'mongodb' ).MongoClient,
+  settings    = require( './settings' ),
   db , myCollection;
 
-var app = express();
+var app    = express();
+var server = require( 'http' ).Server(app);
+var io     = require( 'socket.io' )(server);
+
+
 // ▼ err:Can't set headers after they are sent.
 app.use(function(req,res,next){
   var _send = res.send;
@@ -18,8 +22,14 @@ app.use(function(req,res,next){
   };
   next();
 });
+
 app.use(express.static( 'build' ));
 app.use(bodyParser.json());
+// server.use(bodyParser.json());
+
+console.log( 'start listening at 8000' );
+// app.listen(8000);
+server.listen(8000);
 
 MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(err, mongodb) {
   if (err) { return console.dir(err); }
@@ -27,6 +37,21 @@ MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(e
   db           = mongodb;
   myCollection = db.collection( 'reserved' )
 })
+
+io.sockets.on( 'connection' , function( socket ) {
+  var data = getReserveData();
+  socket.emit( 'reserveData' , data , function( data ) {
+    console.log( 'reserveData emit success' );
+    console.log( data )
+    // socket.emit( 'reserved' , { message : 'hello Socket' } , function() {
+    //   console.log( data )
+    // });
+  });
+  socket.on( 'saveData' , function( data ){
+    console.log( data )
+    save( data )
+  });
+});
 
 app.get("/reserved", function (req, res) {
   try {
@@ -39,11 +64,11 @@ app.get("/reserved", function (req, res) {
   }
 });
 
-app.post("/reserved", function (req, res) {  
+app.post("/reserved", function (req, res) {
   try {
     // same( req , res );
     save( req.body );
-    
+
     res.status(200).end();
     // console.log( 'save' )
   } catch(e) {
@@ -74,8 +99,16 @@ function loading( callback ) {
   });
 }
 
-function save( post ) {
-  myCollection.insert( post, function( err, result ) {
+function getReserveData() {
+  myCollection.find().toArray(function( err, item ) {
+    if (err) { return console.log(err); }
+    return item;
+  });
+}
+
+
+function save( data ) {
+  myCollection.insert( data, function( err, result ) {
     if (err) { return console.log(err); }
   });
 }
@@ -103,10 +136,8 @@ function cancel( req ){
 //       )
 //     } else {
 //       res.status(200).end();
-//     } 
+//     }
 //   })
 //   res.status(200).end();
 // }
 
-console.log( 'start listening at 8000' );
-app.listen(8000);
