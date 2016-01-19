@@ -39,16 +39,26 @@ MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(e
 })
 
 io.sockets.on( 'connection' , function( socket ) {
-  var data = getReserveData();
-  socket.emit( 'reserveData' , data , function( data ) {
-    console.log( 'reserveData emit success' );
-    console.log( data )
-    // socket.emit( 'reserved' , { message : 'hello Socket' } , function() {
-    //   console.log( data )
-    // });
-  });
+  // var data = getReserveData();
+  // console.log( 'getReserveData: ' + data )
+
+  sendReserve()
+
+  setInterval(function() {
+    sendReserve();
+  } , 3000 );
+
+  function sendReserve() {
+    myCollection.find().toArray(function( err, item ) {
+      if (err) { return console.log(err); }
+      socket.emit( 'reserveData' , item , function( data ) {
+          // console.log( data )
+      })
+    });
+  }
+
   socket.on( 'saveData' , function( data ){
-    console.log( data )
+    // console.log( 'saveData:' + data )
     save( data )
   });
 });
@@ -102,10 +112,10 @@ function loading( callback ) {
 function getReserveData() {
   myCollection.find().toArray(function( err, item ) {
     if (err) { return console.log(err); }
+    console.log( item )
     return item;
   });
 }
-
 
 function save( data ) {
   myCollection.insert( data, function( err, result ) {

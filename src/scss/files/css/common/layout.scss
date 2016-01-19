@@ -83,12 +83,12 @@
     }
   }
 }
-  
+
 #nav {
   float: left;
   width: 50px;
   padding-left: 30px;
-  z-index: 50;  
+  z-index: 50;
   #prev,
   #next {
     box-sizing: border-box;
@@ -104,7 +104,7 @@
     p {
       position: relative;
       color: #fff;
-      font-size: 16px;    
+      font-size: 16px;
       transition: all , .15s;
     }
     &:hover {
@@ -117,7 +117,7 @@
     border-radius:  5px 0 0 5px;
     p {
       right: 5px;
-      
+
     }
     &:hover p {
       right: 10px;
@@ -152,14 +152,13 @@
   margin-bottom: 80px;
   padding: 0 $RightWidth 0 $zoneWidth;
 }
-  
+
   #days,
   #times {
     box-sizing: border-box;
     border: 5px solid #F1EEE8;
     & > ul {
-      width: -webkit-calc(100% * 5);
-      width: calc(100% * 5);
+      width: calc(100% * #{$weekNum });
       border-spacing: 0;
       & > li {
         float: left;
@@ -210,7 +209,7 @@
       top: -5px;
     }
   }
-      
+
   /* times
   /*--------------------------------------------------*/
   #times {
@@ -246,7 +245,7 @@
           }
         }
       }
-    }    
+    }
   }
 
   #times #timesList > li.date.today {
@@ -260,7 +259,7 @@
   #times.fixed {
     top: $hourHeight;
   }
-  
+
   // ▼イニシャル
   #timesList {
     text-align: center;
@@ -278,9 +277,9 @@
         font-size: 12px;
         z-index: 10;
       }
-    }    
+    }
   }
-  
+
 
   /* time zone
   /*--------------------------------------------------*/
@@ -292,7 +291,7 @@
     height: calc( #{$hourHeight} * #{$timesTotal} );
     overflow: hidden;
   }
-  
+
     #timeZone li.zone {
       position: relative;
       height: $hourHeight;
@@ -312,7 +311,7 @@
       #timeZone li.zone:first-child p {
         top: 7px;
       }
-      
+
       #timeZone li.zone:nth-child(even) p {
         font-size: 8px;
         color: map-get($color , lightGray)
@@ -321,6 +320,6 @@
   #timeZone.fixed {
     top: $hourHeight;
   }
-  
+
 
 

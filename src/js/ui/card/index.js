@@ -1,13 +1,9 @@
-var slideCard   = require( './slideCard' );
-var check       = require( './check' );
-var sppinner    = require( './spinner' );
-var showEffect  = require( './showEffect' );
-var showReserve = require( './showReserve' );
+var check        = require( './check' );
+var sppinner     = require( './spinner' );
+var eventManager = require( './eventManager' );
 
 module.exports = function Index() {
-  slideCard();
   check();
   sppinner();
-  showEffect();
-  showReserve();
+  eventManager();
 }

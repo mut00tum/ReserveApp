@@ -9,37 +9,9 @@
 #times {
   .timeArea {
     .time {
-      // .place {
-      //   position: relative;
-      //   z-index: 2;
-      //   overflow: hidden;
-      //   cursor: pointer;
-      //   transition: all .2s;
-      // }
-      // .place:hover {
-      //   color: #fef6e5;
-      // }
-      // .place::after {
-      //   position: absolute;
-      //   z-index: -1;
-      //   display: block;
-      //   content: "";
-      //   top: 0;
-      //   left: 0;
-      //   width: 100%;
-      //   height: 100%;
-      //   transition: all .2s;
-      //   -webkit-transform: scale(.5);
-      //   transform: scale(.5);
-      // }
-      // .place:hover::after {
-      //   background: #fef6e5;
-      //   -webkit-transform: scale(1);
-      //   transform: scale(1);
-      // }
       .place {
         cursor: pointer;
-        transition: all .15s;
+        // transition: all .15s;
         &:hover {
           background: map-get( $color , brightOrange );
         }
@@ -138,7 +110,7 @@
         }
       }
       .reserved {
-        
+
         &:hover {
           // background: #EB8CAD;
         }

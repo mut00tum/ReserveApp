@@ -38,7 +38,7 @@ module.exports = function Spinner() {
     setSpinner( Member.filed , Member.up , Member.down , Member.setVal , Member.num , Member.max , Member.min , Member.sum , 'member');
 
     function setSpinner( filed , upBtn , downBtn , setVal , num , max , min , sum , sort ) {
-      
+
       $Map.place.on( 'click' , function(){
         num = 0;
         if( sort == 'hour' ) {
@@ -78,7 +78,7 @@ module.exports = function Spinner() {
         setVal = String( num + sum );
         num = num + sum;
         filed.val( setVal );
-        
+
       });
 
       downBtn.on( 'click' , function(){
@@ -89,7 +89,7 @@ module.exports = function Spinner() {
           num = min;
         }
         setVal = String( num - sum );
-        num = num - sum;      
+        num = num - sum;
         filed.val( setVal );
       });
     }
@@ -106,7 +106,7 @@ module.exports = function Spinner() {
         TL = new TimelineMax();
 
       TL.to( filed , SPEED.READY , { left : - 10 } )
-        .to( filed , SPEED.MAX , { 
+        .to( filed , SPEED.MAX , {
           left : 0,
           ease : EASE.MAX
           // delay : .1

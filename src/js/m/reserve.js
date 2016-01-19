@@ -3,7 +3,7 @@ var calendar = require( '../ui/calendar' );
 var card     = require( '../ui/card' );
 var times    = require( '../ui/times' );
 var timeArea = require( '../data/timeArea' );
-var socket   = require( 'socket.io-client' )( 'http://localhost:8000' );
+var socket   = require( 'socket.io-client' )( 'http://192.168.0.134:8000' );
 
 module.exports = function ReserveModule() {
 
@@ -17,27 +17,25 @@ module.exports = function ReserveModule() {
     this.first     = m.prop( data.first );
   }
 
+  socket.on( 'connect' , function(){
+    console.log( 'connect' )
+  });
+  socket.on( 'disconnect', function(){
+     console.log( 'disconnect' )
+  });
+
+
     function Save( reserve ) {
       socket.emit( 'saveData' , reserve );
     }
 
     Reserve.save = function( reserve ) {
-      // socket.on( 'reserveData' , function( data , fn ){
-      //   var answer = confirm( data.message );
-      //   fn( answer );
-      //   // socket.emit( 'reserveData', function( reserve ){
-      //   //   console.log( reserve )
-      //   //   console.log( 'send: ' + reserve );
-      //   // });
-
-      // });
-      m.request({ method: "POST", url: "/reserved" , data: reserve });
-
+      // m.request({ method: "POST", url: "/reserved" , data: reserve });
     }
 
-    Reserve.list = function() {
-      m.request({ method: "GET", url: "/reserved"  });
-    }
+    // Reserve.list = function() {
+    //   m.request({ method: "GET", url: "/reserved"  });
+    // }
 
     Reserve.cancel = function( reserve ) {
       m.request({ method: "POST", url: "/cancel" , data: reserve });
@@ -51,13 +49,13 @@ module.exports = function ReserveModule() {
       vm.place     = m.prop('');
       vm.date      = m.prop('');
       vm.time      = m.prop('');
-      vm.hour      = m.prop('');
+      vm.hour      = m.prop(0.5);
       vm.member    = m.prop('');
       vm.person    = m.prop('');
       vm.target    = m.prop('');
       vm.json      = m.prop('');
       vm.first     = m.prop(false);
-      vm.interval  = new Array();
+      vm.week      = m.prop(0);
 
       vm.clickSubmitButton = function(){
         var
@@ -170,34 +168,21 @@ module.exports = function ReserveModule() {
         }
       },
       vm.getJsonReq = function() {
-        // ▼テスト
-        // console.log( 'getJsonReq' )
-        // m.request({ method: "GET", url: "/reserved"  })
-        //   .then( function( value ){
-        //     vm.json( value );
-        // });
-
-        socket.on( 'reserveData' , function( data , fn ){
-          // var answer = confirm( data.message );
-          // fn( answer );
-          console.log( data )
-          // socket.emit( 'reserveData', function( reserve ){
-          //   console.log( reserve )
-          //   console.log( 'send: ' + reserve );
-          // });
-
+        m.request({ method: "GET", url: "/reserved"  })
+          .then( function( value ){
+            vm.json( value );
         });
-
       },
-      vm.startInterval = function() {
-        console.log( 'Interval_start' )
-        vm.interval.push( setInterval( vm.getJsonReq , 5000 ) );
-      },
-      vm.stopInterval = function() {
-        console.log( 'Interval_stop' )
-        if ( vm.interval.length > 0 ) {
-         clearInterval( vm.interval.shift() );
-        }
+      vm.getSocket = function() {
+        socket.on( 'reserveData' , function( data , fn ){
+          m.startComputation();
+          // console.log( data )
+          var saveJson = vm.json( data );
+          fn( saveJson );
+          m.endComputation();
+          // m.redraw();
+          // m.redraw.strategy("diff");
+        });
       },
       vm.checkReserve = function( d,t,p ) {
         var
@@ -217,8 +202,10 @@ module.exports = function ReserveModule() {
             place    = json[i].place;
             position = json[i].position + '_' + json[i].place;
             if ( position == id ){
-              Class += ' ' + 'reserved' + ' ' + place;
+              Class += 'reserved' + ' ' + place;
               stamp  = json[i].timestamp;
+              hour   = json[i].hour;
+              member = json[i].member;
               person = json[i].person;
               first  = json[i].first;
             }
@@ -227,60 +214,50 @@ module.exports = function ReserveModule() {
         return {
           Class  : Class,
           stamp  : stamp,
+          hour   : hour,
+          member : member,
           person : person,
           first  : first
         }
       },
-      vm.setCardVal = function() {
+      vm.setCancelTarget = function() {
         var
-          reserved   = $( '.reserved' ),
-          place      = $( '.place' ),
-          infoHour   = $( '#infoHour' ),
-          infoMember = $( '#infoMember' ),
-          infoPerson = $( '#infoPerson' ),
-          json       = vm.json(),
-          target     = '',
-          id , position , place;
-
-        place.on( 'click' , function() {
-          // vm.getJsonReq();
-          initCardVal();
-          infoHour.text('');
-          infoMember.text('');
-          infoPerson.text('');
-        });
+          reserved = $( '.reserved' );
 
         reserved.on( 'click' , function() {
-          setCard( $(this) );
-          vm.target( $(this) );
+          var self = $(this);
+          vm.target( self );
         });
-
-        function initCardVal() {
-          $( '#cardHour' ).val( 0 );
-          $( '#cardMember' ).val( 0 );
-          $( '#cardPerson' ).val('');
-          vm.hour( '0.5' );
-          vm.member( 0 );
-          vm.person( '' );
-        }
-
-        function setCard( t ) {
-          if( json ){
-            id = t.attr( 'id' );
-            var length = json.length;
-            for( var i = 0; i < length; i++ ) {
-              position = json[i].position + '_' + json[i].place;
-              if (position == id) {
-                infoHour.text( json[i].hour );
-                infoMember.text( json[i].member );
-                infoPerson.text( json[i].person );
-              }
-            }
-          }
-        }
       },
       vm.addDateClass = function( d ) {
         return d.getFullYear() + "_" + (d.getMonth() + 1) + "_" + d.getDate();
+      },
+      vm.setWeek = function( dObj ) {
+        var
+          term = 7,  // ▼ _setting.scss：$week_weekTerm
+          arr  = [],
+          i    = vm.week(),
+          d , day , date;
+
+        var weekday = dObj.getDay();
+        var monday  = dObj.getDate() - ( weekday - 1 ) + i ;
+        for( var i = 0; i < term; i++ ){
+          d = new Date();
+          d.setDate( monday );
+          d.setDate( d.getDate() + i );
+          arr.push( d );
+        }
+        return arr;
+      },
+      vm.nextWeek = function() {
+        var num = vm.week();
+        num += 7;
+        vm.week( num );
+      },
+      vm.prevWeek = function() {
+        var num = vm.week();
+        num -= 7;
+        vm.week( num );
       }
     },
     test : function(){
@@ -300,43 +277,20 @@ module.exports = function ReserveModule() {
   var Calendar = {
 
     controller : function() {
-
-      // ▼ ローカルクライアント同期用
-      // setInterval(function(){
-      //   vm.getJsonReq();
-      // } , 5000 );
-      vm.init( );
+      vm.init();
+      vm.getSocket();
       vm.getJsonReq();
-
-      // vm.startInterval();
     },
 
     view : function ( ctrl ) {
 
-      vm.setCardVal();
-      // vm.getJsonReq();
+      vm.setCancelTarget();
 
       function setWeekDay( d ) {
         var weekArr = [
           'sun' , 'mon', 'tue' , 'wed' , 'thu' , 'fri' , 'sat'
         ];
         return weekArr[d];
-      }
-      function setWeek( dObj ) {
-        var
-          term = 35,  // ▼ _setting.scss：$week_weekTerm
-          arr  = [],
-          d , day , date;
-
-        var weekday = dObj.getDay();
-        var monday  = dObj.getDate() - ( weekday - 1 );
-        for( var i = 0; i < term; i++ ){
-          d = new Date();
-          d.setDate( monday );
-          d.setDate( d.getDate() + i );
-          arr.push( d );
-        }
-        return arr;
       }
       function setPlaces() {
         return [
@@ -442,10 +396,10 @@ module.exports = function ReserveModule() {
               ])
             ]),
             m( 'nav#nav' , [
-              m( '#prev.still' , { onclick: vm.stopInterval } , [
+              m( '#prev' , { onclick: vm.prevWeek} , [
                 m( 'p' , '〈' )
               ]),
-              m( '#next' , { onclick: vm.stopInterval } , [
+              m( '#next' , { onclick: vm.nextWeek} , [
                 m( 'p' ,  '〉' )
               ]),
             ])
@@ -463,7 +417,7 @@ module.exports = function ReserveModule() {
             ])
           })),
           m( '#days' , [
-            m( 'ul' , setWeek( new Date() ).map(function ( d ) {
+            m( 'ul' , vm.setWeek( new Date() ).map(function ( d ) {
               return  m( 'li' , [
                   m( 'p' , [
                     m( 'span.month' , d.getMonth() + 1 + '.' ),
@@ -474,15 +428,14 @@ module.exports = function ReserveModule() {
               }))
           ]),
           m( '#times' , { config: times } , [
-            m( 'ul#timesList' , setWeek( new Date() ).map(function ( d ) {
+            m( 'ul#timesList' , vm.setWeek( new Date() ).map(function ( d ) {
               return  m( 'li.date' , {
                 class   : addTodayClass( d ),
                 name    : vm.addDateClass( d )
               } , [
                 m( '.timeArea' , timeArea().map(function ( t ) {
                   return  m( 'ul.time' , {
-                    // onclick: vm.getJsonReq,
-                    name  : t
+                      name  : t
                     } ,
                     setPlaces().map(function ( p ) {
                       return  m( 'li.place' , {
@@ -496,8 +449,10 @@ module.exports = function ReserveModule() {
                         'data-stamp'  : vm.checkReserve( d,t,p ).stamp,
                         'data-place'  : p,
                         'data-date'   : vm.addDateClass( d ),
+                        'data-hour'   : vm.checkReserve( d,t,p ).hour,
                         'data-time'   : t,
-                        // 'date-person' : vm.checkReserve( d,t,p ).person,
+                        'data-member' : vm.checkReserve( d,t,p ).member,
+                        'data-person' : vm.checkReserve( d,t,p ).person,
                         'data-first'  : vm.checkReserve( d,t,p ).first
                       } ,  m( 'span.initial', setInitialName( vm.checkReserve( d,t,p ).person ) ) )
                     }));

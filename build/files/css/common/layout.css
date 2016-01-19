@@ -129,13 +129,13 @@
   border: 5px solid #F1EEE8; }
   #days > ul,
   #times > ul {
-    width: calc(100% * 5);
+    width: calc(100% * 1);
     border-spacing: 0; }
     #days > ul > li,
     #times > ul > li {
       float: left;
       box-sizing: border-box;
-      width: calc(100% / 35); }
+      width: calc(100% / 7); }
 
 /* days
   /*--------------------------------------------------*/
