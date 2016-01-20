@@ -3,7 +3,7 @@ var sppinner     = require( './spinner' );
 var eventManager = require( './eventManager' );
 
 module.exports = function Index() {
-  check();
   sppinner();
-  eventManager();
+  // check();
+  // eventManager();
 }

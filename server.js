@@ -46,7 +46,7 @@ io.sockets.on( 'connection' , function( socket ) {
 
   setInterval(function() {
     sendReserve();
-  } , 3000 );
+  } , 1000 );
 
   function sendReserve() {
     myCollection.find().toArray(function( err, item ) {

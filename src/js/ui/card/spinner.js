@@ -66,6 +66,7 @@ module.exports = function Spinner() {
       });
 
       upBtn.on( 'click' , function(){
+        num = Number( filed.val() );
         if( sort == 'hour' ) {
           max = setHourLimit();
         }
@@ -76,12 +77,12 @@ module.exports = function Spinner() {
           num = max - sum;
         }
         setVal = String( num + sum );
-        num = num + sum;
         filed.val( setVal );
 
       });
 
       downBtn.on( 'click' , function(){
+        num = Number( filed.val() );
         if( sort == 'hour' ) {
           max = setHourLimit();
         }
@@ -89,7 +90,6 @@ module.exports = function Spinner() {
           num = min;
         }
         setVal = String( num - sum );
-        num = num - sum;
         filed.val( setVal );
       });
     }
@@ -109,8 +109,7 @@ module.exports = function Spinner() {
         .to( filed , SPEED.MAX , {
           left : 0,
           ease : EASE.MAX
-          // delay : .1
-          })
+        });
     }
 
     function setHourLimit( ) {

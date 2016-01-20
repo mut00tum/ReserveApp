@@ -3,6 +3,10 @@ var calendar = require( '../ui/calendar' );
 var card     = require( '../ui/card' );
 var times    = require( '../ui/times' );
 var timeArea = require( '../data/timeArea' );
+var fixedHeader  = require( '../ui/times/fixedHeader' );
+var eventManager = require( '../ui/card/eventManager' );
+// var sppinner     = require( '../ui/card/spinner' );
+var check        = require( '../ui/card/check' );
 var socket   = require( 'socket.io-client' )( 'http://192.168.0.134:8000' );
 
 module.exports = function ReserveModule() {
@@ -56,6 +60,8 @@ module.exports = function ReserveModule() {
       vm.json      = m.prop('');
       vm.first     = m.prop(false);
       vm.week      = m.prop(0);
+      vm.notice    = m.prop('');
+      vm.check     = m.prop(true);
 
       vm.clickSubmitButton = function(){
         var
@@ -258,6 +264,41 @@ module.exports = function ReserveModule() {
         var num = vm.week();
         num -= 7;
         vm.week( num );
+      },
+      vm.checkReservedHour = function () {
+        // console.log( 'checkReservedHour' )
+        if( vm.hour() >= 0.5 ) {
+          var
+            day      = vm.date(),
+            time     = vm.time(),
+            place    = vm.place(),
+            hour     = $( '#cardHour' ).val(),
+            preList  = [],
+            timeList = timeArea(),
+            TextMap  = {
+              notice : '予約が入っています'
+            },
+            matchOrder;
+
+          matchOrder = timeList.indexOf( time );
+          var length = ( matchOrder ) + hour * 2;
+          for( var i = matchOrder + 1; i < length; i++ ) {
+            preList.push( day + '_' + timeList[i] + '_' + place )
+          }
+          if( !preList == [] ){
+            var length = preList.length
+            var i = 0;
+            while ( i < length ) {
+              var id = '#' + preList[i];
+              if ( $( id ).hasClass('reserved') ) {
+                vm.notice( TextMap.notice );
+                return false;
+              }
+              i++
+            }
+          }
+          vm.notice( '' );
+        }
       }
     },
     test : function(){
@@ -285,6 +326,7 @@ module.exports = function ReserveModule() {
     view : function ( ctrl ) {
 
       vm.setCancelTarget();
+      // vm.checkReservedHour();
 
       function setWeekDay( d ) {
         var weekArr = [
@@ -383,8 +425,12 @@ module.exports = function ReserveModule() {
         }
       }
 
-      return  m( '.contents' , { config: calendar } , [
-        m( 'headar#header' , [
+      return  m( '.contents' , { config: eventManager } , [
+        m( 'headar#header' , { config: function( element , isInitialized , context){
+          if( !isInitialized ) {
+            fixedHeader();
+          }
+        }} , [
           m( 'h1' , 'Meeting Space Reservation' ),
           m( '.items' , [
             m( '.explain' , [
@@ -405,11 +451,11 @@ module.exports = function ReserveModule() {
             ])
           ]),
         ]),
-        m( '.testArea' , [
-          m( 'button#test' , { onclick: vm.test } , 'test' ),
-          m( 'button#test' , { onclick: vm.clear } , 'clear' ),
-          m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
-        ]),
+        // m( '.testArea' , [
+        //   m( 'button#test' , { onclick: vm.test } , 'test' ),
+        //   m( 'button#test' , { onclick: vm.clear } , 'clear' ),
+        //   m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
+        // ]),
         m( '#calendar' , [
           m( 'ul#timeZone' , timeArea().map(function ( t ) {
             return m( 'li.zone' , [
@@ -439,34 +485,39 @@ module.exports = function ReserveModule() {
                     } ,
                     setPlaces().map(function ( p ) {
                       return  m( 'li.place' , {
-                        onclick : addMultiProp(
-                          m.withAttr( 'data-place' , vm.place ),
-                          m.withAttr( 'data-date'  , vm.date ),
-                          m.withAttr( 'data-time'  , vm.time )
-                        ),
-                        id            : vm.addDateClass( d ) + '_' + t + '_' + p,
-                        class         : vm.checkReserve( d,t,p ).Class,
-                        'data-stamp'  : vm.checkReserve( d,t,p ).stamp,
-                        'data-place'  : p,
-                        'data-date'   : vm.addDateClass( d ),
-                        'data-hour'   : vm.checkReserve( d,t,p ).hour,
-                        'data-time'   : t,
-                        'data-member' : vm.checkReserve( d,t,p ).member,
-                        'data-person' : vm.checkReserve( d,t,p ).person,
-                        'data-first'  : vm.checkReserve( d,t,p ).first
-                      } ,  m( 'span.initial', setInitialName( vm.checkReserve( d,t,p ).person ) ) )
+                          onclick : addMultiProp(
+                            m.withAttr( 'data-place' , vm.place ),
+                            m.withAttr( 'data-date'  , vm.date ),
+                            m.withAttr( 'data-time'  , vm.time )
+                            // m.withAttr( 'id'  , vm.check )
+                          ),
+                          id            : vm.addDateClass( d ) + '_' + t + '_' + p,
+                          class         : vm.checkReserve( d,t,p ).Class,
+                          'data-stamp'  : vm.checkReserve( d,t,p ).stamp,
+                          'data-place'  : p,
+                          'data-date'   : vm.addDateClass( d ),
+                          'data-hour'   : vm.checkReserve( d,t,p ).hour,
+                          'data-time'   : t,
+                          'data-member' : vm.checkReserve( d,t,p ).member,
+                          'data-person' : vm.checkReserve( d,t,p ).person,
+                          'data-first'  : vm.checkReserve( d,t,p ).first
+                        } ,  m( 'span.initial', setInitialName( vm.checkReserve( d,t,p ).person ) ) )
                     }));
                   }))
                 ]);
             })),
           ])
         ]),
-        m( 'form#card' , { config: card } , [
+        m( 'form#card' , { config: function( element , isInitialized , context){
+          if( !isInitialized ) {
+            card();
+          }
+        }} , [
           m( '.header' , [
             m('h2', '予約カード'),
             m('p#closeBtn', '×')
           ]),
-          m('ul', [
+          m('ul' , [
             m('li.place', [
               m('h3', 'Place'),
               m( 'p#cardPlace.val' , setCardPlace( vm.place() ) )
@@ -474,9 +525,9 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( 'h3' , 'Date' ),
               m( 'p#cardDate.val' , [
-                m( 'span.year' , setCardDay(vm.date()).year ),
-                m( 'span.month' , setCardDay(vm.date()).month ),
-                m( 'span.date' , setCardDay(vm.date()).date )
+                m( 'span.year' , setCardDay( vm.date()).year ),
+                m( 'span.month' , setCardDay( vm.date()).month ),
+                m( 'span.date' , setCardDay( vm.date()).date )
               ])
             ]),
             m('li.place', [
@@ -486,11 +537,18 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( '.hourTitle' , [
                 m( 'h3', 'Hour' ),
-                m( 'p#hourNotice' , '' ),
+                m( 'p#hourNotice' , {
+                  onclick : vm.checkReservedHour(),
+                  config: function( element , isInitialized , context){
+                    context = vm.notice();
+                    $(element).text( context );
+                    check();
+                  }
+              } )
               ]),
               m( '.number' , [
                 m( '.sppinner.hour' , [
-                  m( "input#cardHour[name='num'][type='number']" , vm.hour() ),
+                  m( "input#cardHour[name='num'][type='number']" ),
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
                 ]),
@@ -502,7 +560,7 @@ module.exports = function ReserveModule() {
               m( 'h3', 'Member' ),
               m( '.number' , [
                 m( '.sppinner.member' , [
-                  m( "input#cardMember[name='num'][type='number']" , vm.member() ),
+                  m( "input#cardMember[name='num'][type='number']" ),
                   m( 'p.up' , '▲' ),
                   m( 'p.down' , '▼' )
                 ]),

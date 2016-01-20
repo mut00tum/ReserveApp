@@ -39,8 +39,9 @@ module.exports = function EventManager() {
       BTN   : .3
     },
     DELAY = {
-      OPEN  : .05,
-      CLOSE : .05
+      OPEN   : .1,
+      CLOSE  : .1,
+      CANCEL : .4
     },
     EASE = {
       OPEN  : Power2.easeOut,
@@ -86,7 +87,7 @@ module.exports = function EventManager() {
     var tween = TweenMax.to( Map.card , SPEED.OPEN ,{
       right : - Size_Map.padding,
       ease  : EASE.OPEN,
-      // delay : DELAY.OPEN,
+      delay : DELAY.OPEN,
       onComplete: function(){
         this.pause( this.totalDuration() );
       }
@@ -97,7 +98,7 @@ module.exports = function EventManager() {
     var tween = TweenMax.to( Map.card , speed ,{
       right : - Size_Map.card - Size_Map.padding,
       ease  : ease,
-      // delay : DELAY.CLOSE,
+      delay : DELAY.CLOSE,
       onComplete: function(){
         this.pause( this.totalDuration() );
       }
@@ -108,7 +109,7 @@ module.exports = function EventManager() {
     var tween = TweenMax.to( Map.card , speed ,{
       right : - Size_Map.card - Size_Map.padding,
       ease  : ease,
-      delay : .4,
+      delay : DELAY.CANCEL,
       onComplete: function(){
         this.pause( this.totalDuration() );
       }

@@ -186,8 +186,6 @@
       border-right: 1px solid #E9E3CD; }
       #times #timesList > li.date:nth-child(7n) {
         border-right: none; }
-      #times #timesList > li.date:last-child {
-        border-right: 5px solid #E9E3CD; }
       #times #timesList > li.date .timeArea ul.time {
         position: relative;
         display: block;

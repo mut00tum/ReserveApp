@@ -25,15 +25,12 @@ module.exports = function Check() {
     Overlap       = false,
     Class         = 'active',
     preList       = [],
-    Id            = '',
+    Id            = "",
     matchOrder , length;
 
-  //init
-  setNotice().hide();
 
   Map.place.on( 'click' , function( ){
     getPlaceId( $(this) );
-    setNotice().hide();
     showStill();
   });
 
@@ -67,12 +64,12 @@ module.exports = function Check() {
   function judge( Id ) {
     var
       Check = {
-      hour    : Map.hour.val()   == hourStill,
-      member  : Map.member.val() == memberStill,
-      person  : Map.person.val() == personStill
-    },
-    hour   = Math.round(Map.hour.val() * 10 ) / 10;
-    member = Math.floor(Map.member.val());
+        hour    : Map.hour.val()   == hourStill,
+        member  : Map.member.val() == memberStill,
+        person  : Map.person.val() == personStill
+      },
+      hour   = Math.round(Map.hour.val() * 10 ) / 10;
+      member = Math.floor(Map.member.val());
 
     if ( !(hour % 0.5) == 0) {
       var setNum = String(hour).substr( 0,2 );
@@ -80,8 +77,7 @@ module.exports = function Check() {
       if ( num < 5  ) { num = 0; }
       if ( num > 5  ) { num = 5; }
       hour = Number( setNum + num );
-    }
-    // console.log( hour )
+    };
 
     Map.hour.val( hour );
     Map.member.val( member );
@@ -109,14 +105,12 @@ module.exports = function Check() {
           while ( i < length ) {
             var id = '#' + preList[i];
             if ( $( id ).hasClass('reserved') ) {
-              setNotice().show();
               showStill();
               return false;
             }
             i++
           }
         }
-        setNotice().hide();
         showSend();
       }
     }
@@ -150,19 +144,18 @@ module.exports = function Check() {
     return Map.hour.val()
   }
 
-  function setNotice() {
-    function show() {
-      Map.notice.text( TextMap.notice );
-    }
-    function hide() {
-      Map.notice.text('');
-    }
-    return {
-      show : show,
-      hide : hide
-    }
-
-  }
+  // function setNotice() {
+  //   function show() {
+  //     Map.notice.text( TextMap.notice );
+  //   }
+  //   function hide() {
+  //     Map.notice.text('');
+  //   }
+  //   return {
+  //     show : show,
+  //     hide : hide
+  //   }
+  // }
 
   // m.endComputation();
 }
