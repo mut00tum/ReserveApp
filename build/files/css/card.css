@@ -51,7 +51,7 @@
     float: left;
     width: 140px; }
     #card ul li .hourTitle #hourNotice {
-      display: inline-block;
+      display: none;
       float: left;
       font-size: 80%;
       color: #e76565; }

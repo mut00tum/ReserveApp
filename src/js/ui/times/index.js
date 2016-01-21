@@ -6,5 +6,5 @@ var fixedHeader   = require( './fixedHeader' );
 module.exports = function Index() {
   attachCurrent();
   reserveInfo();
-  fixedHeader();
+  // fixedHeader();
 }

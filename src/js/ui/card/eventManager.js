@@ -3,7 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function EventManager() {
-  // m.startComputation();
+  m.startComputation();
   var
     Map = {
       card     : $( '#card' ),
@@ -39,9 +39,10 @@ module.exports = function EventManager() {
       BTN   : .3
     },
     DELAY = {
-      OPEN   : .1,
+      OPEN   : .2,
       CLOSE  : .1,
-      CANCEL : .4
+      CANCEL : .4,
+      SHOW   : .5
     },
     EASE = {
       OPEN  : Power2.easeOut,
@@ -155,7 +156,7 @@ module.exports = function EventManager() {
     var tween = TweenMax.staggerTo( showList , .2 , {
       bottom : 0,
       opacity : 1,
-      // delay: .3,
+      delay: DELAY.SHOW,
       ease : Power4.easeOut,
       onComplete: function(){
         this.pause( this.totalDuration() );
@@ -177,8 +178,5 @@ module.exports = function EventManager() {
     Card.infoMember.text( self.data( 'member' ) );
     Card.infoPerson.text( self.data( 'person' ) );
   }
-
-
-
-  // m.endComputation();
+  m.endComputation();
 }

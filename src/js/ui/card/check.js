@@ -106,11 +106,13 @@ module.exports = function Check() {
             var id = '#' + preList[i];
             if ( $( id ).hasClass('reserved') ) {
               showStill();
+              setNotice().show();
               return false;
             }
             i++
           }
         }
+        setNotice().hide();
         showSend();
       }
     }
@@ -144,18 +146,18 @@ module.exports = function Check() {
     return Map.hour.val()
   }
 
-  // function setNotice() {
-  //   function show() {
-  //     Map.notice.text( TextMap.notice );
-  //   }
-  //   function hide() {
-  //     Map.notice.text('');
-  //   }
-  //   return {
-  //     show : show,
-  //     hide : hide
-  //   }
-  // }
+  function setNotice() {
+    function show() {
+      Map.notice.css( { display: 'inline-block' } );
+    }
+    function hide() {
+      Map.notice.css( { display: 'none' } );
+    }
+    return {
+      show : show,
+      hide : hide
+    }
+  }
 
   // m.endComputation();
 }

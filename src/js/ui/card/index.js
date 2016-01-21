@@ -4,6 +4,6 @@ var eventManager = require( './eventManager' );
 
 module.exports = function Index() {
   sppinner();
-  // check();
+  check();
   // eventManager();
 }

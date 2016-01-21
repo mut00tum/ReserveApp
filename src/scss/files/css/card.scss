@@ -60,7 +60,7 @@
       float: left;
       width: 140px;
         #hourNotice {
-        display: inline-block;
+        display: none;
         float: left;
         font-size: 80%;
         color: map-get( $color , red );

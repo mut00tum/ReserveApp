@@ -1,13 +1,12 @@
-var m        = require( 'mithril' );
-var calendar = require( '../ui/calendar' );
-var card     = require( '../ui/card' );
-var times    = require( '../ui/times' );
-var timeArea = require( '../data/timeArea' );
+var m            = require( 'mithril' );
+var calendar     = require( '../ui/calendar' );
+var card         = require( '../ui/card' );
+var times        = require( '../ui/times' );
+var timeArea     = require( '../data/timeArea' );
 var fixedHeader  = require( '../ui/times/fixedHeader' );
 var eventManager = require( '../ui/card/eventManager' );
-// var sppinner     = require( '../ui/card/spinner' );
 var check        = require( '../ui/card/check' );
-var socket   = require( 'socket.io-client' )( 'http://192.168.0.134:8000' );
+var socket       = require( 'socket.io-client' )( 'http://192.168.0.134:8015' );
 
 module.exports = function ReserveModule() {
 
@@ -266,7 +265,6 @@ module.exports = function ReserveModule() {
         vm.week( num );
       },
       vm.checkReservedHour = function () {
-        // console.log( 'checkReservedHour' )
         if( vm.hour() >= 0.5 ) {
           var
             day      = vm.date(),
@@ -326,7 +324,6 @@ module.exports = function ReserveModule() {
     view : function ( ctrl ) {
 
       vm.setCancelTarget();
-      // vm.checkReservedHour();
 
       function setWeekDay( d ) {
         var weekArr = [
@@ -424,7 +421,6 @@ module.exports = function ReserveModule() {
           return n.substr( 0 , 2 );
         }
       }
-
       return  m( '.contents' , { config: eventManager } , [
         m( 'headar#header' , { config: function( element , isInitialized , context){
           if( !isInitialized ) {
@@ -537,14 +533,15 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( '.hourTitle' , [
                 m( 'h3', 'Hour' ),
+                // m( 'p#hourNotice' , '予約が入っています' )
                 m( 'p#hourNotice' , {
-                  onclick : vm.checkReservedHour(),
+                  // onclick : vm.checkReservedHour(),
                   config: function( element , isInitialized , context){
-                    context = vm.notice();
-                    $(element).text( context );
+                    // context = vm.notice();
+                    // $(element).text( context );
                     check();
                   }
-              } )
+                } , '予約が入っています' )
               ]),
               m( '.number' , [
                 m( '.sppinner.hour' , [

@@ -4,12 +4,29 @@ var
   bodyParser  = require( 'body-parser' ),
   MongoClient = require( 'mongodb' ).MongoClient,
   settings    = require( './settings' ),
+  http        = require('http'),
+  httpProxy   = require( 'http-proxy' ),
   db , myCollection;
 
 var app    = express();
 var server = require( 'http' ).Server(app);
 var io     = require( 'socket.io' )(server);
 
+// ▼ ProxyServer
+var proxy = new httpProxy.createProxyServer({
+  target: {
+    host: 'localhost',
+    port: settings.port
+  }
+});
+var proxyServer = http.createServer(function (req, res) {
+  proxy.web(req, res);
+});
+proxyServer.on('upgrade', function (req, socket, head) {
+  proxy.ws(req, socket, head);
+});
+proxyServer.listen(8015);
+// ▲ ProxyServer end
 
 // ▼ err:Can't set headers after they are sent.
 app.use(function(req,res,next){
@@ -29,7 +46,7 @@ app.use(bodyParser.json());
 
 console.log( 'start listening at 8000' );
 // app.listen(8000);
-server.listen(8000);
+server.listen( settings.port );
 
 MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(err, mongodb) {
   if (err) { return console.dir(err); }
@@ -46,7 +63,7 @@ io.sockets.on( 'connection' , function( socket ) {
 
   setInterval(function() {
     sendReserve();
-  } , 1000 );
+  } , 2000 );
 
   function sendReserve() {
     myCollection.find().toArray(function( err, item ) {
