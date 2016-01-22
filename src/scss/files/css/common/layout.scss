@@ -156,7 +156,7 @@
   #days,
   #times {
     box-sizing: border-box;
-    border: 5px solid #F1EEE8;
+    border: 5px solid map-get( $color , base );
     & > ul {
       width: calc(100% * #{$weekNum });
       border-spacing: 0;

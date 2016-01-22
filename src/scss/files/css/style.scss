@@ -25,7 +25,8 @@
         }
         &[data-place="P9A"] {
           &:hover {
-            // background: lighten( map-get($color, redPink) , 10% );
+            border-top: 2px solid map-get($color, redPink);
+            background: lighten( map-get($color, redPink) , 10% );
           }
           &.current {
             &:before {
@@ -35,7 +36,8 @@
         }
         &[data-place="P9B"] {
           &:hover {
-            // background: lighten( map-get($color, orange) , 10% );
+            border-top: 2px solid map-get($color, orange);
+            background: lighten( map-get($color, orange) , 10% );
           }
           &.current {
             &:before {
@@ -45,7 +47,8 @@
         }
         &[data-place="P1A"] {
           &:hover {
-            // background: lighten( map-get($color, green) , 10% );
+            border-top: 2px solid map-get($color, green);
+            background: lighten( map-get($color, green) , 10% );
           }
           &.current {
             &:before {
@@ -55,7 +58,8 @@
         }
         &[data-place="P1B"] {
           &:hover {
-            // background: lighten( map-get($color, blue) , 10% );
+            border-top: 2px solid map-get($color, blue);
+            background: lighten( map-get($color, blue) , 10% );
           }
           &.current {
             &:before {

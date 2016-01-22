@@ -27,7 +27,7 @@ module.exports = function EventManager() {
       infoMember : $( '#infoMember' ),
       infoPerson : $( '#infoPerson' )
     },
-    inputList = [ Card.hour , Card.member , Card.sppinner , Card.person , Card.unit ],
+    inputList = [ Card.hour , Card.member , Card.sppinner , Card.person ],
     infoList  = [ Card.info ],
     Size_Map = {
       card    : $( '#card' ).width(),
@@ -39,10 +39,10 @@ module.exports = function EventManager() {
       BTN   : .3
     },
     DELAY = {
-      OPEN   : .2,
+      OPEN   : .1,
       CLOSE  : .1,
       CANCEL : .4,
-      SHOW   : .5
+      SHOW   : .3
     },
     EASE = {
       OPEN  : Power2.easeOut,

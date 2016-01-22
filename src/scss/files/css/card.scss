@@ -22,8 +22,9 @@
   float: left;
   width: 100%;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba( map-get($color, pale) , .4 );
-  background: rgba( map-get($color, bg) , .8 );
+  // border-bottom: 1px solid rgba( map-get($color, pale) , .4 );
+  background: rgba( darken( map-get($color, bg) , 3 ) , .8 );
+  // background: rgba( map-get($color, bg) , .8 );
   h2 {
     display: inline-block;
     position: relative;
@@ -151,7 +152,10 @@
 
 #card .info {
   // display: none;
-  float: right;
+  // float: left;
+  position: relative;
+  right: 20px;
+  height: 0;
   text-align: right;
   font-size: 26px;
   span {

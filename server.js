@@ -13,6 +13,7 @@ var server = require( 'http' ).Server(app);
 var io     = require( 'socket.io' )(server);
 
 // ▼ ProxyServer
+
 var proxy = new httpProxy.createProxyServer({
   target: {
     host: 'localhost',
@@ -26,6 +27,7 @@ proxyServer.on('upgrade', function (req, socket, head) {
   proxy.ws(req, socket, head);
 });
 proxyServer.listen(8015);
+
 // ▲ ProxyServer end
 
 // ▼ err:Can't set headers after they are sent.
@@ -56,8 +58,6 @@ MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(e
 })
 
 io.sockets.on( 'connection' , function( socket ) {
-  // var data = getReserveData();
-  // console.log( 'getReserveData: ' + data )
 
   sendReserve()
 

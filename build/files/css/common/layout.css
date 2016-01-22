@@ -62,13 +62,13 @@
       height: 10px;
       margin-right: 3px; }
       #header .explain ul li .box.P9A {
-        background: #f0b0d1; }
+        background: #f192bb; }
       #header .explain ul li .box.P9B {
-        background: #f0bb98; }
+        background: #e99a63; }
       #header .explain ul li .box.P1A {
-        background: #b2e1cd; }
+        background: #87d0b0; }
       #header .explain ul li .box.P1B {
-        background: #b4dfe3; }
+        background: #94ccde; }
 
 #nav {
   float: left;
@@ -126,7 +126,7 @@
 #days,
 #times {
   box-sizing: border-box;
-  border: 5px solid #F1EEE8; }
+  border: 5px solid #efe9da; }
   #days > ul,
   #times > ul {
     width: calc(100% * 1);
@@ -142,7 +142,7 @@
 #days {
   position: relative;
   height: 40px;
-  background: #F1EEE8;
+  background: #efe9da;
   overflow: hidden;
   z-index: 1; }
   #days ul {

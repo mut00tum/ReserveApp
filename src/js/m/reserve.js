@@ -30,11 +30,12 @@ module.exports = function ReserveModule() {
 
     function Save( reserve ) {
       socket.emit( 'saveData' , reserve );
-    }
-
-    Reserve.save = function( reserve ) {
       // m.request({ method: "POST", url: "/reserved" , data: reserve });
     }
+
+    // Reserve.save = function( reserve ) {
+    //   m.request({ method: "POST", url: "/reserved" , data: reserve });
+    // }
 
     // Reserve.list = function() {
     //   m.request({ method: "GET", url: "/reserved"  });
@@ -322,6 +323,10 @@ module.exports = function ReserveModule() {
     },
 
     view : function ( ctrl ) {
+
+      // setInterval(function(){
+      //   vm.getJsonReq();
+      // } , 5000 );
 
       vm.setCancelTarget();
 
