@@ -4,31 +4,10 @@ var
   bodyParser  = require( 'body-parser' ),
   MongoClient = require( 'mongodb' ).MongoClient,
   settings    = require( './settings' ),
-  http        = require('http'),
-  httpProxy   = require( 'http-proxy' ),
   db , myCollection;
 
 var app    = express();
 var server = require( 'http' ).Server(app);
-var io     = require( 'socket.io' )(server);
-
-// ▼ ProxyServer
-
-var proxy = new httpProxy.createProxyServer({
-  target: {
-    host: 'localhost',
-    port: settings.port
-  }
-});
-var proxyServer = http.createServer(function (req, res) {
-  proxy.web(req, res);
-});
-proxyServer.on('upgrade', function (req, socket, head) {
-  proxy.ws(req, socket, head);
-});
-proxyServer.listen(8015);
-
-// ▲ ProxyServer end
 
 // ▼ err:Can't set headers after they are sent.
 app.use(function(req,res,next){
@@ -47,8 +26,8 @@ app.use(bodyParser.json());
 // server.use(bodyParser.json());
 
 console.log( 'start listening at 8000' );
-// app.listen(8000);
-server.listen( settings.port );
+app.listen( settings.port );
+// server.listen( settings.port );
 
 MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(err, mongodb) {
   if (err) { return console.dir(err); }
@@ -57,35 +36,11 @@ MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(e
   myCollection = db.collection( 'reserved' )
 })
 
-io.sockets.on( 'connection' , function( socket ) {
-
-  sendReserve()
-
-  setInterval(function() {
-    sendReserve();
-  } , 2000 );
-
-  function sendReserve() {
-    myCollection.find().toArray(function( err, item ) {
-      if (err) { return console.log(err); }
-      socket.emit( 'reserveData' , item , function( data ) {
-          // console.log( data )
-      })
-    });
-  }
-
-  socket.on( 'saveData' , function( data ){
-    // console.log( 'saveData:' + data )
-    save( data )
-  });
-});
-
 app.get("/reserved", function (req, res) {
   try {
     loading( function ( item ){
       res.send( item );
     });
-    // console.log( 'loading' )
   } catch(e) {
     console.log( 'GET : error!' )
   }
@@ -93,11 +48,9 @@ app.get("/reserved", function (req, res) {
 
 app.post("/reserved", function (req, res) {
   try {
-    // same( req , res );
     save( req.body );
 
     res.status(200).end();
-    // console.log( 'save' )
   } catch(e) {
     console.log( 'POST : error!' )
   }
@@ -107,7 +60,6 @@ app.post("/cancel", function (req, res) {
   try {
     cancel( req, res );
     res.status(200).end();
-    // console.log( 'cancel' )
   } catch(e) {
     console.log( 'POST : error!' );
     console.log( e )

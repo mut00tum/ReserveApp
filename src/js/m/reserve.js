@@ -6,7 +6,7 @@ var timeArea     = require( '../data/timeArea' );
 var fixedHeader  = require( '../ui/times/fixedHeader' );
 var eventManager = require( '../ui/card/eventManager' );
 var check        = require( '../ui/card/check' );
-var socket       = require( 'socket.io-client' )( 'http://192.168.0.134:8015' );
+// var socket       = require( 'socket.io-client' )( 'http://192.168.0.134:8015' );
 
 module.exports = function ReserveModule() {
 
@@ -17,25 +17,22 @@ module.exports = function ReserveModule() {
     this.hour      = m.prop( data.hour );
     this.member    = m.prop( data.member );
     this.person    = m.prop( data.person );
-    this.first     = m.prop( data.first );
+    this.date      = m.prop( data.date );
   }
-
-  socket.on( 'connect' , function(){
-    console.log( 'connect' )
-  });
-  socket.on( 'disconnect', function(){
-     console.log( 'disconnect' )
-  });
+  //   console.log( 'connect' )
+  // });
+  // socket.on( 'disconnect', function(){
+  //    console.log( 'disconnect' )
+  // });
 
 
-    function Save( reserve ) {
-      socket.emit( 'saveData' , reserve );
-      // m.request({ method: "POST", url: "/reserved" , data: reserve });
-    }
-
-    // Reserve.save = function( reserve ) {
-    //   m.request({ method: "POST", url: "/reserved" , data: reserve });
+    // function Save( reserve ) {
+    //   socket.emit( 'saveData' , reserve );
     // }
+
+    Reserve.save = function( reserve ) {
+      m.request({ method: "POST", url: "/reserved" , data: reserve });
+    }
 
     // Reserve.list = function() {
     //   m.request({ method: "GET", url: "/reserved"  });
@@ -59,7 +56,6 @@ module.exports = function ReserveModule() {
       vm.person    = m.prop('');
       vm.target    = m.prop('');
       vm.json      = m.prop('');
-      vm.first     = m.prop(false);
       vm.week      = m.prop(0);
       vm.notice    = m.prop('');
       vm.check     = m.prop(true);
@@ -77,13 +73,8 @@ module.exports = function ReserveModule() {
         vm.member( getCardVal().member );
         vm.person( getCardVal().person );
 
-        if ( getCardVal().hour > 0.5 ) {
-          var reserve = vm.addGainReserve( vm.time() , getCardVal().hour );
-          Save( reserve );
-        } else {
-          vm.first( true );
-          Save( vm.addReserve() );
-        }
+        var reserve = vm.addReserve( vm.time() , getCardVal().hour );
+        Reserve.save( reserve );
 
         vm.getJsonReq();
 
@@ -95,45 +86,28 @@ module.exports = function ReserveModule() {
           }
         }
       },
-      vm.addReserve = function() {
-        reserve = new Reserve({
-          timestamp : vm.timestamp(),
-          position  : vm.position(),
-          place     : vm.place(),
-          hour      : vm.hour(),
-          member    : vm.member(),
-          person    : vm.person(),
-          first     : vm.first()
-        });
-        return reserve
-      },
-      vm.addGainReserve = function( t , h ) {
+      vm.addReserve = function( t , h ) {
         var
           Class = '',
-          list  = [],
-          length , term , gainPosition;
+          // list  = [],
+          gainPosition = {},
+          length , term;
 
         term   = getReserveTimes( t , h );
         length = term.length - 1;
 
         for ( var i = 0; i < length; i++ ) {
-          gainPosition = vm.date() + '_' + term[i];
-          if ( i == 0 ){
-            vm.first( true )
-          } else {
-            vm.first( false )
-          }
-          reserve = new Reserve({
-            timestamp : vm.timestamp(),
-            position  : gainPosition,
-            place     : vm.place(),
-            hour      : h,
-            member    : vm.member(),
-            person    : vm.person(),
-            first     : vm.first()
-          });
-          list.push( reserve );
+          gainPosition[ i ] = vm.date() + '_' + term[i];
         }
+        reserve = new Reserve({
+          timestamp : vm.timestamp(),
+          position  : gainPosition,
+          place     : vm.place(),
+          hour      : h,
+          member    : vm.member(),
+          person    : vm.person(),
+          date      : vm.date()
+        });
         function getReserveTimes( time , hour ) {
           var
             hour        = String( hour ),
@@ -148,7 +122,7 @@ module.exports = function ReserveModule() {
           return arr;
         }
 
-        return list;
+        return reserve;
       },
       vm.cancelReserve = function() {
         var
@@ -181,17 +155,6 @@ module.exports = function ReserveModule() {
             vm.json( value );
         });
       },
-      vm.getSocket = function() {
-        socket.on( 'reserveData' , function( data , fn ){
-          m.startComputation();
-          // console.log( data )
-          var saveJson = vm.json( data );
-          fn( saveJson );
-          m.endComputation();
-          // m.redraw();
-          // m.redraw.strategy("diff");
-        });
-      },
       vm.checkReserve = function( d,t,p ) {
         var
           json   = vm.json(),
@@ -208,14 +171,22 @@ module.exports = function ReserveModule() {
           var length = json.length;
           for( var i = 0; i < length; i++ ){
             place    = json[i].place;
-            position = json[i].position + '_' + json[i].place;
-            if ( position == id ){
-              Class += 'reserved' + ' ' + place;
-              stamp  = json[i].timestamp;
-              hour   = json[i].hour;
-              member = json[i].member;
-              person = json[i].person;
-              first  = json[i].first;
+            var posiLength = Object.keys( json[i].position ).length;
+            for( var j = 0; j < posiLength; j++ ){
+              var reserve = json[i].position[ j ] + '_' + json[i].place;
+              if ( reserve == id ){
+                Class += 'reserved' + ' ' + place;
+                stamp  = json[i].timestamp;
+                hour   = json[i].hour;
+                member = json[i].member;
+                person = json[i].person;
+                // first  = json[i].first;
+                if ( j == 0 ) {
+                  first = true;
+                } else {
+                  first = false;
+                }
+              }
             }
           }
         }
@@ -244,8 +215,7 @@ module.exports = function ReserveModule() {
         var
           term = 7,  // ▼ _setting.scss：$week_weekTerm
           arr  = [],
-          // i    = vm.urlStatus() * 7,
-          i = m.route().split( ':' )[1] * 7,
+          i    = vm.week(),
           d , day , date;
 
         var weekday = dObj.getDay();
@@ -260,20 +230,15 @@ module.exports = function ReserveModule() {
       },
       vm.nextWeek = function() {
         var
-          urlStatus = Number( m.route().split( ':' )[1] );
-        // num += 7;
-        urlStatus += 1;
-        // vm.week( num );
-        vm.urlStatus( urlStatus );
+          num = vm.week();
+        num += 7;
+        vm.week( num );
       },
       vm.prevWeek = function() {
         var
-          // num       = vm.week(),
-          urlStatus = Number( m.route().split( ':' )[1] );
-        // num -= 7;
-        urlStatus -= 1;
-        // vm.week( num );
-        vm.urlStatus( urlStatus );
+          num = vm.week();
+        num -= 7;
+        vm.week( num );
       }
     },
     test : function(){
@@ -294,23 +259,12 @@ module.exports = function ReserveModule() {
 
     controller : function() {
       vm.init();
-      vm.getSocket();
+      // vm.getSocket();
       vm.getJsonReq();
-
-      // m.route.param('week');
-      // var status = vm.urlStatus()
-      // console.log( status )
-      // status     = m.route.param("status");
-
-      // m.route("/week/:" + status);
-      // console.log( m.route() )
-      // console.log( status )
-      // m.route( '/week' );
-      // console.log( m.route() )
-
     },
 
     view : function () {
+
       // setInterval(function(){
       //   vm.getJsonReq();
       // } , 5000 );
@@ -410,14 +364,13 @@ module.exports = function ReserveModule() {
       }
       function setInitialName( n ) {
         if( !n == '' ){
-          return n.substr( 0 , 2 );
+          return n.substr( 0 , 3 );
         }
       }
-      return  m( '.contents'  , [
+      return  m( '.contents' , { config : eventManager } , [
         m( 'headar#header' , { config: function( element , isInitialized , context){
           if( !isInitialized ) {
             fixedHeader();
-            eventManager();
           }
         }} , [
           m( 'h1' , 'Meeting Space Reservation' ),
@@ -432,27 +385,23 @@ module.exports = function ReserveModule() {
             ]),
             m( 'nav#nav' , [
               m( 'a#prev' , {
-                onclick : vm.prevWeek,
-                href    : '/week:' + vm.urlStatus(),
-                config  : m.route
+                onclick : vm.prevWeek
               } , [
                 m( 'p' , '〈' )
               ]),
               m( 'a#next' , {
-                onclick : vm.nextWeek,
-                href    : '/week:' + vm.urlStatus(),
-                config  : m.route
+                onclick : vm.nextWeek
               } , [
                 m( 'p' ,  '〉' )
               ]),
             ])
           ]),
         ]),
-        // m( '.testArea' , [
-        //   m( 'button#test' , { onclick: vm.test } , 'test' ),
-        //   m( 'button#test' , { onclick: vm.clear } , 'clear' ),
-        //   m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
-        // ]),
+        m( '.testArea' , [
+          m( 'button#test' , { onclick: vm.test } , 'test' ),
+          m( 'button#test' , { onclick: vm.clear } , 'clear' ),
+          m( 'button#test' , { onclick: vm.redraw } , 'redraw' ),
+        ]),
         m( '#calendar' , [
           m( 'ul#timeZone' , timeArea().map(function ( t ) {
             return m( 'li.zone' , [
@@ -580,12 +529,6 @@ module.exports = function ReserveModule() {
     }
   }
 
-  // var status = vm.urlStatus();
-  m.route( document.getElementById('app') , '/week:0' , {
-    '/week:status' : Calendar,
-    '/next:status' : Calendar,
-    '/prev:status' : Calendar,
-  });
-   // m.mount( document.getElementById('app') , Calendar );
+   m.mount( document.getElementById('app') , Calendar );
 
 }
