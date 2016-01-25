@@ -260,9 +260,7 @@ module.exports = function ReserveModule() {
       },
       vm.nextWeek = function() {
         var
-          // num       = vm.week(),
           urlStatus = Number( m.route().split( ':' )[1] );
-        // num += 7;
         urlStatus += 1;
         // vm.week( num );
         vm.urlStatus( urlStatus );
