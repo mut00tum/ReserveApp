@@ -48,6 +48,7 @@ module.exports = function ReserveModule() {
   // ビューモデル
   var vm = {
     init : function() {
+      vm.dObj      = m.prop( new Date() );
       vm.timestamp = m.prop('');
       vm.position  = m.prop('');
       vm.place     = m.prop('');
@@ -62,6 +63,7 @@ module.exports = function ReserveModule() {
       vm.week      = m.prop(0);
       vm.notice    = m.prop('');
       vm.check     = m.prop(true);
+      vm.urlStatus = m.prop('0');
 
       vm.clickSubmitButton = function(){
         var
@@ -242,7 +244,8 @@ module.exports = function ReserveModule() {
         var
           term = 7,  // ▼ _setting.scss：$week_weekTerm
           arr  = [],
-          i    = vm.week(),
+          // i    = vm.urlStatus() * 7,
+          i = m.route().split( ':' )[1] * 7,
           d , day , date;
 
         var weekday = dObj.getDay();
@@ -256,58 +259,32 @@ module.exports = function ReserveModule() {
         return arr;
       },
       vm.nextWeek = function() {
-        var num = vm.week();
-        num += 7;
-        vm.week( num );
+        var
+          // num       = vm.week(),
+          urlStatus = Number( m.route().split( ':' )[1] );
+        // num += 7;
+        urlStatus += 1;
+        // vm.week( num );
+        vm.urlStatus( urlStatus );
       },
       vm.prevWeek = function() {
-        var num = vm.week();
-        num -= 7;
-        vm.week( num );
-      },
-      vm.checkReservedHour = function () {
-        if( vm.hour() >= 0.5 ) {
-          var
-            day      = vm.date(),
-            time     = vm.time(),
-            place    = vm.place(),
-            hour     = $( '#cardHour' ).val(),
-            preList  = [],
-            timeList = timeArea(),
-            TextMap  = {
-              notice : '予約が入っています'
-            },
-            matchOrder;
-
-          matchOrder = timeList.indexOf( time );
-          var length = ( matchOrder ) + hour * 2;
-          for( var i = matchOrder + 1; i < length; i++ ) {
-            preList.push( day + '_' + timeList[i] + '_' + place )
-          }
-          if( !preList == [] ){
-            var length = preList.length
-            var i = 0;
-            while ( i < length ) {
-              var id = '#' + preList[i];
-              if ( $( id ).hasClass('reserved') ) {
-                vm.notice( TextMap.notice );
-                return false;
-              }
-              i++
-            }
-          }
-          vm.notice( '' );
-        }
+        var
+          // num       = vm.week(),
+          urlStatus = Number( m.route().split( ':' )[1] );
+        // num -= 7;
+        urlStatus -= 1;
+        // vm.week( num );
+        vm.urlStatus( urlStatus );
       }
     },
     test : function(){
        console.log(vm.json())
     },
     clear : function() {
-      m.request({ method: "GET", url: "/reset"  });
+      m.request({ method: 'GET', url: '/reset'  });
     },
     redraw : function() {
-      m.request({ method: "GET", url: "/reserved"  })
+      m.request({ method: 'GET', url: '/reserved'  })
       .then( function(data){
         vm.json( data );
         m.redraw();
@@ -320,10 +297,21 @@ module.exports = function ReserveModule() {
       vm.init();
       vm.getSocket();
       vm.getJsonReq();
+
+      // m.route.param('week');
+      // var status = vm.urlStatus()
+      // console.log( status )
+      // status     = m.route.param("status");
+
+      // m.route("/week/:" + status);
+      // console.log( m.route() )
+      // console.log( status )
+      // m.route( '/week' );
+      // console.log( m.route() )
+
     },
 
-    view : function ( ctrl ) {
-
+    view : function () {
       // setInterval(function(){
       //   vm.getJsonReq();
       // } , 5000 );
@@ -426,10 +414,11 @@ module.exports = function ReserveModule() {
           return n.substr( 0 , 2 );
         }
       }
-      return  m( '.contents' , { config: eventManager } , [
+      return  m( '.contents'  , [
         m( 'headar#header' , { config: function( element , isInitialized , context){
           if( !isInitialized ) {
             fixedHeader();
+            eventManager();
           }
         }} , [
           m( 'h1' , 'Meeting Space Reservation' ),
@@ -443,10 +432,18 @@ module.exports = function ReserveModule() {
               ])
             ]),
             m( 'nav#nav' , [
-              m( '#prev' , { onclick: vm.prevWeek} , [
+              m( 'a#prev' , {
+                onclick : vm.prevWeek,
+                href    : '/week:' + vm.urlStatus(),
+                config  : m.route
+              } , [
                 m( 'p' , '〈' )
               ]),
-              m( '#next' , { onclick: vm.nextWeek} , [
+              m( 'a#next' , {
+                onclick : vm.nextWeek,
+                href    : '/week:' + vm.urlStatus(),
+                config  : m.route
+              } , [
                 m( 'p' ,  '〉' )
               ]),
             ])
@@ -464,7 +461,7 @@ module.exports = function ReserveModule() {
             ])
           })),
           m( '#days' , [
-            m( 'ul' , vm.setWeek( new Date() ).map(function ( d ) {
+            m( 'ul' , vm.setWeek( vm.dObj() ).map(function ( d ) {
               return  m( 'li' , [
                   m( 'p' , [
                     m( 'span.month' , d.getMonth() + 1 + '.' ),
@@ -475,7 +472,7 @@ module.exports = function ReserveModule() {
               }))
           ]),
           m( '#times' , { config: times } , [
-            m( 'ul#timesList' , vm.setWeek( new Date() ).map(function ( d ) {
+            m( 'ul#timesList' , vm.setWeek( vm.dObj() ).map(function ( d ) {
               return  m( 'li.date' , {
                 class   : addTodayClass( d ),
                 name    : vm.addDateClass( d )
@@ -538,12 +535,8 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( '.hourTitle' , [
                 m( 'h3', 'Hour' ),
-                // m( 'p#hourNotice' , '予約が入っています' )
                 m( 'p#hourNotice' , {
-                  // onclick : vm.checkReservedHour(),
                   config: function( element , isInitialized , context){
-                    // context = vm.notice();
-                    // $(element).text( context );
                     check();
                   }
                 } , '予約が入っています' )
@@ -588,6 +581,12 @@ module.exports = function ReserveModule() {
     }
   }
 
-  m.mount( document.getElementById('app') , Calendar );
+  // var status = vm.urlStatus();
+  m.route( document.getElementById('app') , '/week:0' , {
+    '/week:status' : Calendar,
+    '/next:status' : Calendar,
+    '/prev:status' : Calendar,
+  });
+   // m.mount( document.getElementById('app') , Calendar );
 
 }

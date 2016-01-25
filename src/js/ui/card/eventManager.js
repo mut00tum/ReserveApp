@@ -3,6 +3,7 @@ require( 'TimelineMax' );
 var m = require( 'mithril' );
 
 module.exports = function EventManager() {
+  // console.log( 'EventManager' )
   m.startComputation();
   var
     Map = {
