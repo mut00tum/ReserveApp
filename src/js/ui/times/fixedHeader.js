@@ -6,10 +6,6 @@ module.exports = function FixedHeader() {
       times  : $( '#times' ),
       zone   : $( '#timeZone' )
     },
-    VALUE = {
-      SCROLL : 300,
-      SPEED  : 300
-    },
     top       = $Map.days.position().top,
     windowTop = $(window).scrollTop(),
     scroll;
@@ -21,10 +17,10 @@ module.exports = function FixedHeader() {
     $(window).on( 'scroll' , function(){
       scroll = $(this).scrollTop();
       if( scroll > top ){
-        addClass(); 
-      } 
+        addClass();
+      }
       if( scroll <= top ) {
-        removeClass(); 
+        removeClass();
       }
     });
 

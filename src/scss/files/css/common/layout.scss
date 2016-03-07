@@ -6,6 +6,7 @@
 /* test
 /*-----------------------------------------------------------------------*/
 .testArea {
+  display: none;
   position: relative;
   top: 0;
   right: 50px;
@@ -96,7 +97,6 @@
     text-align: center;
     background: lighten( map-get( $color , brightPale ) , 10% );
     cursor: pointer;
-    // transition: all , .3s;
     &.still {
       background: lighten( map-get( $color , lightGray ) , 15% );
       pointer-events : none;
@@ -127,8 +127,6 @@
     float: right;
     border-left: 1px solid #fff;
     border-radius: 0 5px 5px 0;
-    // width: $RightWidth;
-    // right: 0px;
     p {
       left: 5px;
     }
@@ -139,11 +137,8 @@
 }
 
 
-
-
 /* calendar
 /*--------------------------------------------------*/
-
 #calendar {
   position: relative;
   box-sizing: border-box;
@@ -156,14 +151,15 @@
   #days,
   #times {
     box-sizing: border-box;
-    border: 5px solid map-get( $color , base );
+    width: 100%;
+    // border: 5px solid map-get( $color , base );
     & > ul {
-      width: calc(100% * #{$weekNum });
+      width: calc(99.9% * #{$weekNum });
       border-spacing: 0;
       & > li {
         float: left;
         box-sizing: border-box;
-        width: calc(100% / #{$weekTerm});
+        width: calc(99.9% / #{$weekTerm});
       }
     }
   }
@@ -172,7 +168,7 @@
   /*--------------------------------------------------*/
   #days {
     position: relative;
-    height: 40px;
+    height: $daysHeight;
     background: map-get( $color , base );
     overflow: hidden;
     z-index: 1;
@@ -185,7 +181,6 @@
           user-select: none;
           .month {
             margin-right: 3px;
-            // font-size: 14px;
           }
           .date {
             margin-right: 5px;
@@ -213,8 +208,12 @@
   /* times
   /*--------------------------------------------------*/
   #times {
+    box-sizing: border-box;
     position: relative;
     height: calc( #{$hourHeight} * #{$timesTotal} );
+    border-left: 5px solid map-get( $color , base );
+    border-right: 5px solid map-get( $color , base );
+    border-bottom: 5px solid map-get( $color , base );
     overflow: hidden;
     #timesList {
       position: absolute;
@@ -226,18 +225,16 @@
           border-right: none;
         }
         &:last-child {
-          // border-right: 5px solid #E9E3CD;
         }
         .timeArea ul.time {
           position: relative;
           display: block;
-          height: $hourHeight;
           li.place {
+            box-sizing: border-box;
             position: relative;
             float: left;
             width: calc(100% / 4);
-            height: 100%;
-            box-sizing: border-box;
+            height: $hourHeight;
             border-left: 1px solid #fff;
             border-right: 1px solid #fff;
             border-bottom: 1px dashed #E9E3CD;
@@ -257,7 +254,7 @@
   }
 
   #times.fixed {
-    top: $hourHeight;
+    top: $daysHeight;
   }
 
   // ▼イニシャル
@@ -287,14 +284,14 @@
     float: left;
     width: $zoneWidth;
     margin-left: - $zoneWidth;
-    margin-top: calc( #{$hourHeight} - 5px );
-    height: calc( #{$hourHeight} * #{$timesTotal} );
+    margin-top: calc( #{$daysHeight} - 6px );
+    // height: calc( #{$hourHeight} * #{$timesTotal} );
     overflow: hidden;
   }
 
     #timeZone li.zone {
       position: relative;
-      height: $hourHeight;
+      height: calc( #{$hourHeight});
       text-align: right;
     }
 
@@ -309,7 +306,7 @@
       }
 
       #timeZone li.zone:first-child p {
-        top: 7px;
+        // top: 7px;
       }
 
       #timeZone li.zone:nth-child(even) p {

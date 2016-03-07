@@ -8,9 +8,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bluebird": "^2.14.4",
     "body-parser": "^1.14.2",
     "browser-sync": "^2.8.2",
     "browserify": "^11.2.0",
+    "co": "^4.6.0",
     "express": "^4.13.3",
     "gsap": "^1.18.0",
     "gulp": "^3.9.0",

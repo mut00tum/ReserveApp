@@ -5,6 +5,7 @@
 /* test
 /*-----------------------------------------------------------------------*/
 .testArea {
+  display: none;
   position: relative;
   top: 0;
   right: 50px;
@@ -126,16 +127,16 @@
 #days,
 #times {
   box-sizing: border-box;
-  border: 5px solid #efe9da; }
+  width: 100%; }
   #days > ul,
   #times > ul {
-    width: calc(100% * 1);
+    width: calc(99.9% * 1);
     border-spacing: 0; }
     #days > ul > li,
     #times > ul > li {
       float: left;
       box-sizing: border-box;
-      width: calc(100% / 7); }
+      width: calc(99.9% / 7); }
 
 /* days
   /*--------------------------------------------------*/
@@ -175,8 +176,12 @@
 /* times
   /*--------------------------------------------------*/
 #times {
+  box-sizing: border-box;
   position: relative;
-  height: calc( 40px * 26 );
+  height: calc( 30px * 39 );
+  border-left: 5px solid #efe9da;
+  border-right: 5px solid #efe9da;
+  border-bottom: 5px solid #efe9da;
   overflow: hidden; }
   #times #timesList {
     position: absolute;
@@ -188,14 +193,13 @@
         border-right: none; }
       #times #timesList > li.date .timeArea ul.time {
         position: relative;
-        display: block;
-        height: 40px; }
+        display: block; }
         #times #timesList > li.date .timeArea ul.time li.place {
+          box-sizing: border-box;
           position: relative;
           float: left;
           width: calc(100% / 4);
-          height: 100%;
-          box-sizing: border-box;
+          height: 30px;
           border-left: 1px solid #fff;
           border-right: 1px solid #fff;
           border-bottom: 1px dashed #E9E3CD;
@@ -231,13 +235,12 @@
   float: left;
   width: 7%;
   margin-left: -7%;
-  margin-top: calc( 40px - 5px);
-  height: calc( 40px * 26 );
+  margin-top: calc( 40px - 6px);
   overflow: hidden; }
 
 #timeZone li.zone {
   position: relative;
-  height: 40px;
+  height: calc( 30px);
   text-align: right; }
 
 #timeZone li.zone p {
@@ -252,12 +255,9 @@
       -ms-user-select: none;
           user-select: none; }
 
-#timeZone li.zone:first-child p {
-  top: 7px; }
-
 #timeZone li.zone:nth-child(even) p {
   font-size: 8px;
   color: #BFBFBF; }
 
 #timeZone.fixed {
-  top: 40px; }
+  top: 30px; }

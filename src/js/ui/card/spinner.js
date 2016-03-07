@@ -1,9 +1,7 @@
 require( 'TweenMax' );
 require( 'TimelineMax' );
-var m = require( 'mithril' );
 
 module.exports = function Spinner() {
-  // m.startComputation();
   var
     card = $( '#card' ),
     hourField   = card.find('.hour'),
@@ -128,5 +126,4 @@ module.exports = function Spinner() {
 
       return max;
     }
-  // m.endComputation();
 }

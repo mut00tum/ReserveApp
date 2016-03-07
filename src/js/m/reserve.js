@@ -6,7 +6,6 @@ var timeArea     = require( '../data/timeArea' );
 var fixedHeader  = require( '../ui/times/fixedHeader' );
 var eventManager = require( '../ui/card/eventManager' );
 var check        = require( '../ui/card/check' );
-// var socket       = require( 'socket.io-client' )( 'http://192.168.0.134:8015' );
 
 module.exports = function ReserveModule() {
 
@@ -19,24 +18,10 @@ module.exports = function ReserveModule() {
     this.person    = m.prop( data.person );
     this.date      = m.prop( data.date );
   }
-  //   console.log( 'connect' )
-  // });
-  // socket.on( 'disconnect', function(){
-  //    console.log( 'disconnect' )
-  // });
-
-
-    // function Save( reserve ) {
-    //   socket.emit( 'saveData' , reserve );
-    // }
 
     Reserve.save = function( reserve ) {
-      m.request({ method: "POST", url: "/reserved" , data: reserve });
+      m.request({ method: "POST", url: "/save" , data: reserve });
     }
-
-    // Reserve.list = function() {
-    //   m.request({ method: "GET", url: "/reserved"  });
-    // }
 
     Reserve.cancel = function( reserve ) {
       m.request({ method: "POST", url: "/cancel" , data: reserve });
@@ -89,16 +74,20 @@ module.exports = function ReserveModule() {
       vm.addReserve = function( t , h ) {
         var
           Class = '',
-          // list  = [],
-          gainPosition = {},
+          gainPosition = '',
           length , term;
 
         term   = getReserveTimes( t , h );
         length = term.length - 1;
 
         for ( var i = 0; i < length; i++ ) {
-          gainPosition[ i ] = vm.date() + '_' + term[i];
+          if( i == length - 1 ){
+            gainPosition += vm.date() + '_' + term[i];
+          } else {
+            gainPosition += vm.date() + '_' + term[i] + '/';
+          }
         }
+        console.log( gainPosition )
         reserve = new Reserve({
           timestamp : vm.timestamp(),
           position  : gainPosition,
@@ -149,12 +138,6 @@ module.exports = function ReserveModule() {
           Reserve.cancel( json );
         }
       },
-      vm.getJsonReq = function() {
-        m.request({ method: "GET", url: "/reserved"  })
-          .then( function( value ){
-            vm.json( value );
-        });
-      },
       vm.checkReserve = function( d,t,p ) {
         var
           json   = vm.json(),
@@ -165,22 +148,23 @@ module.exports = function ReserveModule() {
           member = 0,
           person = '',
           first  = '',
+          length = json.length,
           place , position;
 
-        if( json ) {
-          var length = json.length;
+
+        if( length > 0 ) {
           for( var i = 0; i < length; i++ ){
-            place    = json[i].place;
-            var posiLength = Object.keys( json[i].position ).length;
+            place = json[i].place;
+            var posiList = json[i].position.split( '/' );
+            var posiLength = posiList.length;
             for( var j = 0; j < posiLength; j++ ){
-              var reserve = json[i].position[ j ] + '_' + json[i].place;
+              var reserve = posiList[ j ] + '_' + json[i].place;
               if ( reserve == id ){
                 Class += 'reserved' + ' ' + place;
                 stamp  = json[i].timestamp;
                 hour   = json[i].hour;
                 member = json[i].member;
                 person = json[i].person;
-                // first  = json[i].first;
                 if ( j == 0 ) {
                   first = true;
                 } else {
@@ -189,6 +173,8 @@ module.exports = function ReserveModule() {
               }
             }
           }
+        } else {
+          return false;
         }
         return {
           Class  : Class,
@@ -198,6 +184,17 @@ module.exports = function ReserveModule() {
           person : person,
           first  : first
         }
+      },
+      vm.getJsonReq = function() {
+        var date = new Date();
+        var mondayNum = vm.getMonday( date , vm.week() );
+        date.setDate( mondayNum );
+        var firstDay = vm.addDateClass( date );
+        m.request({ method: 'GET', url: '/getReserved' + '?monday=' + firstDay })
+          .then( function( value ){
+            // console.log( value )
+            vm.json( value );
+        });
       },
       vm.setCancelTarget = function() {
         var
@@ -211,15 +208,18 @@ module.exports = function ReserveModule() {
       vm.addDateClass = function( d ) {
         return d.getFullYear() + "_" + (d.getMonth() + 1) + "_" + d.getDate();
       },
+      vm.getMonday = function( dObj , i ) {
+        var weekday = dObj.getDay();
+        return dObj.getDate() - ( weekday - 1 ) + i;
+      },
       vm.setWeek = function( dObj ) {
         var
           term = 7,  // ▼ _setting.scss：$week_weekTerm
           arr  = [],
-          i    = vm.week(),
           d , day , date;
 
-        var weekday = dObj.getDay();
-        var monday  = dObj.getDate() - ( weekday - 1 ) + i ;
+        var monday = vm.getMonday( dObj , vm.week() );
+
         for( var i = 0; i < term; i++ ){
           d = new Date();
           d.setDate( monday );
@@ -233,12 +233,14 @@ module.exports = function ReserveModule() {
           num = vm.week();
         num += 7;
         vm.week( num );
+        vm.getJsonReq();
       },
       vm.prevWeek = function() {
         var
           num = vm.week();
         num -= 7;
         vm.week( num );
+        vm.getJsonReq();
       }
     },
     test : function(){
@@ -259,7 +261,6 @@ module.exports = function ReserveModule() {
 
     controller : function() {
       vm.init();
-      // vm.getSocket();
       vm.getJsonReq();
     },
 
@@ -358,7 +359,7 @@ module.exports = function ReserveModule() {
         if( order % 2 == 0 ){
           setTime = setCardTime( t )
         } else {
-          setTime = '30'
+          setTime = '15'
         }
         return setTime;
       }
@@ -435,7 +436,6 @@ module.exports = function ReserveModule() {
                             m.withAttr( 'data-place' , vm.place ),
                             m.withAttr( 'data-date'  , vm.date ),
                             m.withAttr( 'data-time'  , vm.time )
-                            // m.withAttr( 'id'  , vm.check )
                           ),
                           id            : vm.addDateClass( d ) + '_' + t + '_' + p,
                           class         : vm.checkReserve( d,t,p ).Class,

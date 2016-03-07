@@ -45,7 +45,11 @@
   box-sizing: border-box;
   border-bottom: 1px solid rgba(255, 255, 255, 0.7); }
   #card ul li h3 {
-    float: left; }
+    float: left;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
   #card ul li .hourTitle {
     float: left;
     width: 140px; }
@@ -96,7 +100,11 @@
         background: #cdb287;
         text-align: center;
         font-size: 10px;
-        cursor: pointer; }
+        cursor: pointer;
+        -webkit-user-select: none;
+           -moz-user-select: none;
+            -ms-user-select: none;
+                user-select: none; }
         #card ul li .number .sppinner .up:hover,
         #card ul li .number .sppinner .down:hover {
           background: #b78f51; }
@@ -107,7 +115,11 @@
     #card ul li .number .unit {
       position: relative;
       top: 15px;
-      float: right; }
+      float: right;
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none; }
   #card ul li .name {
     float: right;
     width: auto;
@@ -120,7 +132,11 @@
 #cardDate,
 #cardTime {
   position: relative;
-  opacity: 0; }
+  opacity: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
 
 #card .info {
   position: relative;

@@ -1,33 +1,23 @@
-var
+"use strict";
+
+const
   express     = require( 'express' ),
-  fs          = require( 'fs' ),
   bodyParser  = require( 'body-parser' ),
+  co          = require( 'co' ),
   MongoClient = require( 'mongodb' ).MongoClient,
-  settings    = require( './settings' ),
+  settings    = require( './settings' );
+
+var
   db , myCollection;
 
-var app    = express();
-var server = require( 'http' ).Server(app);
-
-// ▼ err:Can't set headers after they are sent.
-app.use(function(req,res,next){
-  var _send = res.send;
-  var sent  = false;
-  res.send = function(data){
-      if(sent) return;
-      _send.bind(res)(data);
-      sent = true;
-  };
-  next();
-});
+const app    = express();
+const server = require( 'http' ).Server(app);
 
 app.use(express.static( 'build' ));
 app.use(bodyParser.json());
-// server.use(bodyParser.json());
 
 console.log( 'start listening at 8000' );
 app.listen( settings.port );
-// server.listen( settings.port );
 
 MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(err, mongodb) {
   if (err) { return console.dir(err); }
@@ -36,26 +26,65 @@ MongoClient.connect("mongodb://" + settings.host + "/" + settings.db, function(e
   myCollection = db.collection( 'reserved' )
 })
 
-app.get("/reserved", function (req, res) {
-  try {
-    loading( function ( item ){
+// getReserved
+// ---------------------------------------------------
+app.get("/getReserved", function (req, res) {
+  const
+    query  = req.query,
+    monday = query['monday'];
+    loading( monday , res );
+});
+
+var loading = ( monday , res) => {
+  var
+    list     = [],
+    findList = [];
+
+  var getDateList = () => {
+    for ( let i = 0; i < 7; i++ ) {
+      const arr  = monday.split( '_' );
+      const date =  arr[0] + '_' + arr[1] + '_' + String( Number(arr[2]) + i );
+      list.push( {date:date} );
+    }
+  }
+  var matchCollection = () => {
+    myCollection.find(
+      { $or:list }
+    ).toArray( function( err, item ) {
+      if (err) { return console.log(err); }
       res.send( item );
     });
-  } catch(e) {
-    console.log( 'GET : error!' )
   }
-});
+  co( function*(){
+    getDateList();
+    matchCollection();
+  });
+}
 
-app.post("/reserved", function (req, res) {
+// save
+// ---------------------------------------------------
+app.post("/save", function (req, res) {
   try {
-    save( req.body );
+    save( req.body , res );
 
-    res.status(200).end();
   } catch(e) {
-    console.log( 'POST : error!' )
+    console.log( 'save : error!' )
   }
 });
 
+var save = ( data , res ) => {
+  const
+    position = data.position.split( '/' ),
+    list     = [];
+  myCollection.insert( data, function( err, result ) {
+    if (err) { return console.log(err); }
+    res.status(200).end();
+  });
+}
+
+
+// cancel
+// ---------------------------------------------------
 app.post("/cancel", function (req, res) {
   try {
     cancel( req, res );
@@ -66,34 +95,8 @@ app.post("/cancel", function (req, res) {
   }
 });
 
-app.get("/reset", function (req, res){
-  console.log( "MongoDB / reserved : clear!!" );
-  myCollection.remove();
-});
-
-function loading( callback ) {
-  myCollection.find().toArray(function( err, item ) {
-    if (err) { return console.log(err); }
-    callback(item);
-  });
-}
-
-function getReserveData() {
-  myCollection.find().toArray(function( err, item ) {
-    if (err) { return console.log(err); }
-    console.log( item )
-    return item;
-  });
-}
-
-function save( data ) {
-  myCollection.insert( data, function( err, result ) {
-    if (err) { return console.log(err); }
-  });
-}
-
-function cancel( req ){
-  var data = req.body;
+var cancel = ( req ) => {
+  const data = req.body;
   data.forEach( function( list ){
     myCollection.remove( { timestamp: list.timestamp } ,
       function( err, result ) {
@@ -103,20 +106,11 @@ function cancel( req ){
   })
 }
 
-// function same( req , res ){
-//   var data = req.body;
-//   data.forEach( function( list ){
-//     if( myCollection.find({ position: list.position }) ) {
-//       myCollection.find( { position: list.position } ,
-//         function( err, result ) {
-//           if (err) { return console.log(err); }
-//           console.log( 'same' );
-//         }
-//       )
-//     } else {
-//       res.status(200).end();
-//     }
-//   })
-//   res.status(200).end();
-// }
+
+// cancel
+// ---------------------------------------------------
+app.get("/reset", function (req, res){
+  console.log( "MongoDB / reserved : clear!!" );
+  myCollection.remove();
+});
 
