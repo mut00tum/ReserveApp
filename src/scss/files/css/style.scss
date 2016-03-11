@@ -11,9 +11,11 @@
     .time {
       .place {
         cursor: pointer;
-        // transition: all .15s;
-        &:hover {
-          background: map-get( $color , brightOrange );
+        &.timebar {
+          border-top: 1px solid darken(map-get($color, base), 20%);
+        }
+        &.select {
+          border-top: 3px solid darken(map-get($color, base) , 8%);
         }
         &.current {
           &:before {
@@ -32,6 +34,9 @@
               background: darken( map-get( $color , redPink ) , 12% );
             }
           }
+          &.pre {
+            background: lighten( map-get($color, redPink) , 20% );
+          }
         }
         &[data-place="P9B"] {
           &:hover {
@@ -42,6 +47,9 @@
             &:before {
               background: darken( map-get( $color , orange ) , 12% );
             }
+          }
+          &.pre {
+            background: lighten( map-get($color, orange) , 20% );
           }
         }
         &[data-place="P1A"] {
@@ -54,6 +62,9 @@
               background: darken( map-get( $color , green ) , 12% );
             }
           }
+          &.pre {
+            background: lighten( map-get($color, green) , 20% );
+          }
         }
         &[data-place="P1B"] {
           &:hover {
@@ -64,6 +75,9 @@
             &:before {
               background: darken( map-get( $color , blue ) , 12% );
             }
+          }
+          &.pre {
+            background: lighten( map-get($color, blue) , 20% );
           }
         }
       }

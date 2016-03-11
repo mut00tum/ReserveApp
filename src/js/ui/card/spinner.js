@@ -3,23 +3,12 @@ require( 'TimelineMax' );
 
 module.exports = function Spinner() {
   var
-    card = $( '#card' ),
-    hourField   = card.find('.hour'),
+    card        = $( '#card' ),
     memberField = card.find('.member'),
-    $Map = {
+    Map = {
       time    : $( '#cardTime' ),
       spinner : card.find( '.spinner' ),
       place   : $( '#timesList' ).find( '.place' )
-    },
-    Hour = {
-      filed  : hourField.find( 'input' ),
-      up     : hourField.find( '.up' ),
-      down   : hourField.find( '.down' ),
-      setVal : 0,
-      num    : 0,
-      max    : 8,
-      min    : 0.5,
-      sum    : 0.5
     },
     Member = {
       filed  : memberField.find( 'input' ),
@@ -32,22 +21,15 @@ module.exports = function Spinner() {
       sum    : 1
     };
 
-    setSpinner( Hour.filed , Hour.up , Hour.down , Hour.setVal , Hour.num , setHourLimit() , Hour.min , Hour.sum , 'hour' );
     setSpinner( Member.filed , Member.up , Member.down , Member.setVal , Member.num , Member.max , Member.min , Member.sum , 'member');
 
     function setSpinner( filed , upBtn , downBtn , setVal , num , max , min , sum , sort ) {
 
-      $Map.place.on( 'click' , function(){
+      Map.place.on( 'click' , function(){
         num = 0;
-        if( sort == 'hour' ) {
-          max = setHourLimit();
-        }
       });
 
       filed.change(function(){
-        if( sort == 'hour' ) {
-          max = setHourLimit();
-        }
         num = Number( filed.val() );
         if( filed.val() == max ){
           maxEffect( filed );
@@ -65,9 +47,7 @@ module.exports = function Spinner() {
 
       upBtn.on( 'click' , function(){
         num = Number( filed.val() );
-        if( sort == 'hour' ) {
-          max = setHourLimit();
-        }
+
         if( filed.val() == max ){
           maxEffect( filed );
         }
@@ -81,9 +61,7 @@ module.exports = function Spinner() {
 
       downBtn.on( 'click' , function(){
         num = Number( filed.val() );
-        if( sort == 'hour' ) {
-          max = setHourLimit();
-        }
+
         if( filed.val() < min ) {
           num = min;
         }
@@ -117,7 +95,7 @@ module.exports = function Spinner() {
           '16:00':5, '16:30':4.5, '17:00':4, '17:30':3.5, '18:00':3, '18:30':2.5,
           '19:00':2, '19:30':1.5, '20:00':1, '20:30':0.5
         },
-        timeText = $Map.time.text(),
+        timeText = Map.time.text(),
         max = 8;
 
       if( limitMap[timeText] ){

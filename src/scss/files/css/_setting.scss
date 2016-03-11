@@ -13,16 +13,20 @@ $color: (
   emerald      : #5bd68c,
   red          : #e76565,
   brightOrange : #fff2d7,
-  today        : #FFFAF7
+  today        : #FFFAF7,
+  sat          : #f4f7f9,
+  san          : #fff3f3
 );
 
-$weekTerm   : 7;
-$weekNum    : 1;
-$daysHeight : 40px;
-$hourHeight : 30px;
-$timesTotal : 39;
-$RightWidth : 5%;
-$zoneWidth  : 7%;
+$weekTerm    : 7;
+$weekNum     : 1;
+$daysHeight  : 40px;
+$hourHeight  : 30px;
+$timesTotal  : 52;
+$RightWidth  : 5%;
+$zoneWidth   : 7%;
+$fieldHeight : 36px;
+$fieldWidth  : 130px;
 
 $baseFontSize:16px;
 $baseTitleSize:30px;

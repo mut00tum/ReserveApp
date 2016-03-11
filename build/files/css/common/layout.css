@@ -163,6 +163,10 @@
         #days ul li p .day {
           font-size: 10px;
           opacity: .8; }
+      #days ul li:nth-child(6) {
+        color: #68a8c9; }
+      #days ul li:nth-child(7) {
+        color: #ef8390; }
 
 #days.fixed {
   position: fixed;
@@ -178,7 +182,7 @@
 #times {
   box-sizing: border-box;
   position: relative;
-  height: calc( 30px * 39 );
+  height: calc( 30px * 52 );
   border-left: 5px solid #efe9da;
   border-right: 5px solid #efe9da;
   border-bottom: 5px solid #efe9da;
@@ -204,9 +208,11 @@
           border-right: 1px solid #fff;
           border-bottom: 1px dashed #E9E3CD;
           z-index: 0; }
+        #times #timesList > li.date .timeArea ul.time:nth-child(4n) li.place {
+          border-bottom: 1px solid #E9E3CD; }
 
 #times #timesList > li.date.today {
-  background: #FFFAF7; }
+  background-color: #FFFAF7; }
   #times #timesList > li.date.today .timeArea ul.time li.place {
     border-left: 1px solid #FFFAF7;
     border-right: 1px solid #FFFAF7; }
@@ -224,7 +230,6 @@
     border-radius: 5px 5px 0 0; }
     #timesList .timeArea .place[data-first="true"] .initial {
       display: inline-block;
-      padding-top: 8px;
       color: #fff;
       font-size: 12px;
       z-index: 10; }

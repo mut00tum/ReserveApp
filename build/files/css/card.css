@@ -16,10 +16,12 @@
   overflow: hidden; }
 
 #card .header {
+  position: relative;
   float: left;
   width: 100%;
   box-sizing: border-box;
-  background: rgba(241, 218, 178, 0.8); }
+  background: rgba(241, 218, 178, 0.8);
+  z-index: 20; }
   #card .header h2 {
     display: inline-block;
     position: relative;
@@ -37,96 +39,134 @@
     #card .header #closeBtn:hover {
       background: #b78f51; }
 
-#card ul li {
-  float: left;
-  width: 100%;
-  min-height: 58px;
-  padding: 6px 20px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.7); }
-  #card ul li h3 {
+#card > ul {
+  position: relative; }
+  #card > ul > li {
     float: left;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none; }
-  #card ul li .hourTitle {
-    float: left;
-    width: 140px; }
-    #card ul li .hourTitle #hourNotice {
-      display: none;
+    width: 100%;
+    min-height: 58px;
+    padding: 6px 30px 6px 20px;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7); }
+    #card > ul > li h3 {
       float: left;
-      font-size: 80%;
-      color: #e76565; }
-  #card ul li .val {
-    float: right;
-    font-size: 26px; }
-    #card ul li .val .year {
-      margin-right: 8px;
-      font-size: 60%;
-      color: #595959; }
-    #card ul li .val .month {
-      margin-right: 5px; }
-  #card ul li input {
-    position: relative;
-    top: 0;
-    left: 0;
-    float: left;
-    width: 100px;
-    height: 36px;
-    border: none;
-    text-align: center;
-    font-size: 20px; }
-  #card ul li input[type=number]::-webkit-inner-spin-button,
-  #card ul li input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none; }
-  #card ul li .number {
-    float: right;
-    width: 130px;
-    margin-top: 5px; }
-    #card ul li .number .sppinner {
-      position: relative;
-      float: left;
-      overflow: hidden; }
-      #card ul li .number .sppinner .up,
-      #card ul li .number .sppinner .down {
-        position: absolute;
-        box-sizing: border-box;
-        right: 0px;
-        width: 18px;
-        height: 18px;
-        padding-top: 2px;
-        color: #fff;
-        background: #cdb287;
-        text-align: center;
-        font-size: 10px;
-        cursor: pointer;
-        -webkit-user-select: none;
-           -moz-user-select: none;
-            -ms-user-select: none;
-                user-select: none; }
-        #card ul li .number .sppinner .up:hover,
-        #card ul li .number .sppinner .down:hover {
-          background: #b78f51; }
-      #card ul li .number .sppinner .up {
-        top: 0; }
-      #card ul li .number .sppinner .down {
-        top: 18px; }
-    #card ul li .number .unit {
-      position: relative;
-      top: 15px;
-      float: right;
       -webkit-user-select: none;
          -moz-user-select: none;
           -ms-user-select: none;
               user-select: none; }
-  #card ul li .name {
-    float: right;
-    width: auto;
-    margin-top: 5px;
-    padding: 2px 5px;
+    #card > ul > li .hourTitle {
+      float: left;
+      width: 140px; }
+      #card > ul > li .hourTitle #hourNotice {
+        display: none;
+        float: left;
+        font-size: 80%;
+        color: #e76565; }
+    #card > ul > li .val {
+      float: right;
+      font-size: 26px; }
+      #card > ul > li .val .year {
+        margin-right: 8px;
+        font-size: 60%;
+        color: #595959; }
+      #card > ul > li .val .month {
+        margin-right: 5px; }
+    #card > ul > li input {
+      position: relative;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      float: left;
+      width: 100px;
+      height: 36px;
+      border: none;
+      text-align: center;
+      font-size: 20px; }
+      #card > ul > li input:hover {
+        border: 2px solid #f3e0bf; }
+    #card > ul > li input[type=number]::-webkit-inner-spin-button,
+    #card > ul > li input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none; }
+    #card > ul > li .number {
+      float: right;
+      width: 130px;
+      margin-top: 5px; }
+      #card > ul > li .number .sppinner {
+        position: relative;
+        float: left; }
+        #card > ul > li .number .sppinner .up,
+        #card > ul > li .number .sppinner .down {
+          position: absolute;
+          box-sizing: border-box;
+          right: 0px;
+          width: 18px;
+          height: 18px;
+          padding-top: 2px;
+          color: #fff;
+          background: #cdb287;
+          text-align: center;
+          font-size: 10px;
+          cursor: pointer;
+          -webkit-user-select: none;
+             -moz-user-select: none;
+              -ms-user-select: none;
+                  user-select: none; }
+          #card > ul > li .number .sppinner .up:hover,
+          #card > ul > li .number .sppinner .down:hover {
+            background: #b78f51; }
+        #card > ul > li .number .sppinner .up {
+          top: 0; }
+        #card > ul > li .number .sppinner .down {
+          top: 18px; }
+      #card > ul > li .number .unit {
+        position: relative;
+        top: 15px;
+        float: right;
+        -webkit-user-select: none;
+           -moz-user-select: none;
+            -ms-user-select: none;
+                user-select: none; }
+    #card > ul > li .name {
+      float: right;
+      width: 130px;
+      margin-top: 5px;
+      padding: 2px 5px;
+      text-align: center;
+      font-size: 20px; }
+
+#card > ul > li .hour #cardHour {
+  position: relative;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  float: left;
+  width: 130px;
+  height: 36px;
+  border: none;
+  text-align: center;
+  font-size: 20px;
+  background: #fff;
+  cursor: pointer; }
+  #card > ul > li .hour #cardHour:hover {
+    border: 2px solid #f3e0bf; }
+
+#card > ul > li .hour ul {
+  position: absolute;
+  top: 36px;
+  left: 5px;
+  width: calc( 130px - 40px);
+  height: 110px;
+  border: 2px solid #f3e0bf;
+  background: #fff;
+  overflow-y: scroll;
+  z-index: 20; }
+  #card > ul > li .hour ul li {
+    position: relative;
+    font-size: 14px;
     text-align: center;
-    font-size: 20px; }
+    cursor: pointer; }
+    #card > ul > li .hour ul li:hover {
+      background: #f4efe5; }
 
 #cardPlace,
 #cardDate,
@@ -147,6 +187,9 @@
   #card .info span {
     padding-left: 10px;
     font-size: 60%; }
+
+#card #infoHour {
+  right: 0; }
 
 #submit {
   position: relative;

@@ -7,8 +7,10 @@
 /*-----------------------------------------------------------------------*/
 #times .timeArea .time .place {
   cursor: pointer; }
-  #times .timeArea .time .place:hover {
-    background: #fff2d7; }
+  #times .timeArea .time .place.timebar {
+    border-top: 1px solid #d0bf93; }
+  #times .timeArea .time .place.select {
+    border-top: 3px solid #e3d8be; }
   #times .timeArea .time .place.current:before {
     display: block;
     height: 100%;
@@ -18,21 +20,29 @@
     background: #f7bfd7; }
   #times .timeArea .time .place[data-place="P9A"].current:before {
     background: #ea5c99; }
+  #times .timeArea .time .place[data-place="P9A"].pre {
+    background: #fdecf3; }
   #times .timeArea .time .place[data-place="P9B"]:hover {
     border-top: 2px solid #e99a63;
     background: #efb790; }
   #times .timeArea .time .place[data-place="P9B"].current:before {
     background: #e1772d; }
+  #times .timeArea .time .place[data-place="P9B"].pre {
+    background: #f6d4bc; }
   #times .timeArea .time .place[data-place="P1A"]:hover {
     border-top: 2px solid #87d0b0;
     background: #acdec8; }
   #times .timeArea .time .place[data-place="P1A"].current:before {
     background: #5bbf93; }
+  #times .timeArea .time .place[data-place="P1A"].pre {
+    background: #d0ede0; }
   #times .timeArea .time .place[data-place="P1B"]:hover {
     border-top: 2px solid #94ccde;
     background: #bbdfea; }
   #times .timeArea .time .place[data-place="P1B"].current:before {
     background: #65b6d0; }
+  #times .timeArea .time .place[data-place="P1B"].pre {
+    background: #e2f1f6; }
 
 #times .timeArea .time .P9A {
   background: #f192bb; }

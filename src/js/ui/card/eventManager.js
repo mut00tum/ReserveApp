@@ -1,9 +1,10 @@
 require( 'TweenMax' );
 require( 'TimelineMax' );
-var m = require( 'mithril' );
+var timeArea = require( '../../data/timeArea' );
+var m        = require( 'mithril' );
+
 
 module.exports = function EventManager() {
-  // console.log( 'EventManager' )
   m.startComputation();
   var
     Map = {
@@ -166,7 +167,6 @@ module.exports = function EventManager() {
   }
 
   function initCardVal() {
-    $( '#cardHour' ).val( 0 );
     $( '#cardMember' ).val( 0 );
     $( '#cardPerson' ).val('');
     Card.infoHour.text('');
@@ -175,9 +175,32 @@ module.exports = function EventManager() {
   }
 
   function setCardVal( self ) {
-    Card.infoHour.text( self.data( 'hour' ) );
+    var timeList   = timeArea();
+    timeList.shift();
+    timeList.push( '2100' );
+    var hour       = self.data( 'hour' );
+    var matchOrder = timeList.indexOf( self.data( 'time' ) );
+    var afterOrder = matchOrder + hour;
+    var time       = timeList[ afterOrder ];
+
+    var
+      hourText = '',
+      minutes  = '',
+      timeText = '';
+
+    if( time ) {
+      hourText = time.substr( 0 , 2 );
+      if ( hourText.substr( 0 , 1 ) == '0' ){
+        hourText = hourText.substr( 1 , 1 )
+      }
+    }
+    minutes  = time.substr( 2 , 4 );
+    timeText = hourText + ':' + minutes;
+
+    Card.infoHour.text( timeText );
     Card.infoMember.text( self.data( 'member' ) );
     Card.infoPerson.text( self.data( 'person' ) );
   }
+
   m.endComputation();
 }

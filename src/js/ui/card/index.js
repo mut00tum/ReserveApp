@@ -1,9 +1,9 @@
-var check        = require( './check' );
-var sppinner     = require( './spinner' );
-var eventManager = require( './eventManager' );
+var setHour  = require( './setHour' );
+var sppinner = require( './spinner' );
+var check    = require( './check' );
 
 module.exports = function Index() {
   sppinner();
-  check();
-  // eventManager();
+  // check();
+  // setHour();
 }

@@ -1,8 +1,7 @@
-//times / index
 var attachCurrent = require( './attachCurrent' );
-// var fixedHeader   = require( './fixedHeader' );
+var timeBar       = require( './timeBar' );
 
 module.exports = function Index() {
   attachCurrent();
-  // fixedHeader();
+  timeBar();
 }

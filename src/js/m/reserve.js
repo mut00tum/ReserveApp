@@ -1,11 +1,11 @@
 var m            = require( 'mithril' );
-var calendar     = require( '../ui/calendar' );
 var card         = require( '../ui/card' );
 var times        = require( '../ui/times' );
 var timeArea     = require( '../data/timeArea' );
 var fixedHeader  = require( '../ui/times/fixedHeader' );
 var eventManager = require( '../ui/card/eventManager' );
 var check        = require( '../ui/card/check' );
+var setHour      = require( '../ui/card/setHour' );
 
 module.exports = function ReserveModule() {
 
@@ -20,7 +20,11 @@ module.exports = function ReserveModule() {
   }
 
     Reserve.save = function( reserve ) {
-      m.request({ method: "POST", url: "/save" , data: reserve });
+      m.request({ method: "POST", url: "/save" , data: reserve })
+      .then( function( value ){
+          // console.log( value )
+          vm.json( value );
+      });
     }
 
     Reserve.cancel = function( reserve ) {
@@ -65,7 +69,7 @@ module.exports = function ReserveModule() {
 
         function getCardVal() {
           return {
-            hour   : $( '#cardHour' ).val(),
+            hour   : document.getElementById('cardHour').getAttribute( 'data-cardhour' ),
             member : $( '#cardMember' ).val(),
             person : $( '#cardPerson' ).val()
           }
@@ -78,7 +82,7 @@ module.exports = function ReserveModule() {
           length , term;
 
         term   = getReserveTimes( t , h );
-        length = term.length - 1;
+        length = term.length;
 
         for ( var i = 0; i < length; i++ ) {
           if( i == length - 1 ){
@@ -87,7 +91,7 @@ module.exports = function ReserveModule() {
             gainPosition += vm.date() + '_' + term[i] + '/';
           }
         }
-        console.log( gainPosition )
+
         reserve = new Reserve({
           timestamp : vm.timestamp(),
           position  : gainPosition,
@@ -99,11 +103,10 @@ module.exports = function ReserveModule() {
         });
         function getReserveTimes( time , hour ) {
           var
-            hour        = String( hour ),
             timeList    = timeArea(),
             matchOrder  = timeList.indexOf( time ),
             arr         = [],
-            length = ( matchOrder + 1 ) + hour * 2;
+            length      = matchOrder + Number(hour);
 
           for( var i = matchOrder; i < length; i++ ) {
             arr.push( timeList[i] )
@@ -151,8 +154,7 @@ module.exports = function ReserveModule() {
           length = json.length,
           place , position;
 
-
-        if( length > 0 ) {
+        if( json ) {
           for( var i = 0; i < length; i++ ){
             place = json[i].place;
             var posiList = json[i].position.split( '/' );
@@ -305,6 +307,21 @@ module.exports = function ReserveModule() {
               } );
           };
       }
+      function setTimeList( t ) {
+        var
+          time  = t,
+          list  = timeArea(),
+          order = list.indexOf(time),
+          setTime = '';
+
+        // console.log( order )
+        if( order % 2 == 0 ){
+          setTime = setCardTime( t )
+        } else {
+          setTime = t.substr( 2 , 4 );
+        }
+        return setTime;
+      }
       function setCardPlace( p ) {
         var
           textMap = {
@@ -339,7 +356,7 @@ module.exports = function ReserveModule() {
           time    = '';
 
         if( t ) {
-          hour    = t.substr( 0 , 2 );
+          hour = t.substr( 0 , 2 );
           if ( hour.substr( 0 , 1 ) == '0' ){
             hour = hour.substr( 1 , 1 )
           }
@@ -348,20 +365,8 @@ module.exports = function ReserveModule() {
         }
         return time;
       }
-      function setTimeList( t ) {
-        var
-          time  = t,
-          list  = timeArea(),
-          order = list.indexOf(time),
-          setTime = '';
-
-        // console.log( day )
-        if( order % 2 == 0 ){
-          setTime = setCardTime( t )
-        } else {
-          setTime = '15'
-        }
-        return setTime;
+      function setCardHour( time ) {
+        return time.substr( 0 , 2 ) + ':' + time.substr( 2 , 4 )
       }
       function setInitialName( n ) {
         if( !n == '' ){
@@ -420,7 +425,12 @@ module.exports = function ReserveModule() {
                 ]);
               }))
           ]),
-          m( '#times' , { config: times } , [
+          m( '#times' , { config: function( element , isInitialized , context){
+            times();
+            // if( !isInitialized ) {
+            //   times();
+            // }
+          }} , [
             m( 'ul#timesList' , vm.setWeek( vm.dObj() ).map(function ( d ) {
               return  m( 'li.date' , {
                 class   : addTodayClass( d ),
@@ -483,20 +493,14 @@ module.exports = function ReserveModule() {
             m( 'li', [
               m( '.hourTitle' , [
                 m( 'h3', 'Hour' ),
-                m( 'p#hourNotice' , {
-                  config: function( element , isInitialized , context){
-                    check();
-                  }
-                } , '予約が入っています' )
+                m( 'p#hourNotice' , { config: check() } , '予約が入っています' )
               ]),
-              m( '.number' , [
+              m( '.number', { config: setHour() } , [
                 m( '.sppinner.hour' , [
-                  m( "input#cardHour[name='num'][type='number']" ),
-                  m( 'p.up' , '▲' ),
-                  m( 'p.down' , '▼' )
+                  m( 'input#cardHour' , { 'data-cardhour': 1 ,  readonly:"readonly"}),
+                  m( 'ul#selectList')
                 ]),
-                m( 'p#infoHour.info' , '' , m( 'span' , 'h' ) ),
-                m( 'p.unit', 'h' )
+                m( 'p#infoHour.info' , '' )
               ])
             ]),
             m( 'li', [
