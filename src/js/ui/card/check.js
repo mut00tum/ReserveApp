@@ -31,9 +31,7 @@ module.exports = function Check() {
     matchOrder , length;
 
   Map.place.on( 'click' , function( ){
-    if( $( '#timesList' ).find( '.pre' ) ){
-      $( '#timesList' ).find( 'li' ).removeClass( function(){return 'pre'} )
-    }
+    removePreClass();
     getPlaceId( $(this) );
     setNotice().hide();
     showStill();
@@ -97,17 +95,17 @@ module.exports = function Check() {
       matchOrder = timeList.indexOf( time );
       var length = matchOrder + hour;
 
+      removePreClass();
+
       for( var i = matchOrder; i < length; i++ ) {
         preList.push( day + '_' + timeList[i] + '_' + place )
         var id = '#' + day + '_' + timeList[i] + '_' + place;
-        // console.log( id )
         $( id ).addClass( 'pre' );
       }
 
       function setPreCurrent( time ){
         var matchOrder = timeList.indexOf( time );
         var next = self.parent().find( timeList[ matchOrder + 1 ] );
-        console.log( next );
       }
       // setPreCurrent( time );
 
@@ -138,6 +136,12 @@ module.exports = function Check() {
       showStill();
     }
 
+  }
+
+  function removePreClass() {
+    if( $( '#timesList' ).find( '.pre' ) ){
+        $( '#timesList' ).find( 'li' ).removeClass( function(){return 'pre'} )
+      }
   }
 
   function showSend() {

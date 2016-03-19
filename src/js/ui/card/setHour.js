@@ -22,7 +22,15 @@ module.exports = function SetHour() {
     },
     flag = false;
 
-    init();
+    //init
+    (function () {
+      setlist.shift();
+      setlist.push( '2100' );
+      TweenMax.set( Map.selectList , {
+        display: 'none',
+        opacity: 0
+      });
+    })();
 
     Map.place.on( 'click' , function(){
       var self    = $( this );
@@ -89,14 +97,6 @@ module.exports = function SetHour() {
       });
     }
 
-    function init() {
-      setlist.shift();
-      setlist.push( '2100' );
-      TweenMax.set( Map.selectList , {
-        display: 'none',
-        opacity: 0
-      });
-    }
 
     function toStringTime( time ) {
       return time.substr( 0 , 2 ) + ':' + time.substr( 2 , 4 )

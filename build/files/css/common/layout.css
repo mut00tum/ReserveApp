@@ -92,8 +92,8 @@
       position: relative;
       color: #fff;
       font-size: 16px;
-      -webkit-transition: all, 0.15s;
-              transition: all, 0.15s; }
+      -webkit-transition: all , .15s;
+              transition: all , .15s; }
     #nav #prev:hover,
     #nav #next:hover {
       background: #cdb287; }
@@ -182,7 +182,7 @@
 #times {
   box-sizing: border-box;
   position: relative;
-  height: calc( 30px * 52 );
+  height: calc( 30px * 52);
   border-left: 5px solid #efe9da;
   border-right: 5px solid #efe9da;
   border-bottom: 5px solid #efe9da;

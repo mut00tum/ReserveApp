@@ -8,10 +8,8 @@
   display: block;
   position: fixed;
   top: 100px;
-  right: -450px;
-  // right: -100px; //test
+  right: 0;
   width: 350px;
-  padding-right: 100px;
   border-radius: 15px 0 0 15px;
   z-index: 10;
   background: rgba( map-get($color, bg) , .6 );

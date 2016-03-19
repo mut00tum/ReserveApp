@@ -16,7 +16,7 @@ module.exports = function Spinner() {
       down   : memberField.find( '.down' ),
       setVal : 0,
       num    : 0,
-      max    : 20,
+      max    : 30,
       min    : 1,
       sum    : 1
     };
@@ -26,8 +26,14 @@ module.exports = function Spinner() {
     function setSpinner( filed , upBtn , downBtn , setVal , num , max , min , sum , sort ) {
 
       Map.place.on( 'click' , function(){
-        num = 0;
+        init();
       });
+
+      function init() {
+        num = 0;
+        min = 1;
+        sum = 1;
+      }
 
       filed.change(function(){
         num = Number( filed.val() );

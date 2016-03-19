@@ -1,9 +1,9 @@
 var setHour  = require( './setHour' );
-var sppinner = require( './spinner' );
+var spinner = require( './spinner' );
 var check    = require( './check' );
 
 module.exports = function Index() {
-  sppinner();
+  spinner();
   // check();
   // setHour();
 }

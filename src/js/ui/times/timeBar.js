@@ -27,12 +27,6 @@ module.exports = function TimeBar() {
           $( getMatch(self) ).removeClass( function(){return Class} );
         }
       }
-      // click: function(){
-      //   var self = $( this );
-      //   Map.place.removeClass( function(){return Select} );
-      //   $( getMatch(self) ).addClass( Select );
-      //   // state = true;
-      // }
     });
 
     Map.cancel.on( 'click' , function(){

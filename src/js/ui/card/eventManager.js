@@ -3,13 +3,13 @@ require( 'TimelineMax' );
 var timeArea = require( '../../data/timeArea' );
 var m        = require( 'mithril' );
 
-
 module.exports = function EventManager() {
-  m.startComputation();
+  // m.startComputation();
   var
+    Submit = $( '#submit' ),
     Map = {
       card     : $( '#card' ),
-      submit   : $( '#submit' ).find( '.send' ),
+      submit   : Submit.find( '.send' ),
       cancel   : $( '#cancel' ),
       closeBtn : $( '#closeBtn' ),
       place    : $( '#timesList' ).find( '.place' ),
@@ -29,14 +29,14 @@ module.exports = function EventManager() {
       infoMember : $( '#infoMember' ),
       infoPerson : $( '#infoPerson' )
     },
-    inputList = [ Card.hour , Card.member , Card.sppinner , Card.person ],
-    infoList  = [ Card.info ],
+    inputList = [ Card.hour, Card.member, Card.sppinner, Card.person, Submit ],
+    infoList  = [ Card.info, Map.cancel ],
     Size_Map = {
       card    : $( '#card' ).width(),
       padding : parseInt($('#card').css('padding-right'), 10)
     },
     SPEED = {
-      OPEN  : .3,
+      OPEN  : .5,
       CLOSE : .5,
       BTN   : .3
     },
@@ -55,15 +55,22 @@ module.exports = function EventManager() {
     current  = 'current',
     Class    = 'reserved';
 
+  //init
+  (function(){
+    TweenMax.set( Map.card , {
+      x: Size_Map.card
+    });
+  })();
+
   Map.place.on( 'click' , function(){
     var self = $( this );
     initCardVal();
-    set().hide( infoList );
-    set().show( inputList );
+    listFunc().hide( infoList );
+    listFunc().show( inputList );
 
     if( self.hasClass( Class ) ) {
-      set().hide( inputList );
-      set().show( infoList );
+      listFunc().hide( inputList );
+      listFunc().show( infoList );
     }
     showEffect();
     open();
@@ -87,10 +94,9 @@ module.exports = function EventManager() {
   });
 
   function open() {
-    var tween = TweenMax.to( Map.card , SPEED.OPEN ,{
-      right : - Size_Map.padding,
-      ease  : EASE.OPEN,
-      delay : DELAY.OPEN,
+    TweenMax.to( Map.card , SPEED.OPEN ,{
+      x    : 0,
+      ease : EASE.OPEN,
       onComplete: function(){
         this.pause( this.totalDuration() );
       }
@@ -98,10 +104,9 @@ module.exports = function EventManager() {
   }
 
   function close ( speed , ease ) {
-    var tween = TweenMax.to( Map.card , speed ,{
-      right : - Size_Map.card - Size_Map.padding,
-      ease  : ease,
-      delay : DELAY.CLOSE,
+    TweenMax.to( Map.card , speed ,{
+      x    : Size_Map.card,
+      ease : ease,
       onComplete: function(){
         this.pause( this.totalDuration() );
       }
@@ -109,8 +114,8 @@ module.exports = function EventManager() {
   }
 
   function cancelClose ( speed , ease ) {
-    var tween = TweenMax.to( Map.card , speed ,{
-      right : - Size_Map.card - Size_Map.padding,
+    TweenMax.to( Map.card , speed ,{
+      x     : Size_Map.card,
       ease  : ease,
       delay : DELAY.CANCEL,
       onComplete: function(){
@@ -129,20 +134,17 @@ module.exports = function EventManager() {
     Map.place.removeClass( current );
   }
 
-  function set() {
-
+  function listFunc() {
     function show( list ) {
       TweenMax.set( list , {
         display : 'block'
       });
     }
-
     function hide( list ) {
       TweenMax.set( list , {
         display : 'none'
       });
     }
-
     return {
       show : show,
       hide : hide
@@ -150,19 +152,19 @@ module.exports = function EventManager() {
   }
 
   function showEffect() {
-    TweenMax.set( showList , {
+    TweenMax.to( showList , .1 , {
       bottom : -10,
-      opacity : 0
-    });
-
-    var tween = TweenMax.staggerTo( showList , .2 , {
-      bottom : 0,
-      opacity : 1,
-      delay: DELAY.SHOW,
-      ease : Power4.easeOut,
+      opacity : 0,
       onComplete: function(){
         this.pause( this.totalDuration() );
       }
+    });
+
+    TweenMax.staggerTo( showList , .2 , {
+      bottom : 0,
+      opacity : 1,
+      delay: DELAY.SHOW,
+      ease : Power4.easeOut
     } , .075 );
   }
 
@@ -198,9 +200,9 @@ module.exports = function EventManager() {
     timeText = hourText + ':' + minutes;
 
     Card.infoHour.text( timeText );
-    Card.infoMember.text( self.data( 'member' ) );
-    Card.infoPerson.text( self.data( 'person' ) );
+    Card.infoMember.text( self[0].getAttribute( 'data-member' ) );
+    Card.infoPerson.text( self[0].getAttribute( 'data-person' ) );
   }
 
-  m.endComputation();
+  // m.endComputation();
 }

@@ -1,11 +1,11 @@
 var m            = require( 'mithril' );
-var card         = require( '../ui/card' );
 var times        = require( '../ui/times' );
 var timeArea     = require( '../data/timeArea' );
 var fixedHeader  = require( '../ui/times/fixedHeader' );
 var eventManager = require( '../ui/card/eventManager' );
 var check        = require( '../ui/card/check' );
 var setHour      = require( '../ui/card/setHour' );
+var spinner     = require( '../ui/card/spinner' );
 
 module.exports = function ReserveModule() {
 
@@ -20,11 +20,7 @@ module.exports = function ReserveModule() {
   }
 
     Reserve.save = function( reserve ) {
-      m.request({ method: "POST", url: "/save" , data: reserve })
-      .then( function( value ){
-          // console.log( value )
-          vm.json( value );
-      });
+      m.request({ method: "POST", url: "/save" , data: reserve });
     }
 
     Reserve.cancel = function( reserve ) {
@@ -268,10 +264,6 @@ module.exports = function ReserveModule() {
 
     view : function () {
 
-      // setInterval(function(){
-      //   vm.getJsonReq();
-      // } , 5000 );
-
       vm.setCancelTarget();
 
       function setWeekDay( d ) {
@@ -373,7 +365,7 @@ module.exports = function ReserveModule() {
           return n.substr( 0 , 3 );
         }
       }
-      return  m( '.contents' , { config : eventManager } , [
+      return  m( '.contents' , { config: eventManager } , [
         m( 'headar#header' , { config: function( element , isInitialized , context){
           if( !isInitialized ) {
             fixedHeader();
@@ -427,9 +419,6 @@ module.exports = function ReserveModule() {
           ]),
           m( '#times' , { config: function( element , isInitialized , context){
             times();
-            // if( !isInitialized ) {
-            //   times();
-            // }
           }} , [
             m( 'ul#timesList' , vm.setWeek( vm.dObj() ).map(function ( d ) {
               return  m( 'li.date' , {
@@ -464,11 +453,12 @@ module.exports = function ReserveModule() {
             })),
           ])
         ]),
-        m( 'form#card' , { config: function( element , isInitialized , context){
-          if( !isInitialized ) {
-            card();
-          }
-        }} , [
+        m( 'form#card' ,
+          { config: function( element , isInitialized , context){
+            if( !isInitialized ) {
+              spinner();
+            }
+          }} , [
           m( '.header' , [
             m('h2', '予約カード'),
             m('p#closeBtn', '×')
@@ -517,7 +507,7 @@ module.exports = function ReserveModule() {
             ]),
             m( 'li', [
               m( 'h3', 'Name' ),
-              m( "input#cardPerson.name[name='name'][size='10'][type='text'][placeholder='name']" , vm.person() ),
+              m( "input#cardPerson.name[name='name'][size='10'][type='text'][maxlength='8'][placeholder='name']" , vm.person() ),
               m( 'p#infoPerson.info' , '' ),
             ])
           ]),
@@ -528,7 +518,8 @@ module.exports = function ReserveModule() {
           m('#cancel', [
             m('p', { onclick: vm.cancelReserve } , '予約を取り消す' )
           ])
-        ])
+        ]),
+        // m( 'div' , { config : eventManager } )
       ]);
     }
   }
