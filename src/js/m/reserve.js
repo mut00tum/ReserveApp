@@ -349,10 +349,10 @@ module.exports = function ReserveModule() {
       function setCardPlace( p ) {
         var
           textMap = {
-            'P9A' : '9F 大',
-            'P9B' : '9F 小',
-            'P1A' : '1F コンビニ側',
-            'P1B' : '1F 窓口側'
+            'P9A' : 'A会議室',
+            'P9B' : 'B会議室',
+            'P1A' : 'C会議室',
+            'P1B' : 'D会議室'
           }
         return textMap[ p ];
       }
