@@ -20,11 +20,38 @@ module.exports = function ReserveModule() {
   }
 
     Reserve.save = function( reserve ) {
-      m.request({ method: "POST", url: "/save" , data: reserve });
+      var
+        firstData = [],
+        booking = [],
+        str , obj;
+
+      str = localStorage.getItem( "storage" );
+      var reserveData      = JSON.stringify( reserve );
+      var parseReserveData = JSON.parse(reserveData);
+
+      if( str == null ) {
+        firstData.push( parseReserveData )
+        var saveData = JSON.stringify( firstData )
+        localStorage.setItem('storage', saveData );
+      }
+
+      if ( str ) {
+        var data = JSON.parse( str );
+        var length = Object.keys( data ).length;
+
+        for (var i = 0; i < length; i++) {
+          booking.push( data[i] );
+        }
+
+        booking.push( parseReserveData );
+        var saveData = JSON.stringify( booking );
+        localStorage.setItem( "storage", saveData );
+      }
     }
 
     Reserve.cancel = function( reserve ) {
-      m.request({ method: "POST", url: "/cancel" , data: reserve });
+      var saveData = JSON.stringify( reserve );
+      localStorage.setItem( "storage", saveData );
     }
 
   // ビューモデル
@@ -121,7 +148,7 @@ module.exports = function ReserveModule() {
           listNum = 0,
           stamp , length , num ;
 
-        if( json && target ) {
+        if( json && target || !json == null ) {
           length = json.length;
           stamp  = target.attr( 'data-stamp' );
           for( var i = 0; i < length; i++ ) {
@@ -132,8 +159,9 @@ module.exports = function ReserveModule() {
           }
           start   = arr[0];
           listNum = arr.length;
-          json    = json.splice( start , listNum );
+          json.splice( start , 1 );
           arr     = [];
+
           Reserve.cancel( json );
         }
       },
@@ -147,10 +175,11 @@ module.exports = function ReserveModule() {
           member = 0,
           person = '',
           first  = '',
-          length = json.length,
           place , position;
 
+          // console.log( json )
         if( json ) {
+          var length = json.length;
           for( var i = 0; i < length; i++ ){
             place = json[i].place;
             var posiList = json[i].position.split( '/' );
@@ -184,15 +213,15 @@ module.exports = function ReserveModule() {
         }
       },
       vm.getJsonReq = function() {
-        var date = new Date();
-        var mondayNum = vm.getMonday( date , vm.week() );
-        date.setDate( mondayNum );
-        var firstDay = vm.addDateClass( date );
-        m.request({ method: 'GET', url: '/getReserved' + '?monday=' + firstDay })
-          .then( function( value ){
-            // console.log( value )
-            vm.json( value );
-        });
+        var
+          booking = [],
+          str     = '',
+          data    = '';
+
+        str  = localStorage.getItem( "storage" );
+        data = JSON.parse(str);
+        booking.push( data );
+        vm.json( data );
       },
       vm.setCancelTarget = function() {
         var
@@ -242,17 +271,20 @@ module.exports = function ReserveModule() {
       }
     },
     test : function(){
-       console.log(vm.json())
+       // console.log(vm.json())
+       // console.log( localStorage.length );
+       // console.log( localStorage.getItem('storage') )
     },
     clear : function() {
-      m.request({ method: 'GET', url: '/reset'  });
+      // m.request({ method: 'GET', url: '/reset'  });
+      localStorage.clear();
     },
     redraw : function() {
-      m.request({ method: 'GET', url: '/reserved'  })
-      .then( function(data){
-        vm.json( data );
-        m.redraw();
-      });
+      // m.request({ method: 'GET', url: '/reserved'  })
+      // .then( function(data){
+      //   vm.json( data );
+      //   m.redraw();
+      // });
     }
   };
   var Calendar = {
@@ -371,14 +403,14 @@ module.exports = function ReserveModule() {
             fixedHeader();
           }
         }} , [
-          m( 'h1' , 'Meeting Space Reservation' ),
+          m( 'h1' , 'ReserveApp' ),
           m( '.items' , [
             m( '.explain' , [
               m( 'ul' , [
-                m( 'li' , m( 'p.box.P9A' , '' ) , m( 'p.text' , '9F/大' ) ),
-                m( 'li' , m( 'p.box.P9B' , '' ) , m( 'p.text' , '9F/小' ) ),
-                m( 'li' , m( 'p.box.P1A' , '' ) , m( 'p.text' , '1F/コンビニ側' ) ),
-                m( 'li' , m( 'p.box.P1B' , '' ) , m( 'p.text' , '1F/窓口側' ) )
+                m( 'li' , m( 'p.box.P9A' , '' ) , m( 'p.text' , 'A会議室' ) ),
+                m( 'li' , m( 'p.box.P9B' , '' ) , m( 'p.text' , 'B会議室' ) ),
+                m( 'li' , m( 'p.box.P1A' , '' ) , m( 'p.text' , 'C会議室' ) ),
+                m( 'li' , m( 'p.box.P1B' , '' ) , m( 'p.text' , 'D会議室' ) )
               ])
             ]),
             m( 'nav#nav' , [
@@ -518,8 +550,7 @@ module.exports = function ReserveModule() {
           m('#cancel', [
             m('p', { onclick: vm.cancelReserve } , '予約を取り消す' )
           ])
-        ]),
-        // m( 'div' , { config : eventManager } )
+        ])
       ]);
     }
   }
