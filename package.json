@@ -1,5 +1,5 @@
 {
-  "name": "mtgReserveApp",
+  "name": "ReserveApp",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "bluebird": "^2.14.4",
     "body-parser": "^1.14.2",
     "browser-sync": "^2.8.2",
     "browserify": "^11.2.0",
@@ -35,14 +34,10 @@
     "webpack": "^1.12.6"
   },
   "dependencies": {
-    "gulp-autoprefixer": "^2.3.1",
-    "browser-sync": "^2.9.8",
-    "gulp-sass": "^2.0.4",
-    "gulp": "^3.9.0",
-    "gulp-uglify": "^1.4.1",
-    "gulp-plumber": "^1.0.1",
-    "browserify": "^11.2.0",
-    "vinyl-source-stream": "^1.1.0"
+    "express": "3.8.2"
   },
-  "description": ""
+  "engines": {
+    "node": "v5.8.X",
+    "npm": "3.8.X"
+  }
 }
